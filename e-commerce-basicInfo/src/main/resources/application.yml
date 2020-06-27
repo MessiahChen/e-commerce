@@ -1,5 +1,5 @@
 server:
-  port: 9002
+  port: 9020
 spring:
   application:
     name: e-commerce-basicInfo
