@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="e-commerce-product" />
+        <module name="e-commerce-wallet" />
+        <module name="e-commerce-basicInfo" />
+        <module name="e-commerce-admin" />
+        <module name="e-commerce-order" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="admin" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="e-commerce" options="-parameters" />
+      <module name="e-commerce-admin" options="-parameters" />
+      <module name="e-commerce-basicInfo" options="-parameters" />
+      <module name="e-commerce-order" options="-parameters" />
+      <module name="e-commerce-product" options="-parameters" />
+      <module name="e-commerce-wallet" options="-parameters" />
+    </option>
+  </component>
+</project>

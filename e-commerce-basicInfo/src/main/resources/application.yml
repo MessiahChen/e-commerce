@@ -1,0 +1,12 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: e-commerce-basicInfo
+eureka:
+  client:
+    service-url:
+      defaultZone: http://39.105.102.179:8888//eureka
+  instance:
+    prefer-ip-address: true
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
