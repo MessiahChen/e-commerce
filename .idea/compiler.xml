@@ -10,6 +10,7 @@
         <module name="e-commerce-wallet" />
         <module name="e-commerce-basicInfo" />
         <module name="e-commerce-admin" />
+        <module name="e-commerce-redis" />
         <module name="e-commerce-zuul" />
         <module name="e-commerce-order" />
       </profile>
@@ -27,6 +28,7 @@
       <module name="e-commerce-gateway" options="-parameters" />
       <module name="e-commerce-order" options="-parameters" />
       <module name="e-commerce-product" options="-parameters" />
+      <module name="e-commerce-redis" options="-parameters" />
       <module name="e-commerce-wallet" options="-parameters" />
       <module name="e-commerce-zuul" options="-parameters" />
     </option>
