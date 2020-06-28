@@ -20,7 +20,7 @@
         <module>e-commerce-product</module>
         <module>e-commerce-order</module>
         <module>e-commerce-wallet</module>
-        <module>e-commerce-gateway</module>
+        <module>e-commerce-zuul</module>
     </modules>
 
     <properties>
