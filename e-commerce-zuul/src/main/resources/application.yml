@@ -12,6 +12,12 @@ eureka:
     service-url:
       defaultZone: http://39.105.102.179:8888//eureka
 
+management: #actuator配置
+  endpoints:
+    web:
+      exposure:
+        include: 'routes'
+
 zuul:
   routes: #给服务配置路由
     e-commerce-admin:
@@ -30,3 +36,19 @@ zuul:
   host:
     connect-timeout-millis: 3000 #配置路由超时
     socket-timeout-millis: 3000
+
+#  prefix: /proxy #给网关路由添加前缀
+
+#hystrix:
+#  command: #用于控制HystrixCommand的行为
+#    default:
+#      execution:
+#        timeout:
+#          enabled: true
+#        isolation:
+#          thread:
+#            timeoutInMilliseconds: 100000 #配置HystrixCommand执行的超时时间，执行超过该时间会进行服务降级处理
+#
+#ribbon: #全局配置
+#  ConnectTimeout: 6000 #服务请求连接超时时间（毫秒）
+#  ReadTimeout: 6000 #服务请求处理超时时间（毫秒）
