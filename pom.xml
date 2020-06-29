@@ -21,6 +21,7 @@
         <module>e-commerce-order</module>
         <module>e-commerce-wallet</module>
         <module>e-commerce-zuul</module>
+        <module>e-commerce-redis</module>
     </modules>
 
     <properties>
@@ -46,7 +47,7 @@
         <logstash-logback.version>6.4</logstash-logback.version>
         <admin-starter-server.version>2.1.5</admin-starter-server.version>
         <minio.version>3.0.10</minio.version>
-        <!--        <mall-common.version>1.0-SNAPSHOT</mall-common.version>-->
+        <e-commerce.redis.version>1.0-SNAPSHOT</e-commerce.redis.version>
         <!--        <mall-mbg.version>1.0-SNAPSHOT</mall-mbg.version>-->
         <!--        <mall-security.version>1.0-SNAPSHOT</mall-security.version>-->
     </properties>
@@ -84,12 +85,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--            &lt;!&ndash;mall通用模块&ndash;&gt;-->
-            <!--            <dependency>-->
-            <!--                <groupId>com.macro.mall</groupId>-->
-            <!--                <artifactId>mall-common</artifactId>-->
-            <!--                <version>${mall-common.version}</version>-->
-            <!--            </dependency>-->
+            <!--mall通用模块-->
+            <dependency>
+                <groupId>e-commerce</groupId>
+                <artifactId>e-commerce.redis</artifactId>
+                <version>${e-commerce.redis.version}</version>
+            </dependency>
             <!--            &lt;!&ndash;mall中MBG生成模块&ndash;&gt;-->
             <!--            <dependency>-->
             <!--                <groupId>com.macro.mall</groupId>-->
