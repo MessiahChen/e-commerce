@@ -10,7 +10,7 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/e-commerce-zuul/pom.xml" />
         <option value="$PROJECT_DIR$/e-commerce-mybatis/pom.xml" />
-        <option value="$PROJECT_DIR$/e-commerce-common/pom.xml" />
+        <option value="$PROJECT_DIR$/e-commerce-redis/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
