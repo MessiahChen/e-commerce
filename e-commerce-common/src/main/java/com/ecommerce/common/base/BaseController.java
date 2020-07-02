@@ -16,31 +16,31 @@ public class BaseController {
 
     @ExceptionHandler
     @ResponseBody
-    public BaseModel exp(HttpServletRequest request,Exception exception){
-        BaseModel baseModel = new BaseModel();
-        if(exception instanceof BusinessException){
-            baseModel.message = exception.getMessage();
-            baseModel.code = ((BusinessException) exception).getCode();
-            this.logger.error("errorResponse:{}",baseModel.toString());
-        }else{
-            this.logger.error("errorResponse:{}",exception.toString());
-            baseModel.code = 500;
-            baseModel.message = "Sorry!Exception occurs!Please try it later";
+    public CommonResult exp(HttpServletRequest request, Exception exception) {
+        CommonResult commonResult = new CommonResult();
+        if (exception instanceof BusinessException) {
+            commonResult.setMessage(exception.getMessage());
+            commonResult.setCode(((BusinessException) exception).getCode());
+            this.logger.error("errorResponse:{}", commonResult.toString());
+        } else {
+            this.logger.error("errorResponse:{}", exception.toString());
+            commonResult.setCode(500);
+            commonResult.setMessage("Sorry!Exception occurs!Please try it later");
         }
-        return baseModel;
+        return commonResult;
     }
 
-    public String getErrorResponse(BindingResult bindingResult){
-        StringBuffer sb = new StringBuffer();
+    public String getErrorResponse(BindingResult bindingResult) {
+        StringBuilder errorMessage = new StringBuilder();
         Iterator errIterator = bindingResult.getAllErrors().iterator();
-        while (errIterator.hasNext()){
-            ObjectError objectError = (ObjectError)errIterator.next();
+        while (errIterator.hasNext()) {
+            ObjectError objectError = (ObjectError) errIterator.next();
             this.logger.info(objectError.getDefaultMessage());
             this.logger.info(objectError.getCode());
-            sb.append(objectError.getDefaultMessage()).append(",");
+            errorMessage.append(objectError.getDefaultMessage()).append(",");
         }
-        sb.delete(sb.length() - 1,sb.length());
-        return  sb.toString();
+        errorMessage.delete(errorMessage.length() - 1, errorMessage.length());
+        return errorMessage.toString();
     }
 
 }

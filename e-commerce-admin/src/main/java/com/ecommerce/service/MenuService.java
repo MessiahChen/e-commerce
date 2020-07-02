@@ -7,5 +7,5 @@ import com.ecommerce.pojo.SysMenu;
  */
 public interface MenuService {
 
-    String addNewMenu(SysMenu sysMenu);
+    boolean addNewMenu(SysMenu sysMenu);
 }

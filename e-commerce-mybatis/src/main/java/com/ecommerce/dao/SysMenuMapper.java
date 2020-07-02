@@ -5,9 +5,7 @@ import com.ecommerce.pojo.SysMenuExample;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface SysMenuMapper {
     long countByExample(SysMenuExample example);
 

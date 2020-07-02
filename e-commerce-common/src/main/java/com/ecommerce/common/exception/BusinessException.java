@@ -7,8 +7,9 @@ public class BusinessException extends RuntimeException {
     public static final BusinessException UPDATE_FAIL = new BusinessException(504, "delete operation failed", new Object[0]);
     public static final BusinessException DELETE_FAIL = new BusinessException(504, "delete operation failed", new Object[0]);
     public static final BusinessException USERID_NULL_ERROR = new BusinessException(504, "userid shouln't be null", new Object[0]);
-    int code;
-    String msg;
+
+    private int code;
+    private String msg;
 
     public int getCode() {
         return code;
@@ -50,5 +51,6 @@ public class BusinessException extends RuntimeException {
     public BusinessException newInstance(String msg, Object... args) {
         return new BusinessException(this.code, msg, args);
     }
+
 
 }

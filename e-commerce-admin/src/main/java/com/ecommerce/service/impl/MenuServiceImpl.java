@@ -13,8 +13,8 @@ public class MenuServiceImpl implements MenuService {
     private SysMenuMapper sysMenuMapper;
 
     @Override
-    public String addNewMenu(SysMenu sysMenu) {
+    public boolean addNewMenu(SysMenu sysMenu) {
         sysMenuMapper.insert(sysMenu);
-        return "成功！";
+        return true;
     }
 }

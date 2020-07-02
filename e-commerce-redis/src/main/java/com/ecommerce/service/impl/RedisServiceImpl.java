@@ -105,8 +105,6 @@ public class RedisServiceImpl implements RedisService {
      */
     public boolean set(String key, Object value) {
         try {
-            System.out.println(key);
-            System.out.println(value);
             redisTemplate.opsForValue().set(key, value);
             return true;
         } catch (Exception e) {

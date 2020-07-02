@@ -56,6 +56,10 @@
         <!--本系统其他子模块引入-->
         <dependency>
             <groupId>com.ecommerce</groupId>
+            <artifactId>e-commerce-common</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.ecommerce</groupId>
             <artifactId>e-commerce-redis</artifactId>
         </dependency>
         <dependency>

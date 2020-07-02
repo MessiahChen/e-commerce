@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ecommerce.dao.UllUserLoginLogoutLogMapper">
+  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.UllUserLoginLogoutLog">
+    <id column="ull_id" jdbcType="INTEGER" property="ullId" />
+    <result column="usi_id" jdbcType="VARCHAR" property="usiId" />
+    <result column="token" jdbcType="VARCHAR" property="token" />
+    <result column="terminal_type" jdbcType="VARCHAR" property="terminalType" />
+    <result column="operating_type" jdbcType="VARCHAR" property="operatingType" />
+    <result column="operating_date" jdbcType="TIMESTAMP" property="operatingDate" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="last_update_by" jdbcType="VARCHAR" property="lastUpdateBy" />
+    <result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+    <result column="call_cnt" jdbcType="INTEGER" property="callCnt" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+    <result column="sts_cd" jdbcType="CHAR" property="stsCd" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    ull_id, usi_id, token, terminal_type, operating_type, operating_date, created_by, 
+    creation_date, last_update_by, last_update_date, call_cnt, remark, sts_cd
+  </sql>
+  <select id="selectByExample" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from ull_user_login_logout_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from ull_user_login_logout_log
+    where ull_id = #{ullId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from ull_user_login_logout_log
+    where ull_id = #{ullId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLogExample">
+    delete from ull_user_login_logout_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
+    insert into ull_user_login_logout_log (ull_id, usi_id, token, 
+      terminal_type, operating_type, operating_date, 
+      created_by, creation_date, last_update_by, 
+      last_update_date, call_cnt, remark, 
+      sts_cd)
+    values (#{ullId,jdbcType=INTEGER}, #{usiId,jdbcType=VARCHAR}, #{token,jdbcType=VARCHAR}, 
+      #{terminalType,jdbcType=VARCHAR}, #{operatingType,jdbcType=VARCHAR}, #{operatingDate,jdbcType=TIMESTAMP}, 
+      #{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, 
+      #{lastUpdateDate,jdbcType=TIMESTAMP}, #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
+      #{stsCd,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
+    insert into ull_user_login_logout_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="ullId != null">
+        ull_id,
+      </if>
+      <if test="usiId != null">
+        usi_id,
+      </if>
+      <if test="token != null">
+        token,
+      </if>
+      <if test="terminalType != null">
+        terminal_type,
+      </if>
+      <if test="operatingType != null">
+        operating_type,
+      </if>
+      <if test="operatingDate != null">
+        operating_date,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="creationDate != null">
+        creation_date,
+      </if>
+      <if test="lastUpdateBy != null">
+        last_update_by,
+      </if>
+      <if test="lastUpdateDate != null">
+        last_update_date,
+      </if>
+      <if test="callCnt != null">
+        call_cnt,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+      <if test="stsCd != null">
+        sts_cd,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="ullId != null">
+        #{ullId,jdbcType=INTEGER},
+      </if>
+      <if test="usiId != null">
+        #{usiId,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalType != null">
+        #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingType != null">
+        #{operatingType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingDate != null">
+        #{operatingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateBy != null">
+        #{lastUpdateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateDate != null">
+        #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callCnt != null">
+        #{callCnt,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stsCd != null">
+        #{stsCd,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLogExample" resultType="java.lang.Long">
+    select count(*) from ull_user_login_logout_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update ull_user_login_logout_log
+    <set>
+      <if test="record.ullId != null">
+        ull_id = #{record.ullId,jdbcType=INTEGER},
+      </if>
+      <if test="record.usiId != null">
+        usi_id = #{record.usiId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.token != null">
+        token = #{record.token,jdbcType=VARCHAR},
+      </if>
+      <if test="record.terminalType != null">
+        terminal_type = #{record.terminalType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatingType != null">
+        operating_type = #{record.operatingType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operatingDate != null">
+        operating_date = #{record.operatingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationDate != null">
+        creation_date = #{record.creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdateBy != null">
+        last_update_by = #{record.lastUpdateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastUpdateDate != null">
+        last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.callCnt != null">
+        call_cnt = #{record.callCnt,jdbcType=INTEGER},
+      </if>
+      <if test="record.remark != null">
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.stsCd != null">
+        sts_cd = #{record.stsCd,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update ull_user_login_logout_log
+    set ull_id = #{record.ullId,jdbcType=INTEGER},
+      usi_id = #{record.usiId,jdbcType=VARCHAR},
+      token = #{record.token,jdbcType=VARCHAR},
+      terminal_type = #{record.terminalType,jdbcType=VARCHAR},
+      operating_type = #{record.operatingType,jdbcType=VARCHAR},
+      operating_date = #{record.operatingDate,jdbcType=TIMESTAMP},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      creation_date = #{record.creationDate,jdbcType=TIMESTAMP},
+      last_update_by = #{record.lastUpdateBy,jdbcType=VARCHAR},
+      last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP},
+      call_cnt = #{record.callCnt,jdbcType=INTEGER},
+      remark = #{record.remark,jdbcType=VARCHAR},
+      sts_cd = #{record.stsCd,jdbcType=CHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
+    update ull_user_login_logout_log
+    <set>
+      <if test="usiId != null">
+        usi_id = #{usiId,jdbcType=VARCHAR},
+      </if>
+      <if test="token != null">
+        token = #{token,jdbcType=VARCHAR},
+      </if>
+      <if test="terminalType != null">
+        terminal_type = #{terminalType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingType != null">
+        operating_type = #{operatingType,jdbcType=VARCHAR},
+      </if>
+      <if test="operatingDate != null">
+        operating_date = #{operatingDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdateBy != null">
+        last_update_by = #{lastUpdateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateDate != null">
+        last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="callCnt != null">
+        call_cnt = #{callCnt,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="stsCd != null">
+        sts_cd = #{stsCd,jdbcType=CHAR},
+      </if>
+    </set>
+    where ull_id = #{ullId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
+    update ull_user_login_logout_log
+    set usi_id = #{usiId,jdbcType=VARCHAR},
+      token = #{token,jdbcType=VARCHAR},
+      terminal_type = #{terminalType,jdbcType=VARCHAR},
+      operating_type = #{operatingType,jdbcType=VARCHAR},
+      operating_date = #{operatingDate,jdbcType=TIMESTAMP},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      last_update_by = #{lastUpdateBy,jdbcType=VARCHAR},
+      last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      call_cnt = #{callCnt,jdbcType=INTEGER},
+      remark = #{remark,jdbcType=VARCHAR},
+      sts_cd = #{stsCd,jdbcType=CHAR}
+    where ull_id = #{ullId,jdbcType=INTEGER}
+  </update>
+</mapper>

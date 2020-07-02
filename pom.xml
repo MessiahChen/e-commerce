@@ -50,6 +50,7 @@
         <logstash-logback.version>6.4</logstash-logback.version>
         <admin-starter-server.version>2.1.5</admin-starter-server.version>
         <minio.version>3.0.10</minio.version>
+        <e-commerce-common.version>1.0-SNAPSHOT</e-commerce-common.version>
         <e-commerce.redis.version>1.0-SNAPSHOT</e-commerce.redis.version>
         <e-commerce.mybatis.version>1.0-SNAPSHOT</e-commerce.mybatis.version>
         <!--        <mall-mbg.version>1.0-SNAPSHOT</mall-mbg.version>-->
@@ -89,7 +90,12 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-            <!--e-commerce redis模块-->
+            <!--e-commerce模块-->
+            <dependency>
+                <groupId>com.ecommerce</groupId>
+                <artifactId>e-commerce-common</artifactId>
+                <version>${e-commerce-common.version}</version>
+            </dependency>
             <dependency>
                 <groupId>com.ecommerce</groupId>
                 <artifactId>e-commerce-redis</artifactId>
@@ -100,12 +106,6 @@
                 <artifactId>e-commerce-mybatis</artifactId>
                 <version>${e-commerce.mybatis.version}</version>
             </dependency>
-            <!--            &lt;!&ndash;mall中MBG生成模块&ndash;&gt;-->
-            <!--            <dependency>-->
-            <!--                <groupId>com.macro.mall</groupId>-->
-            <!--                <artifactId>mall-mbg</artifactId>-->
-            <!--                <version>${mall-mbg.version}</version>-->
-            <!--            </dependency>-->
             <!--            &lt;!&ndash;mall安全模块&ndash;&gt;-->
             <!--            <dependency>-->
             <!--                <groupId>com.macro.mall</groupId>-->
