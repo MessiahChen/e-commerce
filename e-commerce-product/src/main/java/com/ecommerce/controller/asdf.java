@@ -10,6 +10,6 @@ public class asdf {
     @ApiOperation("这是一个测试")
     @GetMapping("/a")
     public String getAA(){
-        return "aaa";
+        return "abcde";
     }
 }
