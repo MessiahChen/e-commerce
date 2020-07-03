@@ -5,7 +5,9 @@ import com.ecommerce.pojo.PckPackageInfoExample;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PckPackageInfoMapper {
     long countByExample(PckPackageInfoExample example);
 
@@ -28,4 +30,7 @@ public interface PckPackageInfoMapper {
     int updateByPrimaryKeySelective(PckPackageInfo record);
 
     int updateByPrimaryKey(PckPackageInfo record);
+
+    int deletePackageInfoByList(@Param("proIds")List<Integer> proIds);
+
 }

@@ -34,4 +34,6 @@ public interface ProProductMapper {
     int updateByPrimaryKeyWithBLOBs(ProProduct record);
 
     int updateByPrimaryKey(ProProduct record);
+
+    int deleteProductInfoByList(@Param("proIds")List<Integer> proIds);
 }

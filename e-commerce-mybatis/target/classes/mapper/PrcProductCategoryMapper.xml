@@ -4,7 +4,7 @@
   <resultMap id="BaseResultMap" type="com.ecommerce.pojo.PrcProductCategory">
     <id column="prc_id" jdbcType="INTEGER" property="prcId" />
     <result column="pro_id" jdbcType="INTEGER" property="proId" />
-    <result column="category_id" jdbcType="VARCHAR" property="categoryId" />
+    <result column="category_id" jdbcType="INTEGER" property="categoryId" />
     <result column="category_name" jdbcType="VARCHAR" property="categoryName" />
     <result column="category_path" jdbcType="VARCHAR" property="categoryPath" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
@@ -114,7 +114,7 @@
       creation_date, last_update_by, last_update_date, 
       call_int, remark, sts_cd, 
       platform_type)
-    values (#{prcId,jdbcType=INTEGER}, #{proId,jdbcType=INTEGER}, #{categoryId,jdbcType=VARCHAR}, 
+    values (#{prcId,jdbcType=INTEGER}, #{proId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
       #{categoryName,jdbcType=VARCHAR}, #{categoryPath,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
       #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
       #{callInt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
@@ -171,7 +171,7 @@
         #{proId,jdbcType=INTEGER},
       </if>
       <if test="categoryId != null">
-        #{categoryId,jdbcType=VARCHAR},
+        #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="categoryName != null">
         #{categoryName,jdbcType=VARCHAR},
@@ -221,7 +221,7 @@
         pro_id = #{record.proId,jdbcType=INTEGER},
       </if>
       <if test="record.categoryId != null">
-        category_id = #{record.categoryId,jdbcType=VARCHAR},
+        category_id = #{record.categoryId,jdbcType=INTEGER},
       </if>
       <if test="record.categoryName != null">
         category_name = #{record.categoryName,jdbcType=VARCHAR},
@@ -262,7 +262,7 @@
     update prc_product_category
     set prc_id = #{record.prcId,jdbcType=INTEGER},
       pro_id = #{record.proId,jdbcType=INTEGER},
-      category_id = #{record.categoryId,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=INTEGER},
       category_name = #{record.categoryName,jdbcType=VARCHAR},
       category_path = #{record.categoryPath,jdbcType=VARCHAR},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
@@ -284,7 +284,7 @@
         pro_id = #{proId,jdbcType=INTEGER},
       </if>
       <if test="categoryId != null">
-        category_id = #{categoryId,jdbcType=VARCHAR},
+        category_id = #{categoryId,jdbcType=INTEGER},
       </if>
       <if test="categoryName != null">
         category_name = #{categoryName,jdbcType=VARCHAR},
@@ -322,7 +322,7 @@
   <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.PrcProductCategory">
     update prc_product_category
     set pro_id = #{proId,jdbcType=INTEGER},
-      category_id = #{categoryId,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=INTEGER},
       category_name = #{categoryName,jdbcType=VARCHAR},
       category_path = #{categoryPath,jdbcType=VARCHAR},
       created_by = #{createdBy,jdbcType=VARCHAR},
@@ -335,4 +335,12 @@
       platform_type = #{platformType,jdbcType=VARCHAR}
     where prc_id = #{prcId,jdbcType=INTEGER}
   </update>
+  <delete id="deleteProductCategoryByList">
+    delete from
+    prc_product_category
+    where pro_id in
+    <foreach collection="proIds" item="proId" open="(" separator="," close=")">
+      #{id, jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

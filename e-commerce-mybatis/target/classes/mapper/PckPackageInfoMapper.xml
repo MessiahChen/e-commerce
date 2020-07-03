@@ -397,4 +397,12 @@
       logistics_company = #{logisticsCompany,jdbcType=VARCHAR}
     where pck_id = #{pckId,jdbcType=INTEGER}
   </update>
+  <delete id="deletePackageInfoByList">
+    delete from
+    pck_package_info
+    where pro_id in
+    <foreach collection="proIds" item="proId" open="(" separator="," close=")">
+      #{id, jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

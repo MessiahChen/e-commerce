@@ -1,4 +1,4 @@
-package com.ecommerce.vojo;
+package com.ecommerce.vojo.entry;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;

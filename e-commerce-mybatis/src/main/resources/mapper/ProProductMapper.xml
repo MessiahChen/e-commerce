@@ -125,7 +125,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-    select 
+    select
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -568,4 +568,12 @@
       stockseting = #{stockseting,jdbcType=INTEGER}
     where pro_id = #{proId,jdbcType=INTEGER}
   </update>
+  <delete id="deleteProductInfoByList">
+    delete from
+    pro_product
+    where pro_id in
+    <foreach collection="proIds" item="proId" open="(" separator="," close=")">
+      #{id, jdbcType=INTEGER}
+    </foreach>
+  </delete>
 </mapper>

@@ -27,7 +27,7 @@ public class PrcProductCategory implements Serializable {
      * @mbg.generated
      */
     @ApiModelProperty(value = "分类id")
-    private String categoryId;
+    private Integer categoryId;
 
     /**
      * 类别名称
@@ -127,11 +127,11 @@ public class PrcProductCategory implements Serializable {
         this.proId = proId;
     }
 
-    public String getCategoryId() {
+    public Integer getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(Integer categoryId) {
         this.categoryId = categoryId;
     }
 

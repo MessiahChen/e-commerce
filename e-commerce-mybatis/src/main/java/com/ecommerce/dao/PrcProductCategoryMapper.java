@@ -5,7 +5,9 @@ import com.ecommerce.pojo.PrcProductCategoryExample;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface PrcProductCategoryMapper {
     long countByExample(PrcProductCategoryExample example);
 
@@ -28,4 +30,7 @@ public interface PrcProductCategoryMapper {
     int updateByPrimaryKeySelective(PrcProductCategory record);
 
     int updateByPrimaryKey(PrcProductCategory record);
+
+    int deleteProductCategoryByList(@Param("proIds")List<Integer> proIds);
+
 }
