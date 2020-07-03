@@ -19,7 +19,7 @@ import java.io.Serializable;
 public class WalletAccountVO implements Serializable {
 
     @ApiModelProperty("用户名")
-    @NotBlank(message = "username cannot be blank",groups = {InsertGroup.class})
+    @NotBlank(message = "username cannot be blank")
     private String accountName;
 
     @ApiModelProperty("密码")

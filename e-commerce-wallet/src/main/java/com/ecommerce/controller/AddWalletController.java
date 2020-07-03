@@ -4,6 +4,7 @@ import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.InsertGroup;
+import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.AddWalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import io.swagger.annotations.ApiOperation;
@@ -27,7 +28,7 @@ public class AddWalletController extends BaseController {
 
     @ApiOperation("注册新的钱包账户")
     @PutMapping("/wallet")
-    public CommonResult register(@Validated({InsertGroup.class}) @RequestBody WalletAccountVO info, BindingResult bindingResult) throws BusinessException {
+    public CommonResult register(@Validated({UpdateGroup.class}) @RequestBody WalletAccountVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
@@ -38,4 +39,5 @@ public class AddWalletController extends BaseController {
             }
         }
     }
+
 }

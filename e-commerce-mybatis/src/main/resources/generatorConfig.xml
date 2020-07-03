@@ -43,5 +43,6 @@
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
 
+
     </context>
 </generatorConfiguration>
