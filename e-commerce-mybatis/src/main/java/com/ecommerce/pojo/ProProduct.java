@@ -23,11 +23,11 @@ public class ProProduct implements Serializable {
     private String skuCd;
 
     /**
-     *  外键->关联品牌id
+     * 外键->关联品牌id
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 外键->关联品牌id")
+    @ApiModelProperty(value = "外键->关联品牌id")
     private Integer brdId;
 
     /**
@@ -175,11 +175,11 @@ public class ProProduct implements Serializable {
     private String timeUnit;
 
     /**
-     * 库存告）
+     * 库存预警设置（当低于预警值时发出警告）
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "库存告）")
+    @ApiModelProperty(value = "库存预警设置（当低于预警值时发出警告）")
     private Integer stockseting;
 
     /**
