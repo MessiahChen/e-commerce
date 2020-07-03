@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class WafWalletAccountFund implements Serializable {
+public class WaaWalletAccount implements Serializable {
     /**
      * 主键
      *
@@ -14,12 +14,20 @@ public class WafWalletAccountFund implements Serializable {
     private Integer buyerId;
 
     /**
-     * 邮箱名
+     * 账户名
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "邮箱名")
+    @ApiModelProperty(value = "账户名")
     private String accountName;
+
+    /**
+     * 邮箱
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "邮箱")
+    private String email;
 
     /**
      * 支付密码，加密串
@@ -127,6 +135,14 @@ public class WafWalletAccountFund implements Serializable {
         this.accountName = accountName;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public String getPassword() {
         return password;
     }
@@ -223,6 +239,7 @@ public class WafWalletAccountFund implements Serializable {
         sb.append("Hash = ").append(hashCode());
         sb.append(", buyerId=").append(buyerId);
         sb.append(", accountName=").append(accountName);
+        sb.append(", email=").append(email);
         sb.append(", password=").append(password);
         sb.append(", activeTime=").append(activeTime);
         sb.append(", isActive=").append(isActive);

@@ -2,13 +2,10 @@ package com.ecommerce.dao;
 
 import com.ecommerce.pojo.ProProduct;
 import com.ecommerce.pojo.ProProductExample;
-
+import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
-
 import org.apache.ibatis.annotations.Param;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public interface ProProductMapper {
     long countByExample(ProProductExample example);
 

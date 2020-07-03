@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ecommerce.dao.WafWalletAccountFundMapper">
-  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.WafWalletAccountFund">
+<mapper namespace="com.ecommerce.dao.WaaWalletAccountMapper">
+  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.WaaWalletAccount">
     <id column="buyer_id" jdbcType="INTEGER" property="buyerId" />
     <result column="account_name" jdbcType="VARCHAR" property="accountName" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="password" jdbcType="VARCHAR" property="password" />
     <result column="active_time" jdbcType="TIMESTAMP" property="activeTime" />
     <result column="is_active" jdbcType="CHAR" property="isActive" />
@@ -75,16 +76,17 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    buyer_id, account_name, password, active_time, is_active, status, create_by, ` create_time`, 
-    last_update_by, ` last_update_time`, account_type, hold_order_time, auto_pay_status
+    buyer_id, account_name, email, password, active_time, is_active, status, create_by, 
+    ` create_time`, last_update_by, ` last_update_time`, account_type, hold_order_time, 
+    auto_pay_status
   </sql>
-  <select id="selectByExample" parameterType="com.ecommerce.pojo.WafWalletAccountFundExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ecommerce.pojo.WaaWalletAccountExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from waf_wallet_account_fund
+    from waa_wallet_account
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,39 +97,42 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from waf_wallet_account_fund
+    from waa_wallet_account
     where buyer_id = #{buyerId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from waf_wallet_account_fund
+    delete from waa_wallet_account
     where buyer_id = #{buyerId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.WafWalletAccountFundExample">
-    delete from waf_wallet_account_fund
+  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.WaaWalletAccountExample">
+    delete from waa_wallet_account
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ecommerce.pojo.WafWalletAccountFund">
-    insert into waf_wallet_account_fund (buyer_id, account_name, password, 
-      active_time, is_active, status, 
-      create_by, ` create_time`, last_update_by, 
-      ` last_update_time`, account_type, hold_order_time, 
-      auto_pay_status)
-    values (#{buyerId,jdbcType=INTEGER}, #{accountName,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
-      #{activeTime,jdbcType=TIMESTAMP}, #{isActive,jdbcType=CHAR}, #{status,jdbcType=TINYINT}, 
-      #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, 
-      #{lastUpdateTime,jdbcType=TIMESTAMP}, #{accountType,jdbcType=INTEGER}, #{holdOrderTime,jdbcType=CHAR}, 
-      #{autoPayStatus,jdbcType=VARCHAR})
+  <insert id="insert" parameterType="com.ecommerce.pojo.WaaWalletAccount">
+    insert into waa_wallet_account (buyer_id, account_name, email, 
+      password, active_time, is_active, 
+      status, create_by, ` create_time`, 
+      last_update_by, ` last_update_time`, account_type, 
+      hold_order_time, auto_pay_status)
+    values (#{buyerId,jdbcType=INTEGER}, #{accountName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{isActive,jdbcType=CHAR}, 
+      #{status,jdbcType=TINYINT}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP}, #{accountType,jdbcType=INTEGER}, 
+      #{holdOrderTime,jdbcType=CHAR}, #{autoPayStatus,jdbcType=VARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ecommerce.pojo.WafWalletAccountFund">
-    insert into waf_wallet_account_fund
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.WaaWalletAccount">
+    insert into waa_wallet_account
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="buyerId != null">
         buyer_id,
       </if>
       <if test="accountName != null">
         account_name,
+      </if>
+      <if test="email != null">
+        email,
       </if>
       <if test="password != null">
         password,
@@ -170,6 +175,9 @@
       <if test="accountName != null">
         #{accountName,jdbcType=VARCHAR},
       </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
@@ -205,20 +213,23 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ecommerce.pojo.WafWalletAccountFundExample" resultType="java.lang.Long">
-    select count(*) from waf_wallet_account_fund
+  <select id="countByExample" parameterType="com.ecommerce.pojo.WaaWalletAccountExample" resultType="java.lang.Long">
+    select count(*) from waa_wallet_account
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update waf_wallet_account_fund
+    update waa_wallet_account
     <set>
       <if test="record.buyerId != null">
         buyer_id = #{record.buyerId,jdbcType=INTEGER},
       </if>
       <if test="record.accountName != null">
         account_name = #{record.accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
       </if>
       <if test="record.password != null">
         password = #{record.password,jdbcType=VARCHAR},
@@ -259,9 +270,10 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update waf_wallet_account_fund
+    update waa_wallet_account
     set buyer_id = #{record.buyerId,jdbcType=INTEGER},
       account_name = #{record.accountName,jdbcType=VARCHAR},
+      email = #{record.email,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
       active_time = #{record.activeTime,jdbcType=TIMESTAMP},
       is_active = #{record.isActive,jdbcType=CHAR},
@@ -277,11 +289,14 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.WafWalletAccountFund">
-    update waf_wallet_account_fund
+  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.WaaWalletAccount">
+    update waa_wallet_account
     <set>
       <if test="accountName != null">
         account_name = #{accountName,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
       </if>
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
@@ -319,9 +334,10 @@
     </set>
     where buyer_id = #{buyerId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.WafWalletAccountFund">
-    update waf_wallet_account_fund
+  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.WaaWalletAccount">
+    update waa_wallet_account
     set account_name = #{accountName,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
       active_time = #{activeTime,jdbcType=TIMESTAMP},
       is_active = #{isActive,jdbcType=CHAR},

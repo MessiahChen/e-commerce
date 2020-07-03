@@ -1,13 +1,7 @@
 package com.ecommerce.pojo;
 
-import com.ecommerce.common.validationGroup.InsertGroup;
-import com.ecommerce.common.validationGroup.SelectGroup;
-import com.ecommerce.common.validationGroup.UpdateGroup;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 
 public class SysMenu implements Serializable {
     /**
@@ -16,8 +10,6 @@ public class SysMenu implements Serializable {
      * @mbg.generated
      */
     @ApiModelProperty(value = "主键")
-    @NotNull(message = "The menuID shouldn't be null", groups = {InsertGroup.class, UpdateGroup.class, SelectGroup.class})
-    @Min(value = 10, message = "应该大于10！！", groups = {InsertGroup.class, UpdateGroup.class, SelectGroup.class})
     private Integer menuId;
 
     /**
