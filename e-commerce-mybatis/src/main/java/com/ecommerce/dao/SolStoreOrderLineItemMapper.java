@@ -34,4 +34,6 @@ public interface SolStoreOrderLineItemMapper {
     int updateByPrimaryKeyWithBLOBs(SolStoreOrderLineItem record);
 
     int updateByPrimaryKey(SolStoreOrderLineItem record);
+
+
 }
