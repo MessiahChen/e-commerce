@@ -30,6 +30,5 @@ public interface WaaWalletAccountMapper {
 
     int updateByPrimaryKey(WaaWalletAccount record);
 
-    @Select("select buyer_id from waa_wallet_account where account_name = #{}")
     int getIdByName(@Param("accountName")String accountName);
 }

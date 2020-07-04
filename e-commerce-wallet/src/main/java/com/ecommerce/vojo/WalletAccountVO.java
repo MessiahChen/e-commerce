@@ -57,25 +57,25 @@ public class WalletAccountVO implements Serializable {
 //    @ApiModelProperty(value = "状态  7 -正常,  17 -冻结")
 //    private Byte status;
 
-    @NotBlank(groups = {InsertGroup.class})
-    @ApiModelProperty(value = "创建人")
-    private String createBy;
+//    @NotBlank(groups = {InsertGroup.class})
+//    @ApiModelProperty(value = "创建人")
+//    private String createBy;
 
 //    @NotBlank(groups = {InsertGroup.class})
 //    @ApiModelProperty(value = "创建时间")
 //    private Date createTime;
-
-    @NotBlank(groups = {UpdateGroup.class})
-    @ApiModelProperty(value = "更新人")
-    private String lastUpdateBy;
+    //TODO
+//    @NotBlank(groups = {UpdateGroup.class})
+//    @ApiModelProperty(value = "更新人")
+//    private String lastUpdateBy;
 
 //    @NotBlank(groups = {UpdateGroup.class})
 //    @ApiModelProperty(value = "最后更新时间")
 //    private Date lastUpdateTime;
 
-    @NotNull(groups = {InsertGroup.class})
-    @ApiModelProperty(value = "账户类型:1-客户 2-厂家")
-    private Integer accountType;
+//    @NotNull(groups = {InsertGroup.class})
+//    @ApiModelProperty(value = "账户类型:1-客户 2-厂家")
+//    private Integer accountType;
 
     @NotBlank(message = "please confirm hold order time",groups = {InsertGroup.class})
     @ApiModelProperty(value = "订单处理时间")
@@ -87,4 +87,5 @@ public class WalletAccountVO implements Serializable {
 
     @ApiModelProperty(value = "账户币种：USD,RMB")
     private String currency;
+
 }

@@ -34,9 +34,9 @@ public class WalletServiceImpl implements WalletService {
 
         WaaWalletAccount walletAccount = new WaaWalletAccount();
         walletAccount.setAccountName(walletAccountVO.getAccountName());
-        walletAccount.setAccountType(walletAccountVO.getAccountType());
+//        walletAccount.setAccountType(walletAccountVO.getAccountType());
         walletAccount.setAutoPayStatus(walletAccountVO.getAutoPayStatus());
-        walletAccount.setCreateBy(walletAccountVO.getCreateBy());
+//        walletAccount.setCreateBy(walletAccountVO.getCreateBy());
         //SHA加密
         walletAccount.setPassword(DigestUtils.sha1Hex(walletAccountVO.getPassword()));
         walletAccount.setEmail(walletAccountVO.getEmail());

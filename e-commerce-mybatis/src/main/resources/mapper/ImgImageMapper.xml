@@ -8,7 +8,7 @@
     <result column="height" jdbcType="INTEGER" property="height" />
     <result column="uri" jdbcType="VARCHAR" property="uri" />
     <result column="type_cd" jdbcType="CHAR" property="typeCd" />
-    <result column="entity_id" jdbcType="INTEGER" property="entityId" />
+    <result column="entity_id" jdbcType="VARCHAR" property="entityId" />
     <result column="entity_cd" jdbcType="VARCHAR" property="entityCd" />
     <result column="seq_no" jdbcType="INTEGER" property="seqNo" />
     <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
@@ -119,7 +119,7 @@
       call_cnt, remark, sts_cd
       )
     values (#{imgId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{width,jdbcType=INTEGER}, 
-      #{height,jdbcType=INTEGER}, #{uri,jdbcType=VARCHAR}, #{typeCd,jdbcType=CHAR}, #{entityId,jdbcType=INTEGER}, 
+      #{height,jdbcType=INTEGER}, #{uri,jdbcType=VARCHAR}, #{typeCd,jdbcType=CHAR}, #{entityId,jdbcType=VARCHAR}, 
       #{entityCd,jdbcType=VARCHAR}, #{seqNo,jdbcType=INTEGER}, #{createdBy,jdbcType=VARCHAR}, 
       #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
       #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}
@@ -197,7 +197,7 @@
         #{typeCd,jdbcType=CHAR},
       </if>
       <if test="entityId != null">
-        #{entityId,jdbcType=INTEGER},
+        #{entityId,jdbcType=VARCHAR},
       </if>
       <if test="entityCd != null">
         #{entityCd,jdbcType=VARCHAR},
@@ -256,7 +256,7 @@
         type_cd = #{record.typeCd,jdbcType=CHAR},
       </if>
       <if test="record.entityId != null">
-        entity_id = #{record.entityId,jdbcType=INTEGER},
+        entity_id = #{record.entityId,jdbcType=VARCHAR},
       </if>
       <if test="record.entityCd != null">
         entity_cd = #{record.entityCd,jdbcType=VARCHAR},
@@ -298,7 +298,7 @@
       height = #{record.height,jdbcType=INTEGER},
       uri = #{record.uri,jdbcType=VARCHAR},
       type_cd = #{record.typeCd,jdbcType=CHAR},
-      entity_id = #{record.entityId,jdbcType=INTEGER},
+      entity_id = #{record.entityId,jdbcType=VARCHAR},
       entity_cd = #{record.entityCd,jdbcType=VARCHAR},
       seq_no = #{record.seqNo,jdbcType=INTEGER},
       created_by = #{record.createdBy,jdbcType=VARCHAR},
@@ -331,7 +331,7 @@
         type_cd = #{typeCd,jdbcType=CHAR},
       </if>
       <if test="entityId != null">
-        entity_id = #{entityId,jdbcType=INTEGER},
+        entity_id = #{entityId,jdbcType=VARCHAR},
       </if>
       <if test="entityCd != null">
         entity_cd = #{entityCd,jdbcType=VARCHAR},
@@ -370,7 +370,7 @@
       height = #{height,jdbcType=INTEGER},
       uri = #{uri,jdbcType=VARCHAR},
       type_cd = #{typeCd,jdbcType=CHAR},
-      entity_id = #{entityId,jdbcType=INTEGER},
+      entity_id = #{entityId,jdbcType=VARCHAR},
       entity_cd = #{entityCd,jdbcType=VARCHAR},
       seq_no = #{seqNo,jdbcType=INTEGER},
       created_by = #{createdBy,jdbcType=VARCHAR},
@@ -387,7 +387,7 @@
     img_image
     where entity_id in
     <foreach collection="proIds" item="proId" open="(" separator="," close=")">
-      #{id, jdbcType=INTEGER}
+      #{id, jdbcType=VARCHAR}
     </foreach>
   </delete>
 </mapper>

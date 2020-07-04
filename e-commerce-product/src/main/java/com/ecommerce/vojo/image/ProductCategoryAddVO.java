@@ -10,7 +10,7 @@ import java.util.List;
 
 @Setter
 @Getter
-public class ProductImageAddVO {
+public class ProductCategoryAddVO {
 
     @NotNull(message = "商品ID不能为空！", groups = {InsertGroup.class})
     @ApiModelProperty(value = "主键id")
@@ -23,10 +23,16 @@ public class ProductImageAddVO {
     @ApiModelProperty(value = "标题")
     private String title;
 
-    @ApiModelProperty(value = "分类ID")
-    private List<Integer> catIds;
+    @ApiModelProperty(value = "主分类ID")
+    private Integer mainCatId;
 
-    @ApiModelProperty(value = "分类名称")
-    private List<String> catNames;
+    @ApiModelProperty(value = "主分类名称")
+    private String mainCatName;
+
+    @ApiModelProperty(value = "副分类ID")
+    private Integer viceCatId;
+
+    @ApiModelProperty(value = "副分类名称")
+    private String viceCatName;
 
 }

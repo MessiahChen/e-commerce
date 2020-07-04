@@ -368,4 +368,9 @@
       currency = #{currency,jdbcType=VARCHAR}
     where buyer_id = #{buyerId,jdbcType=INTEGER}
   </update>
+  <select id="getIdByName">
+    select buyer_id
+    from waa_wallet_account
+    where account_name = #{accountName, jdbcType=VARCHAR}
+  </select>
 </mapper>

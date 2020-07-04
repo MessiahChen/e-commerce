@@ -59,7 +59,7 @@ public class ImgImage implements Serializable {
      * @mbg.generated
      */
     @ApiModelProperty(value = "关联表的主键id")
-    private Integer entityId;
+    private String entityId;
 
     /**
      * 关联自定义的code
@@ -183,11 +183,11 @@ public class ImgImage implements Serializable {
         this.typeCd = typeCd;
     }
 
-    public Integer getEntityId() {
+    public String getEntityId() {
         return entityId;
     }
 
-    public void setEntityId(Integer entityId) {
+    public void setEntityId(String entityId) {
         this.entityId = entityId;
     }
 

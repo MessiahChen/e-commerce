@@ -6,9 +6,7 @@ import com.ecommerce.common.validationGroup.DeleteGroup;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.ProductEntryService;
-import com.ecommerce.vojo.entry.ProductAddVO;
-import com.ecommerce.vojo.entry.ProductDeleteVO;
-import com.ecommerce.vojo.entry.ProductUpdateVO;
+import com.ecommerce.vojo.entry.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +23,21 @@ public class ProductEntryController extends BaseController {
     @Autowired
     private ProductEntryService productEntryService;
 
+    @ApiOperation("找到该品牌所有商品")
+    @PostMapping("/getAllProduct")
+    public CommonResult<CommonPage<ProductEntryVO>> getAllProduct(@RequestBody GetAllProductVO getAllProductVO) {
+        CommonPage<ProductEntryVO> result = productEntryService.getAllProduct(getAllProductVO);
+        if (!result.getList().isEmpty()) {
+            return CommonResult.success(result, "匹配成功");
+        } else {
+            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+        }
+    }
+
     @ApiOperation("通过商品标题模糊匹配商品")
-    @GetMapping("/searchProductByTitle")
-    public CommonResult<CommonPage> searchProductByTitle(@RequestParam(value = "title") String title, @RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
-        CommonPage result = productEntryService.searchProductByTitle(title, pageNum, pageSize);
+    @PostMapping("/searchProductByTitle")
+    public CommonResult<CommonPage<ProductEntryVO>> searchProductByTitle(@RequestBody SearchProductVO searchProductVO) {
+        CommonPage<ProductEntryVO> result = productEntryService.searchProductByTitle(searchProductVO);
         if (!result.getList().isEmpty()) {
             return CommonResult.success(result, "匹配成功");
         } else {

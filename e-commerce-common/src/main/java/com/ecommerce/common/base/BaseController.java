@@ -27,6 +27,7 @@ public class BaseController {
             commonResult.setCode(500);
             commonResult.setMessage("Sorry!Exception occurs!Please try it later");
         }
+        exception.printStackTrace();
         return commonResult;
     }
 
