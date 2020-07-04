@@ -39,9 +39,10 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.ecommerce.dao"
                              targetProject="e-commerce-mybatis/src/main/java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="%">
+        <table tableName="waa_wallet_account">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
+
 
     </context>
 </generatorConfiguration>

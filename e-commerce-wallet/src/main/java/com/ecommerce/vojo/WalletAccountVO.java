@@ -9,6 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 /**
  * 钱包账户VO
@@ -23,13 +24,25 @@ public class WalletAccountVO implements Serializable {
     private String accountName;
 
     @ApiModelProperty("密码")
-    @NotBlank(message = "password cannot be blank",groups = {InsertGroup.class})
+    @NotBlank(message = "password cannot be blank")
     private String password;
 
     @ApiModelProperty("邮箱")
     @Email(message = "email format wrong",groups = {InsertGroup.class})
     @NotBlank(message = "email cannot be blank",groups = {InsertGroup.class})
     private String email;
+
+    @ApiModelProperty(value = "卖家id")
+    private Integer buyerId;
+
+    @ApiModelProperty(value = "可用金额")
+    private BigDecimal availableMoney;
+
+    @ApiModelProperty(value = "充值中金额")
+    private BigDecimal depositingMoney;
+
+    @ApiModelProperty(value = "提现中金额")
+    private BigDecimal withdrawingMoney;
 
 //    @ApiModelProperty(value = "主键")
 //    private Integer buyerId;
@@ -71,4 +84,7 @@ public class WalletAccountVO implements Serializable {
     @NotBlank(message = "please confirm auto pay status",groups = {InsertGroup.class})
     @ApiModelProperty(value = "自动支付状态 0-FALSE 1-TRUE")
     private String autoPayStatus;
+
+    @ApiModelProperty(value = "账户币种：USD,RMB")
+    private String currency;
 }

@@ -2,14 +2,10 @@ package com.ecommerce.dao;
 
 import com.ecommerce.pojo.WaaWalletAccount;
 import com.ecommerce.pojo.WaaWalletAccountExample;
+import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
-
-/**
- * 新增ID查询
- * Edit by yousabla on 2020/7/3.
- */
 
 public interface WaaWalletAccountMapper {
     long countByExample(WaaWalletAccountExample example);
@@ -34,6 +30,6 @@ public interface WaaWalletAccountMapper {
 
     int updateByPrimaryKey(WaaWalletAccount record);
 
-    @Select("select buyer_id from waa_wallet_account where account_name = #{accountName}")
-    int getBuyerIdByUserName(@Param("accountName") String accountName);
+    @Select("select buyer_id from waa_wallet_account where account_name = #{}")
+    int getIdByName(@Param("accountName")String accountName);
 }

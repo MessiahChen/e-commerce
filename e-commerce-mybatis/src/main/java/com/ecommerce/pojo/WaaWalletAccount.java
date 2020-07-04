@@ -2,6 +2,7 @@ package com.ecommerce.pojo;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class WaaWalletAccount implements Serializable {
@@ -38,20 +39,28 @@ public class WaaWalletAccount implements Serializable {
     private String password;
 
     /**
-     * 激活时间
+     * 可用金额
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "激活时间")
-    private Date activeTime;
+    @ApiModelProperty(value = "可用金额")
+    private BigDecimal availableMoney;
 
     /**
-     * 是否激活 N - 未激活 , Y - 激活
+     * 充值中金额
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "是否激活 N - 未激活 , Y - 激活")
-    private String isActive;
+    @ApiModelProperty(value = "充值中金额")
+    private BigDecimal depositingMoney;
+
+    /**
+     * 提现中金额
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "提现中金额")
+    private BigDecimal withdrawingMoney;
 
     /**
      * 状态  7 -正常,  17 -冻结
@@ -102,20 +111,20 @@ public class WaaWalletAccount implements Serializable {
     private Integer accountType;
 
     /**
-     * 订单处理时间
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "订单处理时间")
-    private String holdOrderTime;
-
-    /**
      * 0-FALSE 1-TRUE
      *
      * @mbg.generated
      */
     @ApiModelProperty(value = "0-FALSE 1-TRUE")
     private String autoPayStatus;
+
+    /**
+     * 币种：USD,RMB
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "币种：USD,RMB")
+    private String currency;
 
     private static final long serialVersionUID = 1L;
 
@@ -151,20 +160,28 @@ public class WaaWalletAccount implements Serializable {
         this.password = password;
     }
 
-    public Date getActiveTime() {
-        return activeTime;
+    public BigDecimal getAvailableMoney() {
+        return availableMoney;
     }
 
-    public void setActiveTime(Date activeTime) {
-        this.activeTime = activeTime;
+    public void setAvailableMoney(BigDecimal availableMoney) {
+        this.availableMoney = availableMoney;
     }
 
-    public String getIsActive() {
-        return isActive;
+    public BigDecimal getDepositingMoney() {
+        return depositingMoney;
     }
 
-    public void setIsActive(String isActive) {
-        this.isActive = isActive;
+    public void setDepositingMoney(BigDecimal depositingMoney) {
+        this.depositingMoney = depositingMoney;
+    }
+
+    public BigDecimal getWithdrawingMoney() {
+        return withdrawingMoney;
+    }
+
+    public void setWithdrawingMoney(BigDecimal withdrawingMoney) {
+        this.withdrawingMoney = withdrawingMoney;
     }
 
     public Byte getStatus() {
@@ -215,20 +232,20 @@ public class WaaWalletAccount implements Serializable {
         this.accountType = accountType;
     }
 
-    public String getHoldOrderTime() {
-        return holdOrderTime;
-    }
-
-    public void setHoldOrderTime(String holdOrderTime) {
-        this.holdOrderTime = holdOrderTime;
-    }
-
     public String getAutoPayStatus() {
         return autoPayStatus;
     }
 
     public void setAutoPayStatus(String autoPayStatus) {
         this.autoPayStatus = autoPayStatus;
+    }
+
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
     }
 
     @Override
@@ -241,16 +258,17 @@ public class WaaWalletAccount implements Serializable {
         sb.append(", accountName=").append(accountName);
         sb.append(", email=").append(email);
         sb.append(", password=").append(password);
-        sb.append(", activeTime=").append(activeTime);
-        sb.append(", isActive=").append(isActive);
+        sb.append(", availableMoney=").append(availableMoney);
+        sb.append(", depositingMoney=").append(depositingMoney);
+        sb.append(", withdrawingMoney=").append(withdrawingMoney);
         sb.append(", status=").append(status);
         sb.append(", createBy=").append(createBy);
         sb.append(", createTime=").append(createTime);
         sb.append(", lastUpdateBy=").append(lastUpdateBy);
         sb.append(", lastUpdateTime=").append(lastUpdateTime);
         sb.append(", accountType=").append(accountType);
-        sb.append(", holdOrderTime=").append(holdOrderTime);
         sb.append(", autoPayStatus=").append(autoPayStatus);
+        sb.append(", currency=").append(currency);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
