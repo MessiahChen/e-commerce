@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.pojo.SalSalesOrderLineItem;
+import com.ecommerce.pojo.SaoSalesOrder;
 import com.ecommerce.pojo.SolStoreOrderLineItem;
 import com.ecommerce.pojo.StoStoreOrder;
 
@@ -20,4 +21,7 @@ public interface OrderService {
 
     //根据借卖方订单管理对应状态返回销售订单明细
     List<SalSalesOrderLineItem> getSalSalesOrderLineItem(String stsCd);
+
+    //根据manId查询sao信息
+    List<SaoSalesOrder> getSaoByManId(int manId);
 }

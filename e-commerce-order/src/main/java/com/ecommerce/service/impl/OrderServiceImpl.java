@@ -103,4 +103,15 @@ public class OrderServiceImpl implements OrderService {
 
         return results;
     }
+
+    @Override
+    //根据manId查询sao信息
+    public List<SaoSalesOrder> getSaoByManId(int manId){
+        //用SaoSalesOrderExample来获取对应的Sao列表
+        SaoSalesOrderExample saoSalesOrderExample = new SaoSalesOrderExample();
+        SaoSalesOrderExample.Criteria criteria = saoSalesOrderExample.createCriteria();
+        //选中条件-> manId相等
+        criteria.andManIdEqualTo(manId);
+        return saoSalesOrderMapper.selectByExample(saoSalesOrderExample);
+    }
 }
