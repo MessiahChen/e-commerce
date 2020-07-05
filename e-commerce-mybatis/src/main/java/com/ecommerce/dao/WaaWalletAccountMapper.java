@@ -30,5 +30,5 @@ public interface WaaWalletAccountMapper {
 
     int updateByPrimaryKey(WaaWalletAccount record);
 
-    int getIdByName(@Param("accountName")String accountName);
+    Integer getIdByName(@Param("accountName")String accountName);
 }

@@ -11,5 +11,5 @@ public interface WalletFlowService {
 
     Boolean withdraw(WalletFlowVO walletFlowVO);
 
-    List<WalletFlowRecordVO> check(Integer buyerId);
+    List<WalletFlowRecordVO> check(String accountName);
 }

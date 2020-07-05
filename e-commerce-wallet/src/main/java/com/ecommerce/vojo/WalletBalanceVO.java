@@ -1,15 +1,17 @@
 package com.ecommerce.vojo;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
 
 /**
- * 钱包余额VO
  * Created by yousabla on 2020/7/3.
+ * 用于提现/充值的VO类
  */
 
+@Api("用于提现/充值的VO类")
 @Data
 public class WalletBalanceVO {
 

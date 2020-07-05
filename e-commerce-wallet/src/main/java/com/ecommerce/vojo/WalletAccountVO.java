@@ -2,6 +2,8 @@ package com.ecommerce.vojo;
 
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -16,6 +18,7 @@ import java.math.BigDecimal;
  * Created by yousabla on 2020/7/3.
  */
 
+@Api("钱包账户VO")
 @Data
 public class WalletAccountVO implements Serializable {
 
@@ -32,17 +35,17 @@ public class WalletAccountVO implements Serializable {
     @NotBlank(message = "email cannot be blank",groups = {InsertGroup.class})
     private String email;
 
-    @ApiModelProperty(value = "卖家id")
-    private Integer buyerId;
-
-    @ApiModelProperty(value = "可用金额")
-    private BigDecimal availableMoney;
-
-    @ApiModelProperty(value = "充值中金额")
-    private BigDecimal depositingMoney;
-
-    @ApiModelProperty(value = "提现中金额")
-    private BigDecimal withdrawingMoney;
+//    @ApiModelProperty(value = "卖家id")
+//    private Integer buyerId;
+//
+//    @ApiModelProperty(value = "可用金额")
+//    private BigDecimal availableMoney;
+//
+//    @ApiModelProperty(value = "充值中金额")
+//    private BigDecimal depositingMoney;
+//
+//    @ApiModelProperty(value = "提现中金额")
+//    private BigDecimal withdrawingMoney;
 
 //    @ApiModelProperty(value = "主键")
 //    private Integer buyerId;
@@ -77,15 +80,15 @@ public class WalletAccountVO implements Serializable {
 //    @ApiModelProperty(value = "账户类型:1-客户 2-厂家")
 //    private Integer accountType;
 
-    @NotBlank(message = "please confirm hold order time",groups = {InsertGroup.class})
-    @ApiModelProperty(value = "订单处理时间")
-    private String holdOrderTime;
-
-    @NotBlank(message = "please confirm auto pay status",groups = {InsertGroup.class})
-    @ApiModelProperty(value = "自动支付状态 0-FALSE 1-TRUE")
-    private String autoPayStatus;
-
-    @ApiModelProperty(value = "账户币种：USD,RMB")
-    private String currency;
+//    @NotBlank(message = "please confirm hold order time",groups = {InsertGroup.class})
+//    @ApiModelProperty(value = "订单处理时间")
+//    private String holdOrderTime;
+//
+//    @NotBlank(message = "please confirm auto pay status",groups = {InsertGroup.class})
+//    @ApiModelProperty(value = "自动支付状态 0-FALSE 1-TRUE")
+//    private String autoPayStatus;
+//
+//    @ApiModelProperty(value = "账户币种：USD,RMB")
+//    private String currency;
 
 }

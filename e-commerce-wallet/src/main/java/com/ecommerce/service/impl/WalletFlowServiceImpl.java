@@ -9,6 +9,7 @@ import com.ecommerce.service.WalletFlowService;
 import com.ecommerce.vojo.WalletFlowRecordVO;
 import com.ecommerce.vojo.WalletFlowVO;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@Service
 public class WalletFlowServiceImpl implements WalletFlowService {
     @Resource
     WaaWalletAccountMapper waaWalletAccountMapper;
@@ -31,6 +33,7 @@ public class WalletFlowServiceImpl implements WalletFlowService {
         WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
         if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword()))){
             account.setDepositingMoney(walletFlowVO.getFlow());
+            waaWalletAccountMapper.updateByPrimaryKeySelective(account);
             generateTransaction(buyerId,2,walletFlowVO.getFlow());
             return true;
         }else {
@@ -46,6 +49,7 @@ public class WalletFlowServiceImpl implements WalletFlowService {
         WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
         if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword()))){
             account.setWithdrawingMoney(walletFlowVO.getFlow());
+            waaWalletAccountMapper.updateByPrimaryKeySelective(account);
             generateTransaction(buyerId,2,walletFlowVO.getFlow());
             return true;
         }else {
@@ -55,7 +59,8 @@ public class WalletFlowServiceImpl implements WalletFlowService {
     }
 
     @Override
-    public List<WalletFlowRecordVO> check(Integer buyerId) {
+    public List<WalletFlowRecordVO> check(String accountName) {
+        int buyerId = waaWalletAccountMapper.getIdByName(accountName);
         WtrWalletTransactionRecordExample example = new WtrWalletTransactionRecordExample();
         example.createCriteria().andBuyerIdEqualTo(buyerId);
         List<WtrWalletTransactionRecord> records = wtrWalletTransactionRecordMapper.selectByExample(example);

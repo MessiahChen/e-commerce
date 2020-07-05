@@ -1,5 +1,6 @@
 package com.ecommerce.vojo;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -7,7 +8,14 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
+/**
+ * Create by yousabla on 2020/7/5
+ * 用于提现/充值的VO类
+ */
+
+@Api("用于提现/充值的VO类")
 @Data
+
 public class WalletFlowVO {
 
     @ApiModelProperty("用户名")

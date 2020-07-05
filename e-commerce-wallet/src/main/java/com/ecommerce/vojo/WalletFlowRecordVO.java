@@ -1,12 +1,19 @@
 package com.ecommerce.vojo;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * Create by yousabla on 2020/7/5
+ * 用于返回当前账户钱包流水的VO类
+ */
+
 @Data
+@Api("用于返回当前账户钱包流水的VO类")
 public class WalletFlowRecordVO {
 
     @ApiModelProperty(value = "买家ID")

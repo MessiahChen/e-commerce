@@ -7,6 +7,7 @@ import com.ecommerce.service.RedisService;
 import com.ecommerce.service.WalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
+import com.ecommerce.vojo.WalletPasswordVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
@@ -35,7 +36,7 @@ public class WalletServiceImpl implements WalletService {
         WaaWalletAccount walletAccount = new WaaWalletAccount();
         walletAccount.setAccountName(walletAccountVO.getAccountName());
 //        walletAccount.setAccountType(walletAccountVO.getAccountType());
-        walletAccount.setAutoPayStatus(walletAccountVO.getAutoPayStatus());
+//        walletAccount.setAutoPayStatus(walletAccountVO.getAutoPayStatus());
 //        walletAccount.setCreateBy(walletAccountVO.getCreateBy());
         //SHA加密
         walletAccount.setPassword(DigestUtils.sha1Hex(walletAccountVO.getPassword()));
@@ -56,7 +57,7 @@ public class WalletServiceImpl implements WalletService {
     public WalletBalanceVO getWalletInfo(String accountName){
         WaaWalletAccount walletInfo = waaWalletAccountMapper.selectByPrimaryKey(waaWalletAccountMapper.getIdByName(accountName));
         if (walletInfo != null){
-            redisService.set(accountName+"Balance",walletInfo.getAvailableMoney());
+//            redisService.set(accountName+"Balance",walletInfo.getAvailableMoney());
             WalletBalanceVO balanceVO = new WalletBalanceVO();
             balanceVO.setCurrency(walletInfo.getCurrency());
             balanceVO.setBuyerId(walletInfo.getBuyerId());
@@ -66,6 +67,18 @@ public class WalletServiceImpl implements WalletService {
             return balanceVO;
         }else {
             throw BusinessException.USERNAME_NOT_EXISTS;
+        }
+    }
+
+    @Override
+    public Boolean changePassword(WalletPasswordVO passwordVO) {
+        WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(waaWalletAccountMapper.getIdByName(passwordVO.getAccountName()));
+        if (DigestUtils.sha1Hex(passwordVO.getOldPassword()).equals(account.getPassword())){
+            account.setPassword(DigestUtils.sha1Hex(passwordVO.getNewPassword()));
+            waaWalletAccountMapper.updateByPrimaryKeySelective(account);
+            return true;
+        }else {
+            return false;
         }
     }
 
