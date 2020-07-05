@@ -24,6 +24,7 @@
     <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
     <result column="time_unit" jdbcType="VARCHAR" property="timeUnit" />
     <result column="stockseting" jdbcType="INTEGER" property="stockseting" />
+    <result column="prc_id" jdbcType="INTEGER" property="prcId" />
   </resultMap>
   <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ecommerce.pojo.ProProduct">
     <result column="warranty" jdbcType="LONGVARCHAR" property="warranty" />
@@ -89,7 +90,7 @@
   <sql id="Base_Column_List">
     pro_id, sku_cd, brd_id, man_id, title, upc, ean, model, warranty_day, retail_price, 
     created_by, creation_date, last_update_by, last_update_date, call_int, remark, sts_cd, 
-    mininum_retail_price, replenishment_period, key_words, time_unit, stockseting
+    mininum_retail_price, replenishment_period, key_words, time_unit, stockseting, prc_id
   </sql>
   <sql id="Blob_Column_List">
     warranty
@@ -125,7 +126,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-    select
+    select 
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
@@ -150,7 +151,8 @@
       last_update_by, last_update_date, call_int, 
       remark, sts_cd, mininum_retail_price, 
       replenishment_period, key_words, time_unit, 
-      stockseting, warranty)
+      stockseting, prc_id, warranty
+      )
     values (#{proId,jdbcType=INTEGER}, #{skuCd,jdbcType=VARCHAR}, #{brdId,jdbcType=INTEGER}, 
       #{manId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, 
       #{ean,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{warrantyDay,jdbcType=VARCHAR}, 
@@ -158,7 +160,8 @@
       #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, #{callInt,jdbcType=INTEGER}, 
       #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, #{mininumRetailPrice,jdbcType=DECIMAL}, 
       #{replenishmentPeriod,jdbcType=INTEGER}, #{keyWords,jdbcType=VARCHAR}, #{timeUnit,jdbcType=VARCHAR}, 
-      #{stockseting,jdbcType=INTEGER}, #{warranty,jdbcType=LONGVARCHAR})
+      #{stockseting,jdbcType=INTEGER}, #{prcId,jdbcType=INTEGER}, #{warranty,jdbcType=LONGVARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ecommerce.pojo.ProProduct">
     insert into pro_product
@@ -228,6 +231,9 @@
       </if>
       <if test="stockseting != null">
         stockseting,
+      </if>
+      <if test="prcId != null">
+        prc_id,
       </if>
       <if test="warranty != null">
         warranty,
@@ -299,6 +305,9 @@
       </if>
       <if test="stockseting != null">
         #{stockseting,jdbcType=INTEGER},
+      </if>
+      <if test="prcId != null">
+        #{prcId,jdbcType=INTEGER},
       </if>
       <if test="warranty != null">
         #{warranty,jdbcType=LONGVARCHAR},
@@ -380,6 +389,9 @@
       <if test="record.stockseting != null">
         stockseting = #{record.stockseting,jdbcType=INTEGER},
       </if>
+      <if test="record.prcId != null">
+        prc_id = #{record.prcId,jdbcType=INTEGER},
+      </if>
       <if test="record.warranty != null">
         warranty = #{record.warranty,jdbcType=LONGVARCHAR},
       </if>
@@ -412,6 +424,7 @@
       key_words = #{record.keyWords,jdbcType=VARCHAR},
       time_unit = #{record.timeUnit,jdbcType=VARCHAR},
       stockseting = #{record.stockseting,jdbcType=INTEGER},
+      prc_id = #{record.prcId,jdbcType=INTEGER},
       warranty = #{record.warranty,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -440,7 +453,8 @@
       replenishment_period = #{record.replenishmentPeriod,jdbcType=INTEGER},
       key_words = #{record.keyWords,jdbcType=VARCHAR},
       time_unit = #{record.timeUnit,jdbcType=VARCHAR},
-      stockseting = #{record.stockseting,jdbcType=INTEGER}
+      stockseting = #{record.stockseting,jdbcType=INTEGER},
+      prc_id = #{record.prcId,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -511,6 +525,9 @@
       <if test="stockseting != null">
         stockseting = #{stockseting,jdbcType=INTEGER},
       </if>
+      <if test="prcId != null">
+        prc_id = #{prcId,jdbcType=INTEGER},
+      </if>
       <if test="warranty != null">
         warranty = #{warranty,jdbcType=LONGVARCHAR},
       </if>
@@ -540,6 +557,7 @@
       key_words = #{keyWords,jdbcType=VARCHAR},
       time_unit = #{timeUnit,jdbcType=VARCHAR},
       stockseting = #{stockseting,jdbcType=INTEGER},
+      prc_id = #{prcId,jdbcType=INTEGER},
       warranty = #{warranty,jdbcType=LONGVARCHAR}
     where pro_id = #{proId,jdbcType=INTEGER}
   </update>
@@ -565,7 +583,8 @@
       replenishment_period = #{replenishmentPeriod,jdbcType=INTEGER},
       key_words = #{keyWords,jdbcType=VARCHAR},
       time_unit = #{timeUnit,jdbcType=VARCHAR},
-      stockseting = #{stockseting,jdbcType=INTEGER}
+      stockseting = #{stockseting,jdbcType=INTEGER},
+      prc_id = #{prcId,jdbcType=INTEGER}
     where pro_id = #{proId,jdbcType=INTEGER}
   </update>
   <delete id="deleteProductInfoByList">
@@ -573,7 +592,7 @@
     pro_product
     where pro_id in
     <foreach collection="proIds" item="proId" open="(" separator="," close=")">
-      #{id, jdbcType=INTEGER}
+      #{proId, jdbcType=INTEGER}
     </foreach>
   </delete>
 </mapper>

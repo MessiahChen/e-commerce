@@ -8,10 +8,7 @@ import com.ecommerce.pojo.PckPackageInfoExample;
 import com.ecommerce.pojo.ProProduct;
 import com.ecommerce.pojo.ProProductExample;
 import com.ecommerce.service.ProductEntryService;
-import com.ecommerce.vojo.entry.ProductAddVO;
-import com.ecommerce.vojo.entry.ProductDeleteVO;
-import com.ecommerce.vojo.entry.ProductEntryVO;
-import com.ecommerce.vojo.entry.ProductUpdateVO;
+import com.ecommerce.vojo.entry.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +29,11 @@ public class ProductEntryServiceImpl implements ProductEntryService {
     private PckPackageInfoMapper pckPackageInfoMapper;
 
     @Override
-    public CommonPage<ProductEntryVO> searchProductByTitle(String title, Integer pageNum, Integer pageSize) {
-        Page<ProProduct> productPage = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> {
+    public CommonPage<ProductEntryVO> getAllProduct(GetAllProductVO vo) {
+        Page<ProProduct> productPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
             ProProductExample proProductExample = new ProProductExample();
             ProProductExample.Criteria criteria = proProductExample.createCriteria();
-            criteria.andTitleLike("%" + title + "%");
+            criteria.andManIdEqualTo(vo.getManId());
             proProductMapper.selectByExample(proProductExample);
         });
 
@@ -44,7 +41,30 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         for (ProProduct product : productPage.getResult()) {
             ProductEntryVO productEntryVO = new ProductEntryVO();
             productEntryVO.setProId(product.getProId());
-            productEntryVO.setRetailPrice(product.getRetailPrice().toString());
+            productEntryVO.setRetailPrice(String.valueOf(product.getRetailPrice()));
+            productEntryVO.setSkuCd(product.getSkuCd());
+            productEntryVO.setTitle(product.getTitle());
+            productEntryVO.setWarNum("1000");
+            result.add(productEntryVO);
+        }
+        return CommonPage.restPage(result, productPage);
+    }
+
+    @Override
+    public CommonPage<ProductEntryVO> searchProductByTitle(SearchProductVO vo) {
+        Page<ProProduct> productPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
+            ProProductExample proProductExample = new ProProductExample();
+            ProProductExample.Criteria criteria = proProductExample.createCriteria();
+            criteria.andTitleLike("%" + vo.getTitle() + "%");
+            criteria.andManIdEqualTo(vo.getManId());
+            proProductMapper.selectByExample(proProductExample);
+        });
+
+        List<ProductEntryVO> result = new ArrayList<>();
+        for (ProProduct product : productPage.getResult()) {
+            ProductEntryVO productEntryVO = new ProductEntryVO();
+            productEntryVO.setProId(product.getProId());
+            productEntryVO.setRetailPrice(String.valueOf(product.getRetailPrice()));
             productEntryVO.setSkuCd(product.getSkuCd());
             productEntryVO.setTitle(product.getTitle());
             productEntryVO.setWarNum("1000");
@@ -87,10 +107,14 @@ public class ProductEntryServiceImpl implements ProductEntryService {
     }
 
     @Override
-    public boolean deleteProductInfo(ProductDeleteVO vo) {
-        proProductMapper.deleteProductInfoByList(vo.getProIds());
-        pckPackageInfoMapper.deletePackageInfoByList(vo.getProIds());
-        return false;
+    public boolean deleteProductInfo(Integer proId) {
+        proProductMapper.deleteByPrimaryKey(proId);
+
+        PckPackageInfoExample pckPackageInfoExample = new PckPackageInfoExample();
+        PckPackageInfoExample.Criteria criteria = pckPackageInfoExample.createCriteria();
+        criteria.andProIdEqualTo(proId);
+        pckPackageInfoMapper.deleteByExample(pckPackageInfoExample);
+        return true;
     }
 
     @Override

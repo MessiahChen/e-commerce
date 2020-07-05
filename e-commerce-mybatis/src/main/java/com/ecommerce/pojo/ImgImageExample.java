@@ -505,52 +505,62 @@ public class ImgImageExample {
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdEqualTo(Integer value) {
+        public Criteria andEntityIdEqualTo(String value) {
             addCriterion("entity_id =", value, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdNotEqualTo(Integer value) {
+        public Criteria andEntityIdNotEqualTo(String value) {
             addCriterion("entity_id <>", value, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdGreaterThan(Integer value) {
+        public Criteria andEntityIdGreaterThan(String value) {
             addCriterion("entity_id >", value, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdGreaterThanOrEqualTo(Integer value) {
+        public Criteria andEntityIdGreaterThanOrEqualTo(String value) {
             addCriterion("entity_id >=", value, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdLessThan(Integer value) {
+        public Criteria andEntityIdLessThan(String value) {
             addCriterion("entity_id <", value, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdLessThanOrEqualTo(Integer value) {
+        public Criteria andEntityIdLessThanOrEqualTo(String value) {
             addCriterion("entity_id <=", value, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdIn(List<Integer> values) {
+        public Criteria andEntityIdLike(String value) {
+            addCriterion("entity_id like", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdNotLike(String value) {
+            addCriterion("entity_id not like", value, "entityId");
+            return (Criteria) this;
+        }
+
+        public Criteria andEntityIdIn(List<String> values) {
             addCriterion("entity_id in", values, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdNotIn(List<Integer> values) {
+        public Criteria andEntityIdNotIn(List<String> values) {
             addCriterion("entity_id not in", values, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdBetween(Integer value1, Integer value2) {
+        public Criteria andEntityIdBetween(String value1, String value2) {
             addCriterion("entity_id between", value1, value2, "entityId");
             return (Criteria) this;
         }
 
-        public Criteria andEntityIdNotBetween(Integer value1, Integer value2) {
+        public Criteria andEntityIdNotBetween(String value1, String value2) {
             addCriterion("entity_id not between", value1, value2, "entityId");
             return (Criteria) this;
         }

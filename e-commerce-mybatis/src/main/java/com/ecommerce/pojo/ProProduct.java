@@ -135,11 +135,11 @@ public class ProProduct implements Serializable {
     private String remark;
 
     /**
-     * 状态
+     * 状态（a，b，c，d分别为待入仓、入仓中、待上架、上架中）
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "状态")
+    @ApiModelProperty(value = "状态（a，b，c，d分别为待入仓、入仓中、待上架、上架中）")
     private String stsCd;
 
     /**
@@ -181,6 +181,14 @@ public class ProProduct implements Serializable {
      */
     @ApiModelProperty(value = "库存预警设置（当低于预警值时发出警告）")
     private Integer stockseting;
+
+    /**
+     * 主分类ID
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "主分类ID")
+    private Integer prcId;
 
     /**
      * 保修政策说明
@@ -368,6 +376,14 @@ public class ProProduct implements Serializable {
         this.stockseting = stockseting;
     }
 
+    public Integer getPrcId() {
+        return prcId;
+    }
+
+    public void setPrcId(Integer prcId) {
+        this.prcId = prcId;
+    }
+
     public String getWarranty() {
         return warranty;
     }
@@ -404,6 +420,7 @@ public class ProProduct implements Serializable {
         sb.append(", keyWords=").append(keyWords);
         sb.append(", timeUnit=").append(timeUnit);
         sb.append(", stockseting=").append(stockseting);
+        sb.append(", prcId=").append(prcId);
         sb.append(", warranty=").append(warranty);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

@@ -1,18 +1,17 @@
 package com.ecommerce.service;
 
 import com.ecommerce.common.base.CommonPage;
-import com.ecommerce.vojo.entry.ProductAddVO;
-import com.ecommerce.vojo.entry.ProductDeleteVO;
-import com.ecommerce.vojo.entry.ProductEntryVO;
-import com.ecommerce.vojo.entry.ProductUpdateVO;
+import com.ecommerce.vojo.entry.*;
 
 public interface ProductEntryService {
 
-    CommonPage<ProductEntryVO> searchProductByTitle(String title, Integer pageNum, Integer pageSize);
+    CommonPage<ProductEntryVO> getAllProduct(GetAllProductVO getAllProductVO);
+
+    CommonPage<ProductEntryVO> searchProductByTitle(SearchProductVO searchProductVO);
 
     boolean updateProductInfo(ProductUpdateVO productUpdateVO);
 
-    boolean deleteProductInfo(ProductDeleteVO productDeleteVO);
+    boolean deleteProductInfo(Integer proId);
 
     boolean addProductInfo(ProductAddVO productAddVO);
 }

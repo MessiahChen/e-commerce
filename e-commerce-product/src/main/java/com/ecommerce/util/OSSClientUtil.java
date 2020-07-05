@@ -202,6 +202,18 @@ public class OSSClientUtil {
         return imgUrl;
     }
 
+    public boolean deleteFile(String filePath) {
+        boolean exist = ossClient.doesObjectExist(bucketName, filePath);
+        if (!exist) {
+            log.error("文件不存在,filePath={}" + filePath);
+            return false;
+        }
+        log.info("删除文件,filePath={}" + filePath);
+        ossClient.deleteObject(bucketName, filePath);
+        ossClient.shutdown();
+        return true;
+    }
+
     //处理文件上传
     @RequestMapping(value = "/homeImageUpload", method = RequestMethod.POST)
     @ResponseBody

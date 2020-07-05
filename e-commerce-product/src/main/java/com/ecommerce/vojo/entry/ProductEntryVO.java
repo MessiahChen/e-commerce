@@ -13,6 +13,7 @@ public class ProductEntryVO {
 
     @ApiModelProperty(value = "主键id")
     private Integer proId;
+
     /**
      * 商品sku编码
      *

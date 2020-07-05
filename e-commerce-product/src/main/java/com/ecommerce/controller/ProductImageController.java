@@ -9,15 +9,11 @@ import com.ecommerce.common.validationGroup.DeleteGroup;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.ProductImageService;
-import com.ecommerce.vojo.entry.ProductAddVO;
-import com.ecommerce.vojo.entry.ProductDeleteVO;
-import com.ecommerce.vojo.entry.ProductUpdateVO;
-import com.ecommerce.vojo.image.ProductImageAddVO;
-import com.ecommerce.vojo.image.ProductImageDeleteVO;
-import com.ecommerce.vojo.image.ProductImageUpdateVO;
+import com.ecommerce.vojo.entry.GetAllProductVO;
+import com.ecommerce.vojo.entry.ProductEntryVO;
+import com.ecommerce.vojo.image.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +30,17 @@ public class ProductImageController extends BaseController {
     @Autowired
     private ProductImageService productImageService;
 
+    @ApiOperation("找到该品牌所有商品主图")
+    @PostMapping("/getAllProductImage")
+    public CommonResult<CommonPage<ProductImageVO>> getAllProductImage(@RequestBody GetAllProductImageVO getAllProductImageVO) {
+        CommonPage<ProductImageVO> result = productImageService.getAllProductImage(getAllProductImageVO);
+        if (!result.getList().isEmpty()) {
+            return CommonResult.success(result, "匹配成功");
+        } else {
+            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+        }
+    }
+
     @ApiOperation("通过商品标题模糊匹配商品")
     @GetMapping("/searchProductImageByTitle")
     public CommonResult<CommonPage> searchProductImageByTitle(@RequestParam(value = "title") String title, @RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
@@ -47,11 +54,11 @@ public class ProductImageController extends BaseController {
 
     @ApiOperation("通过商品ID更新商品主图")
     @PatchMapping("/updateProductImage")
-    public CommonResult updateProductImage(@Validated({UpdateGroup.class}) @RequestBody ProductImageUpdateVO productImageUpdateVO, BindingResult bindingResult) {
+    public CommonResult updateProductImage(@Validated({UpdateGroup.class}) @RequestBody ProductCategoryUpdateVO productCategoryUpdateVO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), productImageUpdateVO.toString());
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), productCategoryUpdateVO.toString());
         } else {
-            if (productImageService.updateProductImage(productImageUpdateVO)) {
+            if (productImageService.updateProductImage(productCategoryUpdateVO)) {
                 return CommonResult.success("更新成功");
             } else {
                 throw BusinessException.UPDATE_FAIL;
@@ -75,11 +82,11 @@ public class ProductImageController extends BaseController {
 
     @ApiOperation("添加新的商品主图")
     @PutMapping("/addProductImage")
-    public CommonResult addProductImage(@Validated({InsertGroup.class}) @RequestBody ProductImageAddVO productImageAddVO, BindingResult bindingResult) {
+    public CommonResult addProductImage(@Validated({InsertGroup.class}) @RequestBody ProductCategoryAddVO productCategoryAddVO, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), productImageAddVO.toString());
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), productCategoryAddVO.toString());
         } else {
-            if (productImageService.addProductImage(productImageAddVO)) {
+            if (productImageService.addProductCategory(productCategoryAddVO)) {
                 return CommonResult.success("添加成功");
             } else {
                 throw BusinessException.INSERT_FAIL;
@@ -89,9 +96,8 @@ public class ProductImageController extends BaseController {
 
     @ApiOperation("批量上传商品主图到阿里云OSS")
     @PostMapping(value = "/uploadImages")
-    public CommonResult uploadImages(@RequestParam("files") MultipartFile file) {
+    public CommonResult uploadImages(@RequestParam("files") List<MultipartFile> file) {
 //        if (file == null) System.out.println("卧槽");
-
 //        if (files.length == 0) System.out.println("卧槽");
 //        System.out.println(files.length);
         List<String> imageUrls = productImageService.uploadImages(file);

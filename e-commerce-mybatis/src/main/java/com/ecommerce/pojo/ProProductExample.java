@@ -1545,6 +1545,66 @@ public class ProProductExample {
             addCriterion("stockseting not between", value1, value2, "stockseting");
             return (Criteria) this;
         }
+
+        public Criteria andPrcIdIsNull() {
+            addCriterion("prc_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdIsNotNull() {
+            addCriterion("prc_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdEqualTo(Integer value) {
+            addCriterion("prc_id =", value, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdNotEqualTo(Integer value) {
+            addCriterion("prc_id <>", value, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdGreaterThan(Integer value) {
+            addCriterion("prc_id >", value, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("prc_id >=", value, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdLessThan(Integer value) {
+            addCriterion("prc_id <", value, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdLessThanOrEqualTo(Integer value) {
+            addCriterion("prc_id <=", value, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdIn(List<Integer> values) {
+            addCriterion("prc_id in", values, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdNotIn(List<Integer> values) {
+            addCriterion("prc_id not in", values, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdBetween(Integer value1, Integer value2) {
+            addCriterion("prc_id between", value1, value2, "prcId");
+            return (Criteria) this;
+        }
+
+        public Criteria andPrcIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("prc_id not between", value1, value2, "prcId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

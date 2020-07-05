@@ -6,16 +6,17 @@
     <result column="account_name" jdbcType="VARCHAR" property="accountName" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="password" jdbcType="VARCHAR" property="password" />
-    <result column="active_time" jdbcType="TIMESTAMP" property="activeTime" />
-    <result column="is_active" jdbcType="CHAR" property="isActive" />
+    <result column="available_money" jdbcType="DECIMAL" property="availableMoney" />
+    <result column="depositing_money" jdbcType="DECIMAL" property="depositingMoney" />
+    <result column="withdrawing_money" jdbcType="DECIMAL" property="withdrawingMoney" />
     <result column="status" jdbcType="TINYINT" property="status" />
     <result column="create_by" jdbcType="VARCHAR" property="createBy" />
-    <result column=" create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="last_update_by" jdbcType="VARCHAR" property="lastUpdateBy" />
-    <result column=" last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
+    <result column="last_update_time" jdbcType="TIMESTAMP" property="lastUpdateTime" />
     <result column="account_type" jdbcType="INTEGER" property="accountType" />
-    <result column="hold_order_time" jdbcType="CHAR" property="holdOrderTime" />
     <result column="auto_pay_status" jdbcType="VARCHAR" property="autoPayStatus" />
+    <result column="currency" jdbcType="VARCHAR" property="currency" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -76,9 +77,9 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    buyer_id, account_name, email, password, active_time, is_active, status, create_by, 
-    ` create_time`, last_update_by, ` last_update_time`, account_type, hold_order_time, 
-    auto_pay_status
+    buyer_id, account_name, email, password, available_money, depositing_money, withdrawing_money, 
+    status, create_by, create_time, last_update_by, last_update_time, account_type, auto_pay_status, 
+    currency
   </sql>
   <select id="selectByExample" parameterType="com.ecommerce.pojo.WaaWalletAccountExample" resultMap="BaseResultMap">
     select
@@ -112,15 +113,17 @@
   </delete>
   <insert id="insert" parameterType="com.ecommerce.pojo.WaaWalletAccount">
     insert into waa_wallet_account (buyer_id, account_name, email, 
-      password, active_time, is_active, 
-      status, create_by, ` create_time`, 
-      last_update_by, ` last_update_time`, account_type, 
-      hold_order_time, auto_pay_status)
+      password, available_money, depositing_money, 
+      withdrawing_money, status, create_by, 
+      create_time, last_update_by, last_update_time, 
+      account_type, auto_pay_status, currency
+      )
     values (#{buyerId,jdbcType=INTEGER}, #{accountName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{password,jdbcType=VARCHAR}, #{activeTime,jdbcType=TIMESTAMP}, #{isActive,jdbcType=CHAR}, 
-      #{status,jdbcType=TINYINT}, #{createBy,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
-      #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP}, #{accountType,jdbcType=INTEGER}, 
-      #{holdOrderTime,jdbcType=CHAR}, #{autoPayStatus,jdbcType=VARCHAR})
+      #{password,jdbcType=VARCHAR}, #{availableMoney,jdbcType=DECIMAL}, #{depositingMoney,jdbcType=DECIMAL}, 
+      #{withdrawingMoney,jdbcType=DECIMAL}, #{status,jdbcType=TINYINT}, #{createBy,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateTime,jdbcType=TIMESTAMP}, 
+      #{accountType,jdbcType=INTEGER}, #{autoPayStatus,jdbcType=VARCHAR}, #{currency,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ecommerce.pojo.WaaWalletAccount">
     insert into waa_wallet_account
@@ -137,11 +140,14 @@
       <if test="password != null">
         password,
       </if>
-      <if test="activeTime != null">
-        active_time,
+      <if test="availableMoney != null">
+        available_money,
       </if>
-      <if test="isActive != null">
-        is_active,
+      <if test="depositingMoney != null">
+        depositing_money,
+      </if>
+      <if test="withdrawingMoney != null">
+        withdrawing_money,
       </if>
       <if test="status != null">
         status,
@@ -150,22 +156,22 @@
         create_by,
       </if>
       <if test="createTime != null">
-        ` create_time`,
+        create_time,
       </if>
       <if test="lastUpdateBy != null">
         last_update_by,
       </if>
       <if test="lastUpdateTime != null">
-        ` last_update_time`,
+        last_update_time,
       </if>
       <if test="accountType != null">
         account_type,
       </if>
-      <if test="holdOrderTime != null">
-        hold_order_time,
-      </if>
       <if test="autoPayStatus != null">
         auto_pay_status,
+      </if>
+      <if test="currency != null">
+        currency,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -181,11 +187,14 @@
       <if test="password != null">
         #{password,jdbcType=VARCHAR},
       </if>
-      <if test="activeTime != null">
-        #{activeTime,jdbcType=TIMESTAMP},
+      <if test="availableMoney != null">
+        #{availableMoney,jdbcType=DECIMAL},
       </if>
-      <if test="isActive != null">
-        #{isActive,jdbcType=CHAR},
+      <if test="depositingMoney != null">
+        #{depositingMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawingMoney != null">
+        #{withdrawingMoney,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         #{status,jdbcType=TINYINT},
@@ -205,11 +214,11 @@
       <if test="accountType != null">
         #{accountType,jdbcType=INTEGER},
       </if>
-      <if test="holdOrderTime != null">
-        #{holdOrderTime,jdbcType=CHAR},
-      </if>
       <if test="autoPayStatus != null">
         #{autoPayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        #{currency,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -234,11 +243,14 @@
       <if test="record.password != null">
         password = #{record.password,jdbcType=VARCHAR},
       </if>
-      <if test="record.activeTime != null">
-        active_time = #{record.activeTime,jdbcType=TIMESTAMP},
+      <if test="record.availableMoney != null">
+        available_money = #{record.availableMoney,jdbcType=DECIMAL},
       </if>
-      <if test="record.isActive != null">
-        is_active = #{record.isActive,jdbcType=CHAR},
+      <if test="record.depositingMoney != null">
+        depositing_money = #{record.depositingMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.withdrawingMoney != null">
+        withdrawing_money = #{record.withdrawingMoney,jdbcType=DECIMAL},
       </if>
       <if test="record.status != null">
         status = #{record.status,jdbcType=TINYINT},
@@ -247,22 +259,22 @@
         create_by = #{record.createBy,jdbcType=VARCHAR},
       </if>
       <if test="record.createTime != null">
-        ` create_time` = #{record.createTime,jdbcType=TIMESTAMP},
+        create_time = #{record.createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.lastUpdateBy != null">
         last_update_by = #{record.lastUpdateBy,jdbcType=VARCHAR},
       </if>
       <if test="record.lastUpdateTime != null">
-        ` last_update_time` = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+        last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.accountType != null">
         account_type = #{record.accountType,jdbcType=INTEGER},
       </if>
-      <if test="record.holdOrderTime != null">
-        hold_order_time = #{record.holdOrderTime,jdbcType=CHAR},
-      </if>
       <if test="record.autoPayStatus != null">
         auto_pay_status = #{record.autoPayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.currency != null">
+        currency = #{record.currency,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -275,16 +287,17 @@
       account_name = #{record.accountName,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       password = #{record.password,jdbcType=VARCHAR},
-      active_time = #{record.activeTime,jdbcType=TIMESTAMP},
-      is_active = #{record.isActive,jdbcType=CHAR},
+      available_money = #{record.availableMoney,jdbcType=DECIMAL},
+      depositing_money = #{record.depositingMoney,jdbcType=DECIMAL},
+      withdrawing_money = #{record.withdrawingMoney,jdbcType=DECIMAL},
       status = #{record.status,jdbcType=TINYINT},
       create_by = #{record.createBy,jdbcType=VARCHAR},
-      ` create_time` = #{record.createTime,jdbcType=TIMESTAMP},
+      create_time = #{record.createTime,jdbcType=TIMESTAMP},
       last_update_by = #{record.lastUpdateBy,jdbcType=VARCHAR},
-      ` last_update_time` = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_time = #{record.lastUpdateTime,jdbcType=TIMESTAMP},
       account_type = #{record.accountType,jdbcType=INTEGER},
-      hold_order_time = #{record.holdOrderTime,jdbcType=CHAR},
-      auto_pay_status = #{record.autoPayStatus,jdbcType=VARCHAR}
+      auto_pay_status = #{record.autoPayStatus,jdbcType=VARCHAR},
+      currency = #{record.currency,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -301,11 +314,14 @@
       <if test="password != null">
         password = #{password,jdbcType=VARCHAR},
       </if>
-      <if test="activeTime != null">
-        active_time = #{activeTime,jdbcType=TIMESTAMP},
+      <if test="availableMoney != null">
+        available_money = #{availableMoney,jdbcType=DECIMAL},
       </if>
-      <if test="isActive != null">
-        is_active = #{isActive,jdbcType=CHAR},
+      <if test="depositingMoney != null">
+        depositing_money = #{depositingMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="withdrawingMoney != null">
+        withdrawing_money = #{withdrawingMoney,jdbcType=DECIMAL},
       </if>
       <if test="status != null">
         status = #{status,jdbcType=TINYINT},
@@ -314,22 +330,22 @@
         create_by = #{createBy,jdbcType=VARCHAR},
       </if>
       <if test="createTime != null">
-        ` create_time` = #{createTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="lastUpdateBy != null">
         last_update_by = #{lastUpdateBy,jdbcType=VARCHAR},
       </if>
       <if test="lastUpdateTime != null">
-        ` last_update_time` = #{lastUpdateTime,jdbcType=TIMESTAMP},
+        last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
       </if>
       <if test="accountType != null">
         account_type = #{accountType,jdbcType=INTEGER},
       </if>
-      <if test="holdOrderTime != null">
-        hold_order_time = #{holdOrderTime,jdbcType=CHAR},
-      </if>
       <if test="autoPayStatus != null">
         auto_pay_status = #{autoPayStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="currency != null">
+        currency = #{currency,jdbcType=VARCHAR},
       </if>
     </set>
     where buyer_id = #{buyerId,jdbcType=INTEGER}
@@ -339,16 +355,22 @@
     set account_name = #{accountName,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       password = #{password,jdbcType=VARCHAR},
-      active_time = #{activeTime,jdbcType=TIMESTAMP},
-      is_active = #{isActive,jdbcType=CHAR},
+      available_money = #{availableMoney,jdbcType=DECIMAL},
+      depositing_money = #{depositingMoney,jdbcType=DECIMAL},
+      withdrawing_money = #{withdrawingMoney,jdbcType=DECIMAL},
       status = #{status,jdbcType=TINYINT},
       create_by = #{createBy,jdbcType=VARCHAR},
-      ` create_time` = #{createTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
       last_update_by = #{lastUpdateBy,jdbcType=VARCHAR},
-      ` last_update_time` = #{lastUpdateTime,jdbcType=TIMESTAMP},
+      last_update_time = #{lastUpdateTime,jdbcType=TIMESTAMP},
       account_type = #{accountType,jdbcType=INTEGER},
-      hold_order_time = #{holdOrderTime,jdbcType=CHAR},
-      auto_pay_status = #{autoPayStatus,jdbcType=VARCHAR}
+      auto_pay_status = #{autoPayStatus,jdbcType=VARCHAR},
+      currency = #{currency,jdbcType=VARCHAR}
     where buyer_id = #{buyerId,jdbcType=INTEGER}
   </update>
+  <select id="getIdByName" resultType="java.lang.Integer" parameterType="java.lang.String">
+    select buyer_id
+    from waa_wallet_account
+    where account_name = #{accountName,jdbcType=VARCHAR}
+  </select>
 </mapper>
