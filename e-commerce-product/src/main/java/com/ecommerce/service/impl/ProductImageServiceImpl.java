@@ -7,10 +7,7 @@ import com.ecommerce.dao.ProProductMapper;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.ProductImageService;
 import com.ecommerce.util.OSSClientUtil;
-import com.ecommerce.vojo.image.ProductCategoryAddVO;
-import com.ecommerce.vojo.image.ProductImageDeleteVO;
-import com.ecommerce.vojo.image.ProductCategoryUpdateVO;
-import com.ecommerce.vojo.image.ProductImageVO;
+import com.ecommerce.vojo.image.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +29,47 @@ public class ProductImageServiceImpl implements ProductImageService {
 
     @Autowired
     private PrcProductCategoryMapper prcProductCategoryMapper;
+
+    @Override
+    public CommonPage<ProductImageVO> getAllProductImage(GetAllProductImageVO vo) {
+        Page<ProProduct> productPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
+            ProProductExample proProductExample = new ProProductExample();
+            ProProductExample.Criteria criteria = proProductExample.createCriteria();
+            criteria.andManIdEqualTo(vo.getManId());
+            proProductMapper.selectByExample(proProductExample);
+        });
+
+        // 需要从分类表中找到分类；需要从图片表中找到主URI
+        List<ProductImageVO> result = new ArrayList<>();
+        for (ProProduct product : productPage.getResult()) {
+            ProductImageVO productImageVO = new ProductImageVO();
+            productImageVO.setProId(product.getProId());
+            productImageVO.setTitle(product.getTitle());
+            String statusChar = product.getStsCd();
+            if (statusChar.equals("a")) {
+                statusChar = "待入仓";
+            } else if (statusChar.equals("b")) {
+                statusChar = "入仓中";
+            } else if (statusChar.equals("c")) {
+                statusChar = "待上架";
+            } else {
+                statusChar = "上架中";
+            }
+            productImageVO.setStatus(statusChar);
+
+            PrcProductCategory prcProductCategory = prcProductCategoryMapper.selectByPrimaryKey(product.getPrcId());
+            productImageVO.setCategoryName(prcProductCategory.getCategoryName());
+
+            ImgImageExample imgImageExample = new ImgImageExample();
+            ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
+            criteria_img.andEntityIdEqualTo(String.valueOf(product.getProId()));
+            List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
+            productImageVO.setImageUri(imgImages.get(0).getUri());
+
+            result.add(productImageVO);
+        }
+        return CommonPage.restPage(result, productPage);
+    }
 
     @Override
     public CommonPage<ProductImageVO> searchProductImageByTitle(String title, Integer pageNum, Integer pageSize) {

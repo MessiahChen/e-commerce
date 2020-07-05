@@ -1,15 +1,16 @@
 package com.ecommerce.service;
 
 import com.ecommerce.common.base.CommonPage;
-import com.ecommerce.vojo.image.ProductCategoryAddVO;
-import com.ecommerce.vojo.image.ProductImageDeleteVO;
-import com.ecommerce.vojo.image.ProductCategoryUpdateVO;
-import com.ecommerce.vojo.image.ProductImageVO;
+import com.ecommerce.vojo.entry.GetAllProductVO;
+import com.ecommerce.vojo.entry.ProductEntryVO;
+import com.ecommerce.vojo.image.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
 public interface ProductImageService {
+
+    CommonPage<ProductImageVO> getAllProductImage(GetAllProductImageVO getAllProductImageVO);
 
     CommonPage<ProductImageVO> searchProductImageByTitle(String title, Integer pageNum, Integer pageSize);
 

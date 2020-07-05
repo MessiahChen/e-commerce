@@ -64,7 +64,7 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         for (ProProduct product : productPage.getResult()) {
             ProductEntryVO productEntryVO = new ProductEntryVO();
             productEntryVO.setProId(product.getProId());
-            productEntryVO.setRetailPrice(product.getRetailPrice().toString());
+            productEntryVO.setRetailPrice(String.valueOf(product.getRetailPrice()));
             productEntryVO.setSkuCd(product.getSkuCd());
             productEntryVO.setTitle(product.getTitle());
             productEntryVO.setWarNum("1000");
@@ -107,10 +107,14 @@ public class ProductEntryServiceImpl implements ProductEntryService {
     }
 
     @Override
-    public boolean deleteProductInfo(ProductDeleteVO vo) {
-        proProductMapper.deleteProductInfoByList(vo.getProIds());
-        pckPackageInfoMapper.deletePackageInfoByList(vo.getProIds());
-        return false;
+    public boolean deleteProductInfo(Integer proId) {
+        proProductMapper.deleteByPrimaryKey(proId);
+
+        PckPackageInfoExample pckPackageInfoExample = new PckPackageInfoExample();
+        PckPackageInfoExample.Criteria criteria = pckPackageInfoExample.createCriteria();
+        criteria.andProIdEqualTo(proId);
+        pckPackageInfoMapper.deleteByExample(pckPackageInfoExample);
+        return true;
     }
 
     @Override

@@ -61,17 +61,14 @@ public class ProductEntryController extends BaseController {
 
     @ApiOperation("通过商品ID删除商品信息")
     @DeleteMapping("/deleteProductInfo")
-    public CommonResult deleteProductInfo(@Validated({DeleteGroup.class}) @RequestBody ProductDeleteVO productDeleteVO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw BusinessException.DELETE_FAIL.newInstance(this.getErrorResponse(bindingResult), productDeleteVO.toString());
+    public CommonResult deleteProductInfo(@RequestParam(value = "proId") Integer proId) {
+        if (productEntryService.deleteProductInfo(proId)) {
+            return CommonResult.success("删除成功");
         } else {
-            if (productEntryService.deleteProductInfo(productDeleteVO)) {
-                return CommonResult.success("更新成功");
-            } else {
-                throw BusinessException.DELETE_FAIL;
-            }
+            throw BusinessException.DELETE_FAIL;
         }
     }
+
 
     @ApiOperation("添加新的商品")
     @PutMapping("/addProductInfo")

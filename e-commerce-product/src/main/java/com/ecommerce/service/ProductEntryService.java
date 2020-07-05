@@ -11,7 +11,7 @@ public interface ProductEntryService {
 
     boolean updateProductInfo(ProductUpdateVO productUpdateVO);
 
-    boolean deleteProductInfo(ProductDeleteVO productDeleteVO);
+    boolean deleteProductInfo(Integer proId);
 
     boolean addProductInfo(ProductAddVO productAddVO);
 }

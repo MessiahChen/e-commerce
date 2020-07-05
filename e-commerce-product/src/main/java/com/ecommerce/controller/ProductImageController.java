@@ -9,9 +9,9 @@ import com.ecommerce.common.validationGroup.DeleteGroup;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.ProductImageService;
-import com.ecommerce.vojo.image.ProductCategoryAddVO;
-import com.ecommerce.vojo.image.ProductImageDeleteVO;
-import com.ecommerce.vojo.image.ProductCategoryUpdateVO;
+import com.ecommerce.vojo.entry.GetAllProductVO;
+import com.ecommerce.vojo.entry.ProductEntryVO;
+import com.ecommerce.vojo.image.*;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -29,6 +29,17 @@ public class ProductImageController extends BaseController {
 
     @Autowired
     private ProductImageService productImageService;
+
+    @ApiOperation("找到该品牌所有商品主图")
+    @PostMapping("/getAllProductImage")
+    public CommonResult<CommonPage<ProductImageVO>> getAllProductImage(@RequestBody GetAllProductImageVO getAllProductImageVO) {
+        CommonPage<ProductImageVO> result = productImageService.getAllProductImage(getAllProductImageVO);
+        if (!result.getList().isEmpty()) {
+            return CommonResult.success(result, "匹配成功");
+        } else {
+            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+        }
+    }
 
     @ApiOperation("通过商品标题模糊匹配商品")
     @GetMapping("/searchProductImageByTitle")
