@@ -15,6 +15,11 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 管理员-钱包流水服务实现类
+ * Created by yousabla on 2020/7/3.
+ */
+
 @Service
 public class WalletAdminServiceImpl implements WalletAdminService {
 
@@ -41,5 +46,10 @@ public class WalletAdminServiceImpl implements WalletAdminService {
             flows.add(flow);
         }
         return CommonPage.restPage(flows,flowPage);
+    }
+
+    @Override
+    public Boolean audit(String transactionNumber) {
+        return null;
     }
 }

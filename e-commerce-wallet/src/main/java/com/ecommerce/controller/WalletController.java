@@ -39,7 +39,7 @@ public class WalletController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.addWallet(info)) {
-                return new CommonResult(200,"insert successful",walletService.getWalletInfo(info.getAccountName()));
+                return new CommonResult<>(200,"insert successful",walletService.getWalletInfo(info.getAccountName()));
             } else {
                 throw BusinessException.INSERT_FAIL;
             }

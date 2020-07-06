@@ -17,6 +17,11 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
+/**
+ * 管理员-钱包流水控制类
+ * Created by yousabla on 2020/7/5.
+ */
+
 @Api(value = "负责获取待审核的流水账单，审核待审核的账单（待完成）", tags = "管理员-钱包流水控制器")
 @CrossOrigin
 @RestController

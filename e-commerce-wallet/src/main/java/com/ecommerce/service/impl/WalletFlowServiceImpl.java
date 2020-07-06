@@ -18,6 +18,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * 钱包流水服务实现类
+ * Created by yousabla on 2020/7/3.
+ */
+
 @Service
 public class WalletFlowServiceImpl implements WalletFlowService {
     @Resource
