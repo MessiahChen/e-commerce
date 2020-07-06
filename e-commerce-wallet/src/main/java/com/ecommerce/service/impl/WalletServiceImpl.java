@@ -7,6 +7,7 @@ import com.ecommerce.service.RedisService;
 import com.ecommerce.service.WalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
+import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,7 @@ public class WalletServiceImpl implements WalletService {
         //SHA加密
         walletAccount.setPassword(DigestUtils.sha1Hex(walletAccountVO.getPassword()));
         walletAccount.setEmail(walletAccountVO.getEmail());
-        walletAccount.setStatus((byte)7);
+        walletAccount.setStatus((byte) 7);
 
         walletAccount.setAvailableMoney(BigDecimal.ZERO);
         walletAccount.setDepositingMoney(BigDecimal.ZERO);
@@ -53,10 +54,9 @@ public class WalletServiceImpl implements WalletService {
     }
 
 
-
-    public WalletBalanceVO getWalletInfo(String accountName){
+    public WalletBalanceVO getWalletInfo(String accountName) {
         WaaWalletAccount walletInfo = waaWalletAccountMapper.selectByPrimaryKey(waaWalletAccountMapper.getIdByName(accountName));
-        if (walletInfo != null){
+        if (walletInfo != null) {
 //            redisService.set(accountName+"Balance",walletInfo.getAvailableMoney());
             WalletBalanceVO balanceVO = new WalletBalanceVO();
             balanceVO.setCurrency(walletInfo.getCurrency());
@@ -65,7 +65,7 @@ public class WalletServiceImpl implements WalletService {
             balanceVO.setDepositingMoney(walletInfo.getDepositingMoney());
             balanceVO.setWithdrawingMoney(walletInfo.getWithdrawingMoney());
             return balanceVO;
-        }else {
+        } else {
             throw BusinessException.USERNAME_NOT_EXISTS;
         }
     }
@@ -73,13 +73,34 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Boolean changePassword(WalletPasswordVO passwordVO) {
         WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(waaWalletAccountMapper.getIdByName(passwordVO.getAccountName()));
-        if (DigestUtils.sha1Hex(passwordVO.getOldPassword()).equals(account.getPassword())){
+        if (DigestUtils.sha1Hex(passwordVO.getOldPassword()).equals(account.getPassword())) {
             account.setPassword(DigestUtils.sha1Hex(passwordVO.getNewPassword()));
             waaWalletAccountMapper.updateByPrimaryKeySelective(account);
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
+    @Override
+    public Boolean pay(WalletFlowVO walletFlowVO) {
+        int buyerId = waaWalletAccountMapper.getIdByName(walletFlowVO.getAccountName());
+        WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
+        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword())) && (account.getAvailableMoney().compareTo(walletFlowVO.getFlow()) > -1)) {
+            account.setAvailableMoney(account.getAvailableMoney().subtract(walletFlowVO.getFlow()));
+            account.setLastUpdateTime(new Date());
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean refund(WalletFlowVO walletFlowVO) {
+        int buyerId = waaWalletAccountMapper.getIdByName(walletFlowVO.getAccountName());
+        WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
+        account.setAvailableMoney(account.getAvailableMoney().add(walletFlowVO.getFlow()));
+        account.setLastUpdateTime(new Date());
+        return true;
+    }
 }

@@ -52,7 +52,7 @@ public class WalletFlowServiceImpl implements WalletFlowService {
 
         int buyerId = waaWalletAccountMapper.getIdByName(walletFlowVO.getAccountName());
         WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
-        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword()))){
+        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword())) && (account.getAvailableMoney().compareTo(walletFlowVO.getFlow()) > -1)){
             account.setWithdrawingMoney(walletFlowVO.getFlow());
             waaWalletAccountMapper.updateByPrimaryKeySelective(account);
             generateTransaction(buyerId,2,walletFlowVO.getFlow());

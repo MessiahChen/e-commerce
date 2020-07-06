@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.vojo.WalletAdminVO;
+import com.ecommerce.vojo.WalletAuditVO;
 import com.ecommerce.vojo.WalletPageVO;
 
 /**
@@ -18,5 +19,5 @@ public interface WalletAdminService {
     /**
      * 审核
      */
-    Boolean audit(String transactionNumber);
+    Boolean audit(WalletAuditVO walletAuditVO);
 }

@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
+import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 
 /**
@@ -25,5 +26,13 @@ public interface WalletService {
      */
     Boolean changePassword(WalletPasswordVO passwordVO);
 
+    /**
+     * 支付
+     */
+    Boolean pay(WalletFlowVO walletFlowVO);
 
+    /**
+     * 申请退款
+     */
+    Boolean refund(WalletFlowVO walletFlowVO);
 }

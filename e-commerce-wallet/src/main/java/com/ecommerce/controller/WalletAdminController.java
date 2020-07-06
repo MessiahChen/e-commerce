@@ -6,8 +6,10 @@ import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.SelectGroup;
+import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.WalletAdminService;
 import com.ecommerce.vojo.WalletAdminVO;
+import com.ecommerce.vojo.WalletAuditVO;
 import com.ecommerce.vojo.WalletPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,13 +34,27 @@ public class WalletAdminController extends BaseController {
     private WalletAdminService walletAdminService;
 
     @ApiOperation("管理员获取所有待审核wallet流水")
-    @GetMapping("/getAllFlow")
+    @PostMapping("/getAllFlow")
     public CommonResult<CommonPage<WalletAdminVO>> getAllFlow(@Validated({SelectGroup.class}) @RequestBody WalletPageVO walletPageVO, BindingResult bindingResult) throws BusinessException {
         CommonPage<WalletAdminVO> commonPage = walletAdminService.getAllFlow(walletPageVO);
         if (!commonPage.getList().isEmpty()) {
-            return CommonResult.success(commonPage, "insert successful");
+            return CommonResult.success(commonPage, "get all flows successful");
         } else {
             return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+        }
+    }
+
+    @ApiOperation("审核")
+    @PatchMapping("/audit")
+    public CommonResult audit(@Validated({UpdateGroup.class}) @RequestBody WalletAuditVO walletAuditVO, BindingResult bindingResult) throws BusinessException{
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), walletAuditVO.toString());
+        } else {
+            if (walletAdminService.audit(walletAuditVO)) {
+                return new CommonResult(200,"insert successful");
+            } else {
+                throw BusinessException.UPDATE_FAIL;
+            }
         }
     }
 }

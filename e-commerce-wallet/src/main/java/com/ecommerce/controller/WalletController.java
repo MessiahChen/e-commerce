@@ -10,6 +10,7 @@ import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.WalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
+import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +40,7 @@ public class WalletController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.addWallet(info)) {
-                return new CommonResult<>(200,"insert successful",walletService.getWalletInfo(info.getAccountName()));
+                return new CommonResult<>(200,"register new wallet ccount successful",walletService.getWalletInfo(info.getAccountName()));
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
@@ -64,9 +65,37 @@ public class WalletController extends BaseController {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.changePassword(info)) {
-                return new CommonResult(200,"insert successful");
+                return new CommonResult(200,"change password successful");
             } else {
                 throw BusinessException.INSERT_FAIL;
+            }
+        }
+    }
+
+    @ApiOperation("支付")
+    @PatchMapping("/pay")
+    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+        } else {
+            if (walletService.pay(info)) {
+                return new CommonResult(200,"pay successful");
+            } else {
+                throw BusinessException.UPDATE_FAIL;
+            }
+        }
+    }
+
+    @ApiOperation("申请退款")
+    @PatchMapping("/refund")
+    public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+        } else {
+            if (walletService.refund(info)) {
+                return new CommonResult(200,"apply for refund successful");
+            } else {
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }
