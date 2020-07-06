@@ -1,9 +1,7 @@
 package com.ecommerce.service;
 
-import com.ecommerce.pojo.SalSalesOrderLineItem;
-import com.ecommerce.pojo.SaoSalesOrder;
-import com.ecommerce.pojo.SolStoreOrderLineItem;
-import com.ecommerce.pojo.StoStoreOrder;
+import com.ecommerce.pojo.*;
+import com.ecommerce.vo.SaoSalesOrderVO;
 
 import java.util.List;
 
@@ -23,5 +21,11 @@ public interface OrderService {
     List<SalSalesOrderLineItem> getSalSalesOrderLineItem(String stsCd);
 
     //根据manId查询sao信息
-    List<SaoSalesOrder> getSaoByManId(int manId);
+    List<SaoSalesOrderVO> getSaoByManId(int manId);
+
+    //根据saoId 查询 sal
+    SalSalesOrderLineItem getSalBySaoId(Integer saoId);
+
+    //根据sal的proId查询pro
+    ProProduct getProBySalId(Integer salId);
 }
