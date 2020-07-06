@@ -40,7 +40,7 @@
                              targetProject="e-commerce-mybatis/src/main/java"/>
         <!--生成全部表tableName设为%-->
         <table tableName="pro_product">
-            <generatedKey column="id" sqlStatement="MySql" identity="true"/>
+            <generatedKey column="pro_id" sqlStatement="MySql" identity="true"/>
         </table>
 
 

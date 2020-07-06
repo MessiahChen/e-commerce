@@ -1,6 +1,7 @@
 package com.ecommerce.service.impl;
 
 import com.ecommerce.common.base.CommonPage;
+import com.ecommerce.dao.CatCategoryMapper;
 import com.ecommerce.dao.ImgImageMapper;
 import com.ecommerce.dao.PrcProductCategoryMapper;
 import com.ecommerce.dao.ProProductMapper;
@@ -30,6 +31,9 @@ public class ProductImageServiceImpl implements ProductImageService {
     @Autowired
     private PrcProductCategoryMapper prcProductCategoryMapper;
 
+    @Autowired
+    private CatCategoryMapper catCategoryMapper;
+
     @Override
     public CommonPage<ProductImageVO> getAllProductImage(GetAllProductImageVO vo) {
         Page<ProProduct> productPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
@@ -58,13 +62,15 @@ public class ProductImageServiceImpl implements ProductImageService {
             productImageVO.setStatus(statusChar);
 
             PrcProductCategory prcProductCategory = prcProductCategoryMapper.selectByPrimaryKey(product.getPrcId());
-            productImageVO.setCategoryName(prcProductCategory.getCategoryName());
+            if (prcProductCategory != null)
+                productImageVO.setCategoryName(prcProductCategory.getCategoryName());
 
             ImgImageExample imgImageExample = new ImgImageExample();
             ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
             criteria_img.andEntityIdEqualTo(String.valueOf(product.getProId()));
             List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
-            productImageVO.setImageUri(imgImages.get(0).getUri());
+            if (!imgImages.isEmpty())
+                productImageVO.setImageUri(imgImages.get(0).getUri());
 
             result.add(productImageVO);
         }
@@ -72,11 +78,11 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public CommonPage<ProductImageVO> searchProductImageByTitle(String title, Integer pageNum, Integer pageSize) {
-        Page<ProProduct> productPage = PageHelper.startPage(pageNum, pageSize).doSelectPage(() -> {
+    public CommonPage<ProductImageVO> searchProductImageByTitle(SearchProductImageVO vo) {
+        Page<ProProduct> productPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
             ProProductExample proProductExample = new ProProductExample();
             ProProductExample.Criteria criteria = proProductExample.createCriteria();
-            criteria.andTitleLike("%" + title + "%");
+            criteria.andTitleLike("%" + vo.getTitle() + "%");
             proProductMapper.selectByExample(proProductExample);
         });
 
@@ -99,13 +105,15 @@ public class ProductImageServiceImpl implements ProductImageService {
             productImageVO.setStatus(statusChar);
 
             PrcProductCategory prcProductCategory = prcProductCategoryMapper.selectByPrimaryKey(product.getPrcId());
-            productImageVO.setCategoryName(prcProductCategory.getCategoryName());
+            if (prcProductCategory != null)
+                productImageVO.setCategoryName(prcProductCategory.getCategoryName());
 
             ImgImageExample imgImageExample = new ImgImageExample();
             ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
             criteria_img.andEntityIdEqualTo(String.valueOf(product.getProId()));
             List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
-            productImageVO.setImageUri(imgImages.get(0).getUri());
+            if (!imgImages.isEmpty())
+                productImageVO.setImageUri(imgImages.get(0).getUri());
 
             result.add(productImageVO);
         }
@@ -149,6 +157,41 @@ public class ProductImageServiceImpl implements ProductImageService {
         imgImageMapper.deleteProductImageByList(proIds);
         prcProductCategoryMapper.deleteProductCategoryByList(vo.getProIds());
         return true;
+    }
+
+    @Override
+    public List<ProductCategoryVO> getAllCategory() {
+        List<ProductCategoryVO> result = new ArrayList<>();
+        CatCategoryExample catCategoryExample = new CatCategoryExample();
+        CatCategoryExample.Criteria criteria_cat = catCategoryExample.createCriteria();
+        criteria_cat.andCatFatherIdIsNull();
+
+        List<CatCategory> mainCatCategories = catCategoryMapper.selectByExample(catCategoryExample);
+
+        CatCategoryExample viceCatCategoryExample = new CatCategoryExample();
+        CatCategoryExample.Criteria criteria_vice_cat_ = viceCatCategoryExample.createCriteria();
+
+        for (CatCategory cat : mainCatCategories) {
+            ProductCategoryVO productCategoryVO = new ProductCategoryVO();
+            productCategoryVO.setCatId(cat.getCatId());
+            productCategoryVO.setCatName(cat.getCatName());
+            List<ViceCategory> viceCats = productCategoryVO.getViceCats();
+
+            criteria_vice_cat_.andCatFatherIdEqualTo(cat.getCatId());
+
+            List<CatCategory> viceCatCategories = catCategoryMapper.selectByExample(viceCatCategoryExample);
+
+            if (!viceCatCategories.isEmpty()) {
+                for (CatCategory viceCat : viceCatCategories) {
+                    ViceCategory viceCategory = new ViceCategory();
+                    viceCategory.setCatId(viceCat.getCatId());
+                    viceCategory.setCatName(viceCat.getCatName());
+                    viceCats.add(viceCategory);
+                }
+            }
+            result.add(productCategoryVO);
+        }
+        return result;
     }
 
     @Override

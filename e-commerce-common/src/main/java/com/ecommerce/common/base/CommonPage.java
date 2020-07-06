@@ -24,7 +24,7 @@ public class CommonPage<T> {
         CommonPage<T> result = new CommonPage<T>();
         result.setPageNum(page.getPageNum());
         result.setPageSize(page.getPageSize());
-        result.setTotalPage(page.getPageNum());
+        result.setTotalPage(page.getPages());
         result.setTotal(page.getTotal());
         result.setList(list);
         return result;

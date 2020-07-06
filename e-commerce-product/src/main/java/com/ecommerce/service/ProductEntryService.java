@@ -9,9 +9,13 @@ public interface ProductEntryService {
 
     CommonPage<ProductEntryVO> searchProductByTitle(SearchProductVO searchProductVO);
 
+    boolean addProductInfo(ProductAddVO productAddVO);
+
+    ProductAddVO getProductInfoWhenUpdate(Integer proId);
+
     boolean updateProductInfo(ProductUpdateVO productUpdateVO);
 
     boolean deleteProductInfo(Integer proId);
 
-    boolean addProductInfo(ProductAddVO productAddVO);
+
 }

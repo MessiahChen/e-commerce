@@ -12,11 +12,13 @@ public interface ProductImageService {
 
     CommonPage<ProductImageVO> getAllProductImage(GetAllProductImageVO getAllProductImageVO);
 
-    CommonPage<ProductImageVO> searchProductImageByTitle(String title, Integer pageNum, Integer pageSize);
+    CommonPage<ProductImageVO> searchProductImageByTitle(SearchProductImageVO searchProductImageVO);
 
     boolean updateProductImage(ProductCategoryUpdateVO productCategoryUpdateVO);
 
     boolean deleteProductImage(ProductImageDeleteVO productImageDeleteVO);
+
+    List<ProductCategoryVO> getAllCategory();
 
     boolean addProductCategory(ProductCategoryAddVO productCategoryAddVO);
 

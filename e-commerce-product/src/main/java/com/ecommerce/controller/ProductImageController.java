@@ -42,9 +42,9 @@ public class ProductImageController extends BaseController {
     }
 
     @ApiOperation("通过商品标题模糊匹配商品")
-    @GetMapping("/searchProductImageByTitle")
-    public CommonResult<CommonPage> searchProductImageByTitle(@RequestParam(value = "title") String title, @RequestParam(value = "pageNum") Integer pageNum, @RequestParam(value = "pageSize") Integer pageSize) {
-        CommonPage result = productImageService.searchProductImageByTitle(title, pageNum, pageSize);
+    @PostMapping("/searchProductImageByTitle")
+    public CommonResult<CommonPage<ProductImageVO>> searchProductImageByTitle(@RequestBody SearchProductImageVO searchProductImageVO) {
+        CommonPage<ProductImageVO> result = productImageService.searchProductImageByTitle(searchProductImageVO);
         if (!result.getList().isEmpty()) {
             return CommonResult.success(result, "匹配成功");
         } else {
@@ -77,6 +77,17 @@ public class ProductImageController extends BaseController {
             } else {
                 throw BusinessException.DELETE_FAIL;
             }
+        }
+    }
+
+    @ApiOperation("在添加商品主图对话框打开时，获取商品所有一级分类、二级分类")
+    @GetMapping("/getAllCategory")
+    public CommonResult<List<ProductCategoryVO>> getAllCategory() {
+        List<ProductCategoryVO> allCategory = productImageService.getAllCategory();
+        if (!allCategory.isEmpty()) {
+            return CommonResult.success(allCategory, "所有商品分类获得成功");
+        } else {
+            throw BusinessException.SELECT_FAIL;
         }
     }
 

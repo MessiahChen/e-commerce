@@ -15,6 +15,10 @@ public class ProductAddVO {
     @ApiModelProperty(value = "创建人id")
     private String userId;
 
+    @NotNull(message = "品牌ID不能为空！", groups = {InsertGroup.class})
+    @ApiModelProperty(value = "品牌id")
+    private Integer manId;
+
     /**
      * 标题
      *

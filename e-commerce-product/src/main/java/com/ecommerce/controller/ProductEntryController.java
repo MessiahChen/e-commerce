@@ -45,6 +45,20 @@ public class ProductEntryController extends BaseController {
         }
     }
 
+    @ApiOperation("添加新的商品")
+    @PutMapping("/addProductInfo")
+    public CommonResult addProductInfo(@Validated({InsertGroup.class}) @RequestBody ProductAddVO productAddVO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), productAddVO.toString());
+        } else {
+            if (productEntryService.addProductInfo(productAddVO)) {
+                return CommonResult.success("添加成功");
+            } else {
+                throw BusinessException.INSERT_FAIL;
+            }
+        }
+    }
+
     @ApiOperation("通过商品ID更新商品信息")
     @PatchMapping("/updateProductInfo")
     public CommonResult updateProductInfo(@Validated({UpdateGroup.class}) @RequestBody ProductUpdateVO productUpdateVO, BindingResult bindingResult) {
@@ -59,6 +73,12 @@ public class ProductEntryController extends BaseController {
         }
     }
 
+    @ApiOperation("更新时通过商品ID获得商品信息")
+    @GetMapping("/getProductInfoWhenUpdate")
+    public CommonResult<ProductAddVO> getProductInfoWhenUpdate(@RequestParam(value = "proId") Integer proId) {
+        return CommonResult.success(productEntryService.getProductInfoWhenUpdate(proId), "获取成功");
+    }
+
     @ApiOperation("通过商品ID删除商品信息")
     @DeleteMapping("/deleteProductInfo")
     public CommonResult deleteProductInfo(@RequestParam(value = "proId") Integer proId) {
@@ -69,18 +89,4 @@ public class ProductEntryController extends BaseController {
         }
     }
 
-
-    @ApiOperation("添加新的商品")
-    @PutMapping("/addProductInfo")
-    public CommonResult addProductInfo(@Validated({InsertGroup.class}) @RequestBody ProductAddVO productAddVO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), productAddVO.toString());
-        } else {
-            if (productEntryService.addProductInfo(productAddVO)) {
-                return CommonResult.success("添加成功");
-            } else {
-                throw BusinessException.INSERT_FAIL;
-            }
-        }
-    }
 }

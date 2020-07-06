@@ -74,6 +74,60 @@ public class ProductEntryServiceImpl implements ProductEntryService {
     }
 
     @Override
+    public boolean addProductInfo(ProductAddVO vo) {
+        ProProduct proProduct = new ProProduct();
+        proProduct.setManId(vo.getManId());
+        proProduct.setTitle(vo.getTitle());
+        proProduct.setSkuCd(vo.getSkuCd());
+        proProduct.setUpc(vo.getUpc());
+        proProduct.setEan(vo.getEan());
+        proProduct.setModel(vo.getModel());
+        proProduct.setRetailPrice(new BigDecimal(vo.getRetailPrice()));
+        proProduct.setWarrantyDay(vo.getWarrantyDay());
+        proProduct.setCreatedBy(vo.getUserId());
+        proProduct.setCreationDate(new Date());
+        proProductMapper.insertSelective(proProduct);
+
+        // 更新重量等信息
+        PckPackageInfo pckPackageInfo = new PckPackageInfo();
+        pckPackageInfo.setProId(proProduct.getProId());
+        pckPackageInfo.setLength(new BigDecimal(vo.getLength()));
+        pckPackageInfo.setWidth(new BigDecimal(vo.getWeight()));
+        pckPackageInfo.setHeight(new BigDecimal(vo.getHeight()));
+        pckPackageInfo.setWeight(new BigDecimal(vo.getWeight()));
+        pckPackageInfo.setCreatedBy(vo.getUserId());
+        pckPackageInfo.setCreationDate(new Date());
+        pckPackageInfoMapper.insertSelective(pckPackageInfo);
+        return true;
+    }
+
+    @Override
+    public ProductAddVO getProductInfoWhenUpdate(Integer proId) {
+        ProProduct proProduct = proProductMapper.selectByPrimaryKey(proId);
+        ProductAddVO productAddVO = new ProductAddVO();
+        productAddVO.setTitle(proProduct.getTitle());
+        productAddVO.setSkuCd(proProduct.getSkuCd());
+        productAddVO.setUpc(proProduct.getUpc());
+        productAddVO.setEan(proProduct.getEan());
+        productAddVO.setModel(proProduct.getModel());
+        productAddVO.setRetailPrice(String.valueOf(proProduct.getRetailPrice()));
+        productAddVO.setWarrantyDay(proProduct.getWarrantyDay());
+
+        PckPackageInfoExample pckPackageInfoExample = new PckPackageInfoExample();
+        PckPackageInfoExample.Criteria criteria_pck = pckPackageInfoExample.createCriteria();
+        criteria_pck.andProIdEqualTo(proId);
+
+        List<PckPackageInfo> pckPackageInfos = pckPackageInfoMapper.selectByExample(pckPackageInfoExample);
+        PckPackageInfo pckPackageInfo = pckPackageInfos.get(0);
+        productAddVO.setWidth(pckPackageInfo.getWidth().toString());
+        productAddVO.setHeight(pckPackageInfo.getHeight().toString());
+        productAddVO.setLength(pckPackageInfo.getLength().toString());
+        productAddVO.setWeight(pckPackageInfo.getWeight().toString());
+
+        return productAddVO;
+    }
+
+    @Override
     public boolean updateProductInfo(ProductUpdateVO vo) {
         // 更新商品信息
         ProProductExample proProductExample = new ProProductExample();
@@ -114,33 +168,6 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         PckPackageInfoExample.Criteria criteria = pckPackageInfoExample.createCriteria();
         criteria.andProIdEqualTo(proId);
         pckPackageInfoMapper.deleteByExample(pckPackageInfoExample);
-        return true;
-    }
-
-    @Override
-    public boolean addProductInfo(ProductAddVO vo) {
-        ProProduct proProduct = new ProProduct();
-        proProduct.setTitle(vo.getTitle());
-        proProduct.setSkuCd(vo.getSkuCd());
-        proProduct.setUpc(vo.getUpc());
-        proProduct.setEan(vo.getEan());
-        proProduct.setModel(vo.getModel());
-        proProduct.setRetailPrice(new BigDecimal(vo.getRetailPrice()));
-        proProduct.setWarrantyDay(vo.getWarrantyDay());
-        proProduct.setCreatedBy(vo.getUserId());
-        proProduct.setCreationDate(new Date());
-        int proId = proProductMapper.insertSelective(proProduct);
-
-        // 更新重量等信息
-        PckPackageInfo pckPackageInfo = new PckPackageInfo();
-        pckPackageInfo.setProId(proId);
-        pckPackageInfo.setLength(new BigDecimal(vo.getLength()));
-        pckPackageInfo.setWidth(new BigDecimal(vo.getWeight()));
-        pckPackageInfo.setHeight(new BigDecimal(vo.getHeight()));
-        pckPackageInfo.setWeight(new BigDecimal(vo.getWeight()));
-        pckPackageInfo.setCreatedBy(vo.getUserId());
-        pckPackageInfo.setCreationDate(new Date());
-        pckPackageInfoMapper.insertSelective(pckPackageInfo);
         return true;
     }
 }

@@ -144,31 +144,32 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ecommerce.pojo.ProProduct">
-    insert into pro_product (pro_id, sku_cd, brd_id, 
-      man_id, title, upc, 
-      ean, model, warranty_day, 
-      retail_price, created_by, creation_date, 
-      last_update_by, last_update_date, call_int, 
-      remark, sts_cd, mininum_retail_price, 
-      replenishment_period, key_words, time_unit, 
-      stockseting, prc_id, warranty
-      )
-    values (#{proId,jdbcType=INTEGER}, #{skuCd,jdbcType=VARCHAR}, #{brdId,jdbcType=INTEGER}, 
-      #{manId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, 
-      #{ean,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{warrantyDay,jdbcType=VARCHAR}, 
-      #{retailPrice,jdbcType=DECIMAL}, #{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, 
-      #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, #{callInt,jdbcType=INTEGER}, 
-      #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, #{mininumRetailPrice,jdbcType=DECIMAL}, 
-      #{replenishmentPeriod,jdbcType=INTEGER}, #{keyWords,jdbcType=VARCHAR}, #{timeUnit,jdbcType=VARCHAR}, 
-      #{stockseting,jdbcType=INTEGER}, #{prcId,jdbcType=INTEGER}, #{warranty,jdbcType=LONGVARCHAR}
-      )
+    <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pro_product (sku_cd, brd_id, man_id, 
+      title, upc, ean, model, 
+      warranty_day, retail_price, created_by, 
+      creation_date, last_update_by, last_update_date, 
+      call_int, remark, sts_cd, 
+      mininum_retail_price, replenishment_period, 
+      key_words, time_unit, stockseting, 
+      prc_id, warranty)
+    values (#{skuCd,jdbcType=VARCHAR}, #{brdId,jdbcType=INTEGER}, #{manId,jdbcType=INTEGER}, 
+      #{title,jdbcType=VARCHAR}, #{upc,jdbcType=VARCHAR}, #{ean,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, 
+      #{warrantyDay,jdbcType=VARCHAR}, #{retailPrice,jdbcType=DECIMAL}, #{createdBy,jdbcType=VARCHAR}, 
+      #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
+      #{callInt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
+      #{mininumRetailPrice,jdbcType=DECIMAL}, #{replenishmentPeriod,jdbcType=INTEGER}, 
+      #{keyWords,jdbcType=VARCHAR}, #{timeUnit,jdbcType=VARCHAR}, #{stockseting,jdbcType=INTEGER}, 
+      #{prcId,jdbcType=INTEGER}, #{warranty,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.ecommerce.pojo.ProProduct">
+    <selectKey keyProperty="proId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into pro_product
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="proId != null">
-        pro_id,
-      </if>
       <if test="skuCd != null">
         sku_cd,
       </if>
@@ -240,9 +241,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="proId != null">
-        #{proId,jdbcType=INTEGER},
-      </if>
       <if test="skuCd != null">
         #{skuCd,jdbcType=VARCHAR},
       </if>
@@ -587,12 +585,4 @@
       prc_id = #{prcId,jdbcType=INTEGER}
     where pro_id = #{proId,jdbcType=INTEGER}
   </update>
-  <delete id="deleteProductInfoByList">
-    delete from
-    pro_product
-    where pro_id in
-    <foreach collection="proIds" item="proId" open="(" separator="," close=")">
-      #{proId, jdbcType=INTEGER}
-    </foreach>
-  </delete>
 </mapper>
