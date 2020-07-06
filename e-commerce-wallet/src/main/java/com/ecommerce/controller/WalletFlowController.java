@@ -68,4 +68,32 @@ public class WalletFlowController extends BaseController {
             return new CommonResult<>(200, "withdraw successful", walletFlowService.check(accountName));
         }
     }
+
+    @ApiOperation("支付")
+    @PatchMapping("/pay")
+    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+        } else {
+            if (walletFlowService.pay(info)) {
+                return new CommonResult(200,"pay successful");
+            } else {
+                throw BusinessException.UPDATE_FAIL;
+            }
+        }
+    }
+
+    @ApiOperation("申请退款")
+    @PatchMapping("/refund")
+    public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+        } else {
+            if (walletFlowService.refund(info)) {
+                return new CommonResult(200,"apply for refund successful");
+            } else {
+                throw BusinessException.UPDATE_FAIL;
+            }
+        }
+    }
 }

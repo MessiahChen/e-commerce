@@ -26,4 +26,14 @@ public interface WalletFlowService {
      * 查看钱包流水
      */
     List<WalletFlowRecordVO> check(String accountName);
+
+    /**
+     * 支付
+     */
+    Boolean pay(WalletFlowVO walletFlowVO);
+
+    /**
+     * 申请退款
+     */
+    Boolean refund(WalletFlowVO walletFlowVO);
 }

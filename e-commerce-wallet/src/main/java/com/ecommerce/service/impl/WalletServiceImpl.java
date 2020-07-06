@@ -82,25 +82,5 @@ public class WalletServiceImpl implements WalletService {
         }
     }
 
-    @Override
-    public Boolean pay(WalletFlowVO walletFlowVO) {
-        int buyerId = waaWalletAccountMapper.getIdByName(walletFlowVO.getAccountName());
-        WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
-        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword())) && (account.getAvailableMoney().compareTo(walletFlowVO.getFlow()) > -1)) {
-            account.setAvailableMoney(account.getAvailableMoney().subtract(walletFlowVO.getFlow()));
-            account.setLastUpdateTime(new Date());
-            return true;
-        } else {
-            return false;
-        }
-    }
 
-    @Override
-    public Boolean refund(WalletFlowVO walletFlowVO) {
-        int buyerId = waaWalletAccountMapper.getIdByName(walletFlowVO.getAccountName());
-        WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(buyerId);
-        account.setAvailableMoney(account.getAvailableMoney().add(walletFlowVO.getFlow()));
-        account.setLastUpdateTime(new Date());
-        return true;
-    }
 }
