@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
+import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 
 /**

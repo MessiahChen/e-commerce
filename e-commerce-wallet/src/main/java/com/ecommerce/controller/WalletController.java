@@ -10,6 +10,7 @@ import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.WalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
+import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +40,7 @@ public class WalletController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.addWallet(info)) {
-                return new CommonResult(200,"insert successful",walletService.getWalletInfo(info.getAccountName()));
+                return new CommonResult<>(200,"register new wallet account successful",walletService.getWalletInfo(info.getAccountName()));
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
@@ -64,9 +65,9 @@ public class WalletController extends BaseController {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.changePassword(info)) {
-                return new CommonResult(200,"insert successful");
+                return new CommonResult(200,"change password successful");
             } else {
-                throw BusinessException.INSERT_FAIL;
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }

@@ -8,8 +8,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 
 /**
- * Created by yousabla on 2020/7/5.
  * 用于返回待审核流水表的VO类
+ * Created by yousabla on 2020/7/5.
  */
 
 @Api("用于返回待审核流水表的VO类")

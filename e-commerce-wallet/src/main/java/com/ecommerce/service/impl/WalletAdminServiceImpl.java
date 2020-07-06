@@ -1,11 +1,14 @@
 package com.ecommerce.service.impl;
 
 import com.ecommerce.common.base.CommonPage;
+import com.ecommerce.dao.WaaWalletAccountMapper;
 import com.ecommerce.dao.WtrWalletTransactionRecordMapper;
+import com.ecommerce.pojo.WaaWalletAccount;
 import com.ecommerce.pojo.WtrWalletTransactionRecord;
 import com.ecommerce.pojo.WtrWalletTransactionRecordExample;
 import com.ecommerce.service.WalletAdminService;
 import com.ecommerce.vojo.WalletAdminVO;
+import com.ecommerce.vojo.WalletAuditVO;
 import com.ecommerce.vojo.WalletPageVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -13,10 +16,18 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+/**
+ * 管理员-钱包流水服务实现类
+ * Created by yousabla on 2020/7/5.
+ */
 
 @Service
 public class WalletAdminServiceImpl implements WalletAdminService {
+    @Resource
+    WaaWalletAccountMapper waaWalletAccountMapper;
 
     @Resource
     WtrWalletTransactionRecordMapper wtrWalletTransactionRecordMapper;
@@ -25,7 +36,7 @@ public class WalletAdminServiceImpl implements WalletAdminService {
     public CommonPage<WalletAdminVO> getAllFlow(WalletPageVO vo) {
         Page<WtrWalletTransactionRecord> flowPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
             WtrWalletTransactionRecordExample example = new WtrWalletTransactionRecordExample();
-            example.createCriteria().andStatusEqualTo((byte)2);
+            example.createCriteria().andStatusEqualTo((byte) 2);
             wtrWalletTransactionRecordMapper.selectByExample(example);
         });
 
@@ -41,5 +52,44 @@ public class WalletAdminServiceImpl implements WalletAdminService {
             flows.add(flow);
         }
         return CommonPage.restPage(flows,flowPage);
+    }
+
+    @Override
+    public Boolean audit(WalletAuditVO walletAuditVO) {
+        WtrWalletTransactionRecordExample example = new WtrWalletTransactionRecordExample();
+        example.createCriteria().andTransactionNumberEqualTo(walletAuditVO.getTransactionNumber());
+        List<WtrWalletTransactionRecord> records = wtrWalletTransactionRecordMapper.selectByExample(example);
+        WtrWalletTransactionRecord record = records.get(0);
+        if (record == null) return false;
+
+        WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(record.getBuyerId());
+
+        if (walletAuditVO.getStatus()){
+            record.setStatus((byte) 4);
+            switch (record.getTransactionType()){
+                //充值
+                case (byte) 1:{
+                    account.setDepositingMoney(account.getDepositingMoney().subtract(record.getTransactionMoney()));
+                    account.setAvailableMoney(account.getAvailableMoney().add(record.getTransactionMoney()));
+                    account.setLastUpdateTime(new Date());
+                }
+                //提现
+                case (byte) 2:{
+                    account.setWithdrawingMoney(account.getWithdrawingMoney().subtract(record.getTransactionMoney()));
+                    account.setAvailableMoney(account.getAvailableMoney().subtract(record.getTransactionMoney()));
+                    account.setLastUpdateTime(new Date());
+                }
+                //退款
+                case (byte) 4:{
+                    account.setAvailableMoney(account.getAvailableMoney().add(record.getTransactionMoney()));
+                    account.setLastUpdateTime(new Date());
+                }
+                default:{}
+            }
+        }else {
+            record.setStatus((byte) 1);
+        }
+        record.setNote(walletAuditVO.getNote());
+        return wtrWalletTransactionRecordMapper.updateByPrimaryKeySelective(record) > 0;
     }
 }
