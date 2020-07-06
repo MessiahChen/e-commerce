@@ -11,14 +11,14 @@ import java.util.List;
 
 public interface OrderService {
 
-    //返回所有的原式订单
-    List<StoStoreOrder> getAllStoStoreOrder();
-
-    //根据原始订单返回对应状态的原始订单明细
-    List<SolStoreOrderLineItem> getSolStoreOrderLineItem(String stsCd);
-
-    //根据借卖方订单管理对应状态返回销售订单明细
-    List<SalSalesOrderLineItem> getSalSalesOrderLineItem(String stsCd);
+//    //返回所有的原式订单
+//    List<StoStoreOrder> getAllStoStoreOrder();
+//
+//    //根据原始订单返回对应状态的原始订单明细
+//    List<SolStoreOrderLineItem> getSolStoreOrderLineItem(String stsCd);
+//
+//    //根据借卖方订单管理对应状态返回销售订单明细
+//    List<SalSalesOrderLineItem> getSalSalesOrderLineItem(String stsCd);
 
     //根据manId查询sao信息
     List<SaoSalesOrderVO> getSaoByManId(int manId);
@@ -28,4 +28,7 @@ public interface OrderService {
 
     //根据sal的proId查询pro
     ProProduct getProBySalId(Integer salId);
+
+    //根据saoId更新订单状态
+    boolean updateOrder(Integer saoId);
 }
