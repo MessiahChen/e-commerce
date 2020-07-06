@@ -35,12 +35,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/deposit")
     public CommonResult deposit(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.deposit(info)) {
                 return new CommonResult(200, "deposit successful");
             } else {
-                throw BusinessException.SELECT_FAIL;
+                throw BusinessException.INSERT_FAIL;
             }
         }
     }
@@ -49,12 +49,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/withdraw")
     public CommonResult withdraw(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.withdraw(info)) {
                 return new CommonResult(200, "withdraw successful");
             } else {
-                throw BusinessException.UPDATE_FAIL;
+                throw BusinessException.INSERT_FAIL;
             }
         }
     }
@@ -65,7 +65,7 @@ public class WalletFlowController extends BaseController {
         if (bindingResult.hasErrors()) {
             throw BusinessException.SELECT_FAIL.newInstance(this.getErrorResponse(bindingResult), accountName.toString());
         } else {
-            return new CommonResult<>(200, "withdraw successful", walletFlowService.check(accountName));
+            return new CommonResult<>(200, "check successful", walletFlowService.check(accountName));
         }
     }
 
@@ -73,12 +73,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/pay")
     public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.pay(info)) {
                 return new CommonResult(200,"pay successful");
             } else {
-                throw BusinessException.UPDATE_FAIL;
+                throw BusinessException.INSERT_FAIL;
             }
         }
     }
@@ -87,12 +87,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/refund")
     public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.refund(info)) {
                 return new CommonResult(200,"apply for refund successful");
             } else {
-                throw BusinessException.UPDATE_FAIL;
+                throw BusinessException.INSERT_FAIL;
             }
         }
     }

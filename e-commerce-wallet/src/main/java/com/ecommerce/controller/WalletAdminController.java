@@ -48,10 +48,10 @@ public class WalletAdminController extends BaseController {
     @PatchMapping("/audit")
     public CommonResult audit(@Validated({UpdateGroup.class}) @RequestBody WalletAuditVO walletAuditVO, BindingResult bindingResult) throws BusinessException{
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), walletAuditVO.toString());
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), walletAuditVO.toString());
         } else {
             if (walletAdminService.audit(walletAuditVO)) {
-                return new CommonResult(200,"insert successful");
+                return new CommonResult(200,"audit successful");
             } else {
                 throw BusinessException.UPDATE_FAIL;
             }
