@@ -2,8 +2,9 @@ package com.ecommerce.service;
 
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
-import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
+
+import java.util.List;
 
 /**
  * wallet服务接口
@@ -18,8 +19,9 @@ public interface WalletService {
 
     /**
      * 获取钱包信息
+     * @return
      */
-    WalletBalanceVO getWalletInfo(String accountName);
+    List<WalletBalanceVO> getWalletInfo(String accountName);
 
     /**
      * 更改支付密码

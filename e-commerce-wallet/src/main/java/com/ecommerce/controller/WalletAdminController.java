@@ -51,7 +51,7 @@ public class WalletAdminController extends BaseController {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), walletAuditVO.toString());
         } else {
             if (walletAdminService.audit(walletAuditVO)) {
-                return new CommonResult(200,"audit successful");
+                return new CommonResult(20000,"audit successful");
             } else {
                 throw BusinessException.UPDATE_FAIL;
             }

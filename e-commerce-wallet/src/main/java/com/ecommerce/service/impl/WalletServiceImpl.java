@@ -3,18 +3,20 @@ package com.ecommerce.service.impl;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.dao.WaaWalletAccountMapper;
 import com.ecommerce.pojo.WaaWalletAccount;
+import com.ecommerce.pojo.WaaWalletAccountExample;
 import com.ecommerce.service.RedisService;
 import com.ecommerce.service.WalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
-import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * wallet服务实现类
@@ -33,6 +35,12 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Boolean addWallet(WalletAccountVO walletAccountVO) {
         Date date = new Date();
+        WaaWalletAccountExample example = new WaaWalletAccountExample();
+        example.createCriteria().andAccountNameEqualTo(walletAccountVO.getAccountName());
+        List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
+        if (accounts.get(0) != null){
+            throw BusinessException.USERNAME_DUPLICATE;
+        }
 
         WaaWalletAccount walletAccount = new WaaWalletAccount();
         walletAccount.setAccountName(walletAccountVO.getAccountName());
@@ -54,20 +62,24 @@ public class WalletServiceImpl implements WalletService {
     }
 
 
-    public WalletBalanceVO getWalletInfo(String accountName) {
-        WaaWalletAccount walletInfo = waaWalletAccountMapper.selectByPrimaryKey(waaWalletAccountMapper.getIdByName(accountName));
-        if (walletInfo != null) {
-//            redisService.set(accountName+"Balance",walletInfo.getAvailableMoney());
+    public List<WalletBalanceVO> getWalletInfo(String accountName) {
+        WaaWalletAccountExample example = new WaaWalletAccountExample();
+        example.createCriteria().andAccountNameEqualTo(accountName);
+        List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
+        if (accounts == null) throw BusinessException.USERNAME_NOT_EXISTS;
+        List<WalletBalanceVO> balanceVOS = new ArrayList<>();
+        for (WaaWalletAccount account:accounts) {
+
+//            redisService.set(accountName+"Balance",account.getAvailableMoney());
             WalletBalanceVO balanceVO = new WalletBalanceVO();
-            balanceVO.setCurrency(walletInfo.getCurrency());
-            balanceVO.setBuyerId(walletInfo.getBuyerId());
-            balanceVO.setAvailableMoney(walletInfo.getAvailableMoney());
-            balanceVO.setDepositingMoney(walletInfo.getDepositingMoney());
-            balanceVO.setWithdrawingMoney(walletInfo.getWithdrawingMoney());
-            return balanceVO;
-        } else {
-            throw BusinessException.USERNAME_NOT_EXISTS;
+            balanceVO.setCurrency(account.getCurrency());
+            balanceVO.setBuyerId(account.getBuyerId());
+            balanceVO.setAvailableMoney(account.getAvailableMoney());
+            balanceVO.setDepositingMoney(account.getDepositingMoney());
+            balanceVO.setWithdrawingMoney(account.getWithdrawingMoney());
+            balanceVOS.add(balanceVO);
         }
+        return balanceVOS;
     }
 
     @Override
