@@ -8,10 +8,7 @@ import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.WalletService;
-import com.ecommerce.vojo.WalletAccountVO;
-import com.ecommerce.vojo.WalletBalanceVO;
-import com.ecommerce.vojo.WalletFlowVO;
-import com.ecommerce.vojo.WalletPasswordVO;
+import com.ecommerce.vojo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -49,8 +46,8 @@ public class WalletController extends BaseController {
 
     @ApiOperation("获取账户钱包信息")
     @PostMapping("/getInfo")
-    public CommonResult<WalletBalanceVO> getInfo(@RequestBody String accountName){
-        WalletBalanceVO balanceVO = walletService.getWalletInfo(accountName);
+    public CommonResult<WalletBalanceVO> getInfo(@RequestBody StringVO info){
+        WalletBalanceVO balanceVO = walletService.getWalletInfo(info.getAccountName());
         if (balanceVO != null) {
             return CommonResult.success(balanceVO,"get wallet info successful");
         } else {
