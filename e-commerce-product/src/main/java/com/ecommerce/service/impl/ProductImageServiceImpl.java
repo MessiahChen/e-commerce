@@ -63,7 +63,7 @@ public class ProductImageServiceImpl implements ProductImageService {
 
             PrcProductCategory prcProductCategory = prcProductCategoryMapper.selectByPrimaryKey(product.getPrcId());
             if (prcProductCategory != null)
-                productImageVO.setCategoryName(prcProductCategory.getCategoryName());
+                productImageVO.setCategoryName(prcProductCategory.getCategoryPath());
 
             ImgImageExample imgImageExample = new ImgImageExample();
             ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
@@ -121,12 +121,18 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public boolean updateProductImage(ProductCategoryUpdateVO vo) {
+    public boolean addProductCategory(ProductCategoryAddVO vo) {
+        int mainCatId = vo.getCategory().get(0);
+        int viceCatId = vo.getCategory().get(1);
+
+        CatCategory mainCatCategory = catCategoryMapper.selectByPrimaryKey(mainCatId);
+        CatCategory viceCatCategory = catCategoryMapper.selectByPrimaryKey(viceCatId);
+
         PrcProductCategory prcProductCategory = new PrcProductCategory();
         prcProductCategory.setProId(vo.getProId());
-        prcProductCategory.setCategoryId(vo.getMainCatId());
-        prcProductCategory.setCategoryName(vo.getMainCatName());
-        prcProductCategory.setCategoryPath(vo.getMainCatName() + vo.getViceCatName());
+        prcProductCategory.setCategoryId(mainCatId);
+        prcProductCategory.setCategoryName(mainCatCategory.getCatName());
+        prcProductCategory.setCategoryPath(mainCatCategory.getCatName() + "/" + viceCatCategory.getCatName());
         prcProductCategory.setCreatedBy(vo.getUserId());
         prcProductCategory.setCreationDate(new Date());
         prcProductCategory.setLastUpdateBy(vo.getUserId());
@@ -134,14 +140,61 @@ public class ProductImageServiceImpl implements ProductImageService {
 
         prcProductCategoryMapper.insertSelective(prcProductCategory);
 
-        prcProductCategory.setCategoryId(vo.getViceCatId());
-        prcProductCategory.setCategoryName(vo.getViceCatName());
+        ProProduct proProduct = new ProProduct();
+        proProduct.setProId(vo.getProId());
+        proProduct.setPrcId(prcProductCategory.getPrcId());
+
+        prcProductCategory.setCategoryId(viceCatId);
+        prcProductCategory.setCategoryName(viceCatCategory.getCatName());
+        prcProductCategoryMapper.insertSelective(prcProductCategory);
+
+        proProductMapper.updateByPrimaryKeySelective(proProduct);
+        return true;
+    }
+
+    @Override
+    public ProductCategoryAddVO getProductCatWhenUpdate(Integer proId) {
+        ProductCategoryAddVO productCategoryAddVO = new ProductCategoryAddVO();
+        productCategoryAddVO.setProId(proId);
+
+
+        return null;
+    }
+
+    @Override
+    public boolean updateProductImage(ProductCategoryUpdateVO vo) {
+        PrcProductCategoryExample prcProductCategoryExample = new PrcProductCategoryExample();
+        PrcProductCategoryExample.Criteria criteria = prcProductCategoryExample.createCriteria();
+        criteria.andProIdEqualTo(vo.getProId());
+
+        prcProductCategoryMapper.deleteByExample(prcProductCategoryExample);
+
+        int mainCatId = vo.getCategory().get(0);
+        int viceCatId = vo.getCategory().get(1);
+
+        CatCategory mainCatCategory = catCategoryMapper.selectByPrimaryKey(mainCatId);
+        CatCategory viceCatCategory = catCategoryMapper.selectByPrimaryKey(viceCatId);
+
+        PrcProductCategory prcProductCategory = new PrcProductCategory();
+        prcProductCategory.setProId(vo.getProId());
+        prcProductCategory.setCategoryId(mainCatId);
+        prcProductCategory.setCategoryName(mainCatCategory.getCatName());
+        prcProductCategory.setCategoryPath(mainCatCategory.getCatName() + "/" + viceCatCategory.getCatName());
+        prcProductCategory.setCreatedBy(vo.getUserId());
+        prcProductCategory.setCreationDate(new Date());
+        prcProductCategory.setLastUpdateBy(vo.getUserId());
+        prcProductCategory.setLastUpdateDate(new Date());
 
         prcProductCategoryMapper.insertSelective(prcProductCategory);
 
         ProProduct proProduct = new ProProduct();
         proProduct.setProId(vo.getProId());
-        proProduct.setPrcId(vo.getMainCatId());
+        proProduct.setPrcId(prcProductCategory.getPrcId());
+
+        prcProductCategory.setCategoryId(viceCatId);
+        prcProductCategory.setCategoryName(viceCatCategory.getCatName());
+        prcProductCategoryMapper.insertSelective(prcProductCategory);
+
         proProductMapper.updateByPrimaryKeySelective(proProduct);
         return true;
     }
@@ -168,15 +221,14 @@ public class ProductImageServiceImpl implements ProductImageService {
 
         List<CatCategory> mainCatCategories = catCategoryMapper.selectByExample(catCategoryExample);
 
-        CatCategoryExample viceCatCategoryExample = new CatCategoryExample();
-        CatCategoryExample.Criteria criteria_vice_cat_ = viceCatCategoryExample.createCriteria();
-
         for (CatCategory cat : mainCatCategories) {
             ProductCategoryVO productCategoryVO = new ProductCategoryVO();
             productCategoryVO.setCatId(cat.getCatId());
             productCategoryVO.setCatName(cat.getCatName());
             List<ViceCategory> viceCats = productCategoryVO.getViceCats();
 
+            CatCategoryExample viceCatCategoryExample = new CatCategoryExample();
+            CatCategoryExample.Criteria criteria_vice_cat_ = viceCatCategoryExample.createCriteria();
             criteria_vice_cat_.andCatFatherIdEqualTo(cat.getCatId());
 
             List<CatCategory> viceCatCategories = catCategoryMapper.selectByExample(viceCatCategoryExample);
@@ -193,33 +245,6 @@ public class ProductImageServiceImpl implements ProductImageService {
         }
         return result;
     }
-
-    @Override
-    public boolean addProductCategory(ProductCategoryAddVO vo) {
-        PrcProductCategory prcProductCategory = new PrcProductCategory();
-        prcProductCategory.setProId(vo.getProId());
-        prcProductCategory.setCategoryId(vo.getMainCatId());
-        prcProductCategory.setCategoryName(vo.getMainCatName());
-        prcProductCategory.setCategoryPath(vo.getMainCatName() + vo.getViceCatName());
-        prcProductCategory.setCreatedBy(vo.getUserId());
-        prcProductCategory.setCreationDate(new Date());
-        prcProductCategory.setLastUpdateBy(vo.getUserId());
-        prcProductCategory.setLastUpdateDate(new Date());
-
-        prcProductCategoryMapper.insertSelective(prcProductCategory);
-
-        prcProductCategory.setCategoryId(vo.getViceCatId());
-        prcProductCategory.setCategoryName(vo.getViceCatName());
-
-        prcProductCategoryMapper.insertSelective(prcProductCategory);
-
-        ProProduct proProduct = new ProProduct();
-        proProduct.setProId(vo.getProId());
-        proProduct.setPrcId(vo.getMainCatId());
-        proProductMapper.updateByPrimaryKeySelective(proProduct);
-        return true;
-    }
-
 
     @Override
     public List<String> uploadImages(List<MultipartFile> files) {

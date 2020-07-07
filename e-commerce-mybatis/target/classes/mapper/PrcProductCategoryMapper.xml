@@ -109,23 +109,26 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ecommerce.pojo.PrcProductCategory">
-    insert into prc_product_category (prc_id, pro_id, category_id, 
-      category_name, category_path, created_by, 
-      creation_date, last_update_by, last_update_date, 
-      call_int, remark, sts_cd, 
-      platform_type)
-    values (#{prcId,jdbcType=INTEGER}, #{proId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, 
-      #{categoryName,jdbcType=VARCHAR}, #{categoryPath,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
-      #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
-      #{callInt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
-      #{platformType,jdbcType=VARCHAR})
+    <selectKey keyProperty="prcId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into prc_product_category (pro_id, category_id, category_name, 
+      category_path, created_by, creation_date, 
+      last_update_by, last_update_date, call_int, 
+      remark, sts_cd, platform_type
+      )
+    values (#{proId,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{categoryName,jdbcType=VARCHAR}, 
+      #{categoryPath,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, 
+      #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, #{callInt,jdbcType=INTEGER}, 
+      #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, #{platformType,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ecommerce.pojo.PrcProductCategory">
+    <selectKey keyProperty="prcId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
     insert into prc_product_category
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="prcId != null">
-        prc_id,
-      </if>
       <if test="proId != null">
         pro_id,
       </if>
@@ -164,9 +167,6 @@
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="prcId != null">
-        #{prcId,jdbcType=INTEGER},
-      </if>
       <if test="proId != null">
         #{proId,jdbcType=INTEGER},
       </if>
@@ -340,7 +340,7 @@
     prc_product_category
     where pro_id in
     <foreach collection="proIds" item="proId" open="(" separator="," close=")">
-      #{id, jdbcType=INTEGER}
+      #{proId, jdbcType=INTEGER}
     </foreach>
   </delete>
 </mapper>

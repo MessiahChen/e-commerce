@@ -38,59 +38,59 @@ public class PrcProductCategory implements Serializable {
     private String categoryName;
 
     /**
-     *  类别全路径如 ce>digital>mp3
+     * 类别全路径如 ce>digital>mp3
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 类别全路径如 ce>digital>mp3")
+    @ApiModelProperty(value = "类别全路径如 ce>digital>mp3")
     private String categoryPath;
 
     /**
-     *  创建人
+     * 创建人
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 创建人")
+    @ApiModelProperty(value = "创建人")
     private String createdBy;
 
     /**
-     *  创建时间
+     * 创建时间
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 创建时间")
+    @ApiModelProperty(value = "创建时间")
     private Date creationDate;
 
     /**
-     *  修改人
+     * 修改人
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 修改人")
+    @ApiModelProperty(value = "修改人")
     private String lastUpdateBy;
 
     /**
-     *  修改时间
+     * 修改时间
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 修改时间")
+    @ApiModelProperty(value = "修改时间")
     private Date lastUpdateDate;
 
     /**
-     *  乐观锁
+     * 乐观锁
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 乐观锁")
+    @ApiModelProperty(value = "乐观锁")
     private Integer callInt;
 
     /**
-     *  备注
+     * 备注
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**

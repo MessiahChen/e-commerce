@@ -14,6 +14,8 @@ public interface ProductImageService {
 
     CommonPage<ProductImageVO> searchProductImageByTitle(SearchProductImageVO searchProductImageVO);
 
+    ProductCategoryAddVO getProductCatWhenUpdate(Integer proId);
+
     boolean updateProductImage(ProductCategoryUpdateVO productCategoryUpdateVO);
 
     boolean deleteProductImage(ProductImageDeleteVO productImageDeleteVO);
