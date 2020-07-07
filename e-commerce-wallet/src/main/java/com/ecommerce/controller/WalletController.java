@@ -16,6 +16,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 钱包控制类
@@ -32,12 +33,12 @@ public class WalletController extends BaseController {
 
     @ApiOperation("注册新的钱包账户")
     @PutMapping("/register")
-    public CommonResult<WalletBalanceVO> register(@Validated({InsertGroup.class}) @RequestBody WalletAccountVO info, BindingResult bindingResult) throws BusinessException {
+    public CommonResult<List<WalletBalanceVO>> register(@Validated({InsertGroup.class}) @RequestBody WalletAccountVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.addWallet(info)) {
-                return new CommonResult<>(200,"register new wallet account successful",walletService.getWalletInfo(info.getAccountName()));
+                return new CommonResult<>(20000,"register new wallet account successful",walletService.getWalletInfo(info.getAccountName()));
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
@@ -46,10 +47,10 @@ public class WalletController extends BaseController {
 
     @ApiOperation("获取账户钱包信息")
     @PostMapping("/getInfo")
-    public CommonResult<WalletBalanceVO> getInfo(@RequestBody StringVO info){
-        WalletBalanceVO balanceVO = walletService.getWalletInfo(info.getAccountName());
-        if (balanceVO != null) {
-            return CommonResult.success(balanceVO,"get wallet info successful");
+    public CommonResult<List<WalletBalanceVO>> getInfo(@RequestBody StringVO info){
+        List<WalletBalanceVO> balanceVOs = walletService.getWalletInfo(info.getAccountName());
+        if (balanceVOs != null) {
+            return CommonResult.success(balanceVOs,"get wallet info successful");
         } else {
             return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
         }
@@ -62,7 +63,7 @@ public class WalletController extends BaseController {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.changePassword(info)) {
-                return new CommonResult(200,"change password successful");
+                return new CommonResult(20000,"change password successful");
             } else {
                 throw BusinessException.UPDATE_FAIL;
             }

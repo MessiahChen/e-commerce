@@ -39,7 +39,7 @@ public class WalletFlowController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.deposit(info)) {
-                return new CommonResult(200, "deposit successful");
+                return new CommonResult(20000, "deposit successful");
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
@@ -53,7 +53,7 @@ public class WalletFlowController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.withdraw(info)) {
-                return new CommonResult(200, "withdraw successful");
+                return new CommonResult(20000, "withdraw successful");
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
@@ -66,7 +66,7 @@ public class WalletFlowController extends BaseController {
         if (bindingResult.hasErrors()) {
             throw BusinessException.SELECT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            return new CommonResult<>(200, "check successful", walletFlowService.check(info.getAccountName()));
+            return new CommonResult<>(20000, "check successful", walletFlowService.check(info.getAccountName()));
         }
     }
 
@@ -77,7 +77,7 @@ public class WalletFlowController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.pay(info)) {
-                return new CommonResult(200,"pay successful");
+                return new CommonResult(20000,"pay successful");
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
@@ -91,7 +91,7 @@ public class WalletFlowController extends BaseController {
             throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.refund(info)) {
-                return new CommonResult(200,"apply for refund successful");
+                return new CommonResult(20000,"apply for refund successful");
             } else {
                 throw BusinessException.INSERT_FAIL;
             }
