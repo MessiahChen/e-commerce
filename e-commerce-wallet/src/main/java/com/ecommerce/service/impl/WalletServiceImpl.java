@@ -3,11 +3,11 @@ package com.ecommerce.service.impl;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.dao.WaaWalletAccountMapper;
 import com.ecommerce.pojo.WaaWalletAccount;
+import com.ecommerce.pojo.WaaWalletAccountExample;
 import com.ecommerce.service.RedisService;
 import com.ecommerce.service.WalletService;
 import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
-import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * wallet服务实现类
@@ -33,6 +34,12 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Boolean addWallet(WalletAccountVO walletAccountVO) {
         Date date = new Date();
+        WaaWalletAccountExample example = new WaaWalletAccountExample();
+        example.createCriteria().andAccountNameEqualTo(walletAccountVO.getAccountName());
+        List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
+        if (accounts.get(0) != null){
+            throw BusinessException.USERNAME_DUPLICATE;
+        }
 
         WaaWalletAccount walletAccount = new WaaWalletAccount();
         walletAccount.setAccountName(walletAccountVO.getAccountName());
