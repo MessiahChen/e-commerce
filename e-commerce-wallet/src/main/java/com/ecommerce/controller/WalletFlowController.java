@@ -6,6 +6,7 @@ import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.WalletFlowService;
+import com.ecommerce.vojo.StringVO;
 import com.ecommerce.vojo.WalletFlowRecordVO;
 import com.ecommerce.vojo.WalletFlowVO;
 import io.swagger.annotations.Api;
@@ -61,11 +62,11 @@ public class WalletFlowController extends BaseController {
 
     @ApiOperation("查看流水")
     @PostMapping("/check")
-    public CommonResult<List<WalletFlowRecordVO>> check(@Validated({SelectGroup.class}) @RequestBody String accountName, BindingResult bindingResult) throws BusinessException {
+    public CommonResult<List<WalletFlowRecordVO>> check(@Validated({SelectGroup.class}) @RequestBody StringVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.SELECT_FAIL.newInstance(this.getErrorResponse(bindingResult), accountName.toString());
+            throw BusinessException.SELECT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            return new CommonResult<>(200, "check successful", walletFlowService.check(accountName));
+            return new CommonResult<>(200, "check successful", walletFlowService.check(info.getAccountName()));
         }
     }
 
