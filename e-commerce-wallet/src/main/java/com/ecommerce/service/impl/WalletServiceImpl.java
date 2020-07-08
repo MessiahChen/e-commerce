@@ -38,7 +38,7 @@ public class WalletServiceImpl implements WalletService {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
         example.createCriteria().andAccountNameEqualTo(walletAccountVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
-        if (accounts.get(0) != null){
+        if (accounts != null){
             throw BusinessException.USERNAME_DUPLICATE;
         }
 
