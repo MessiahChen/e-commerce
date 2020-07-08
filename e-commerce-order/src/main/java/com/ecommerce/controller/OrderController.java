@@ -6,6 +6,7 @@ import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.OrderService;
+import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class OrderController extends BaseController {
     private OrderService orderService;
 
     @ApiOperation("根据manId获得saoVo对象列表，sao->销售订单")
-    @GetMapping("/sao")
-    public CommonResult<List<SaoSalesOrderVO>> getSaoByManId(@RequestParam int manId){
-        if(orderService.getSaoByManId(manId) != null){
+    @PostMapping("/sao")
+    public CommonResult<List<SaoSalesOrderVO>> getSaoByManId(@RequestBody IntegerVO integerVO){
+        if(orderService.getSaoByManId(integerVO.getI()) != null){
             return CommonResult.success("获取sao数据成功");
         }else {
             throw BusinessException.SELECT_FAIL;
@@ -32,9 +33,9 @@ public class OrderController extends BaseController {
     }
 
     @ApiOperation("根据saoId查询sal，然后根据该sal查询proId，然后根据proId获得pro对象")
-    @GetMapping("/getProBySao")
-    public CommonResult<ProProduct> getProBySalId(@RequestParam int saoId){
-        SalSalesOrderLineItem salSalesOrderLineItem = orderService.getSalBySaoId(saoId);
+    @PostMapping("/getProBySao")
+    public CommonResult<ProProduct> getProBySalId(@RequestBody IntegerVO integerVO){
+        SalSalesOrderLineItem salSalesOrderLineItem = orderService.getSalBySaoId(integerVO.getI());
         if(salSalesOrderLineItem != null){
             ProProduct proProduct = orderService.getProBySalId(salSalesOrderLineItem.getSalId());
             if(proProduct != null){
@@ -48,10 +49,10 @@ public class OrderController extends BaseController {
     }
 
     @ApiOperation("发货接口,根据saoId更新订单状态")
-    @GetMapping("/shipment")
-    public CommonResult<Boolean> getShipped(@RequestParam int saoId){
-        if(orderService.updateOrder(saoId)){
-            return CommonResult.success(orderService.updateOrder(saoId),"发货成功");
+    @PostMapping("/shipment")
+    public CommonResult<Boolean> getShipped(@RequestBody IntegerVO integerVO){
+        if(orderService.updateOrder(integerVO.getI())){
+            return CommonResult.success(orderService.updateOrder(integerVO.getI()),"发货成功");
         }else {
             throw BusinessException.SELECT_FAIL;
         }

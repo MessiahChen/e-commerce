@@ -59,6 +59,10 @@
             <groupId>com.ecommerce</groupId>
             <artifactId>e-commerce-mybatis</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.ecommerce</groupId>
+            <artifactId>e-commerce-common</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
