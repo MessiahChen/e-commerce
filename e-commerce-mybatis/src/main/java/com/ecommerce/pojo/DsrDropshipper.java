@@ -85,6 +85,22 @@ public class DsrDropshipper implements Serializable {
     @ApiModelProperty(value = "注册时间")
     private Date registerDate;
 
+    /**
+     * 邮箱
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "邮箱")
+    private String email;
+
+    /**
+     * 手机号码
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "手机号码")
+    private String phoneNumber;
+
     private static final long serialVersionUID = 1L;
 
     public Integer getDsrId() {
@@ -167,6 +183,22 @@ public class DsrDropshipper implements Serializable {
         this.registerDate = registerDate;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -183,6 +215,8 @@ public class DsrDropshipper implements Serializable {
         sb.append(", remark=").append(remark);
         sb.append(", stsCd=").append(stsCd);
         sb.append(", registerDate=").append(registerDate);
+        sb.append(", email=").append(email);
+        sb.append(", phoneNumber=").append(phoneNumber);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
