@@ -142,7 +142,8 @@ public class OrderServiceImpl implements OrderService {
                 ProProduct pro = proProductMapper.selectByPrimaryKey(proId);
                 //把所有的信息封装到VO中，再把VO添加进返回列表里
                 tempVO = new SaoSalesOrderVO(pro.getTitle(),sal.getPrice(),
-                    sal.getQty(),pro.getSkuCd(),sal.getCreationDate(), temp.getOrderNo(), temp.getOrderSts() ,temp.getSaoId());
+                    sal.getQty(),pro.getSkuCd(),sal.getCreationDate(), temp.getOrderNo(), temp.getOrderSts() ,temp.getSaoId(),
+                        sal.getTrackingNo());
                 saoSalesOrderVOs.add(tempVO);
             }
         }

@@ -75,6 +75,17 @@ public class SaoSalesOrderVO {
     private String productOrderNum;
     private String type;
     private int saoId;
+    private String trackingNo;
+
+    public String getTrackingNo() {
+        return trackingNo;
+    }
+
+    public void setTrackingNo(String trackingNo) {
+        this.trackingNo = trackingNo;
+    }
+
+
 
     public String getType() {
         return type;
@@ -84,7 +95,7 @@ public class SaoSalesOrderVO {
         this.type = type;
     }
 
-    public SaoSalesOrderVO(String productTitle, BigDecimal productPrice, int productNum, String productSku, Date productCreateTime, String productOrderNum, String type, int saoId) {
+    public SaoSalesOrderVO(String productTitle, BigDecimal productPrice, int productNum, String productSku, Date productCreateTime, String productOrderNum, String type, int saoId, String trackingNo) {
         this.productTitle = productTitle;
         this.productPrice = productPrice;
         this.productNum = productNum;
@@ -93,6 +104,7 @@ public class SaoSalesOrderVO {
         this.productOrderNum = productOrderNum;
         this.type = type;
         this.saoId = saoId;
+        this.trackingNo = trackingNo;
     }
 
     public int getSaoId() {
