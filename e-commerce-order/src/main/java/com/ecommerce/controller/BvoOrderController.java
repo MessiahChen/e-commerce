@@ -7,6 +7,7 @@ import com.ecommerce.pojo.SalSalesOrderLineItem;
 import com.ecommerce.pojo.StoStoreOrder;
 import com.ecommerce.pojo.StrStore;
 import com.ecommerce.service.BvoOrderService;
+import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,9 @@ public class BvoOrderController extends BaseController {
     private BvoOrderService bvoOrderService;
 
     @ApiOperation("根据dsrId获取订单信息->dsr：借卖方对象")
-    @GetMapping("/getVosByDsrId")
-    public CommonResult<List<SaoSalesOrderVO>> getVo(@RequestParam int dsrId){
-        List<SaoSalesOrderVO> saoSalesOrderVOS = bvoOrderService.getSaoVosByDsrId(dsrId);
+    @PostMapping("/getVosByDsrId")
+    public CommonResult<List<SaoSalesOrderVO>> getVo(@RequestBody IntegerVO integerVO){
+        List<SaoSalesOrderVO> saoSalesOrderVOS = bvoOrderService.getSaoVosByDsrId(integerVO.getI());
         if(saoSalesOrderVOS == null){
             throw BusinessException.SELECT_FAIL;
         }else {
@@ -42,9 +43,9 @@ public class BvoOrderController extends BaseController {
     }
 
     @ApiOperation("根据saoId获取sal对象")
-    @GetMapping("/getSalBySaoId")
-    public CommonResult<SalSalesOrderLineItem> getSalBySaoId(int saoId){
-        SalSalesOrderLineItem sal = bvoOrderService.getSalBySaoId(saoId);
+    @PostMapping("/getSalBySaoId")
+    public CommonResult<SalSalesOrderLineItem> getSalBySaoId(@RequestBody IntegerVO integerVO){
+        SalSalesOrderLineItem sal = bvoOrderService.getSalBySaoId(integerVO.getI());
         if(sal == null){
             throw BusinessException.SELECT_FAIL;
         }else {
@@ -53,9 +54,9 @@ public class BvoOrderController extends BaseController {
     }
 
     @ApiOperation("支付以后，根据saoId修改对应的订单状态")
-    @GetMapping("/update")
-    public CommonResult<Integer> update(int saoId){
-        int result = bvoOrderService.updateOrderBySaoId(saoId);
+    @PostMapping("/update")
+    public CommonResult<Integer> update(@RequestBody IntegerVO integerVO){
+        int result = bvoOrderService.updateOrderBySaoId(integerVO.getI());
         if(result == 0){
             throw BusinessException.UPDATE_FAIL;
         }else {
@@ -64,9 +65,9 @@ public class BvoOrderController extends BaseController {
     }
 
     @ApiOperation("根据saoId获取运费")
-    @GetMapping("/getFeeBySaoId")
-    public CommonResult<Double> getFeeBySaoId(int saoId){
-        double fee = bvoOrderService.getFreightFeeBySaoId(saoId);
+    @PostMapping("/getFeeBySaoId")
+    public CommonResult<Double> getFeeBySaoId(@RequestBody IntegerVO integerVO){
+        double fee = bvoOrderService.getFreightFeeBySaoId(integerVO.getI());
         if(fee == -1){
             throw BusinessException.SELECT_FAIL;
         }else {
