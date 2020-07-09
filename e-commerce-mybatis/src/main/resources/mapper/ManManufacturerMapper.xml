@@ -143,7 +143,7 @@
       #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
       #{description,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ecommerce.pojo.ManManufacturer">
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.ManManufacturer" useGeneratedKeys="true" keyProperty="man_id">
     insert into man_manufacturer
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="manId != null">

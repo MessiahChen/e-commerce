@@ -115,7 +115,7 @@
       #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
       #{registerDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.ecommerce.pojo.DsrDropshipper">
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.DsrDropshipper" useGeneratedKeys="true" keyProperty="dsr_id">
     insert into dsr_dropshipper
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="dsrId != null">
