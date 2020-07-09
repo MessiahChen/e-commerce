@@ -11,9 +11,12 @@ import com.ecommerce.vojo.WalletFlowRecordVO;
 import com.ecommerce.vojo.WalletFlowVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -29,6 +32,13 @@ import java.util.List;
 @RequestMapping("/walletFlow")
 public class WalletFlowController extends BaseController {
 
+
+    @Resource
+    RestTemplate restTemplate;
+
+    @Value("${value.zuulURI}")
+    private String zuulURI;
+
     @Resource
     WalletFlowService walletFlowService;
 
@@ -36,12 +46,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/deposit")
     public CommonResult deposit(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.deposit(info)) {
                 return new CommonResult(20000, "deposit successful");
             } else {
-                throw BusinessException.INSERT_FAIL;
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }
@@ -50,12 +60,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/withdraw")
     public CommonResult withdraw(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.withdraw(info)) {
                 return new CommonResult(20000, "withdraw successful");
             } else {
-                throw BusinessException.INSERT_FAIL;
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }
@@ -72,14 +82,19 @@ public class WalletFlowController extends BaseController {
 
     @ApiOperation("支付")
     @PatchMapping("/pay")
-    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
+    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult,int[] oderNum) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.pay(info)) {
-                return new CommonResult(20000,"pay successful");
+                ResponseEntity<CommonResult> entity = restTemplate.getForEntity(zuulURI + "/order/bvoOrder/getSalBySaoId/{oderNum}",CommonResult.class, oderNum);
+                if (entity.getStatusCode().is2xxSuccessful()){
+                    return new CommonResult(20000,"pay successful");
+                }else {
+                    return new CommonResult(500,"更新订单状态失败");
+                }
             } else {
-                throw BusinessException.INSERT_FAIL;
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }
@@ -88,12 +103,12 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/refund")
     public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.refund(info)) {
                 return new CommonResult(20000,"apply for refund successful");
             } else {
-                throw BusinessException.INSERT_FAIL;
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }

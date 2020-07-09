@@ -30,3 +30,6 @@ eureka:
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
+
+value:
+  zuulURI: "http://localhost:9000"
