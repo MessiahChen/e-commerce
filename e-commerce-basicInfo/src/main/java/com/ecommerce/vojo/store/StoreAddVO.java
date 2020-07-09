@@ -1,29 +1,54 @@
-package com.ecommerce.vojo.bvoinfo;
+package com.ecommerce.vojo.store;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.ws.rs.GET;
 import java.util.Date;
 
 @Getter
 @Setter
-public class BVOInfoUpdateVO {
+public class StoreAddVO {
     /**
      *  主键
      *
      * @mbg.generated
      */
     @ApiModelProperty(value = " 主键")
-    private Integer dsrId;
+    private Integer strId;
 
     /**
-     *  借卖方名称
+     * 借卖id
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 借卖方名称")
-    private String name;
+    @ApiModelProperty(value = "借卖id")
+    private Integer dsrId;
+
+    /**
+     * 平台类别,1:Amazon;2:ebay
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "平台类别,1:Amazon;2:ebay")
+    private String platformType;
+
+    /**
+     * 网店名 - 从api中取得
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "网店名 - 从api中取得")
+    private String storeName;
+
+    /**
+     * API 对接状态 1. INI - 刚授权 2. WIP - 正常对接 3. EXP - token 过期 4. ERR - token 出错 5. CLS - 网店关闭
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "API 对接状态 1. INI - 刚授权 2. WIP - 正常对接 3. EXP - token 过期 4. ERR - token 出错 5. CLS - 网店关闭")
+    private String storeStsCd;
 
     /**
      * 创建人
@@ -80,28 +105,4 @@ public class BVOInfoUpdateVO {
      */
     @ApiModelProperty(value = "状态")
     private String stsCd;
-
-    /**
-     * 注册时间
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "注册时间")
-    private Date registerDate;
-
-    /**
-     * 邮箱
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "邮箱")
-    private String email;
-
-    /**
-     * 手机号码
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "手机号码")
-    private String phoneNumber;
 }

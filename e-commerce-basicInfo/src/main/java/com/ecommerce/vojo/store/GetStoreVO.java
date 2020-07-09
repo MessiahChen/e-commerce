@@ -1,12 +1,12 @@
-package com.ecommerce.vojo.bvoinfo;
+package com.ecommerce.vojo.store;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class GetBVOInfoVO {
-    private Integer dsrId;
+public class GetStoreVO {
+    private Integer strId;
     private Integer pageNum;
     private Integer pageSize;
 }
