@@ -14,6 +14,46 @@ public class ProductEntryVO {
     @ApiModelProperty(value = "主键id")
     private Integer proId;
 
+    public Integer getProId() {
+        return proId;
+    }
+
+    public void setProId(Integer proId) {
+        this.proId = proId;
+    }
+
+    public String getSkuCd() {
+        return skuCd;
+    }
+
+    public void setSkuCd(String skuCd) {
+        this.skuCd = skuCd;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getRetailPrice() {
+        return retailPrice;
+    }
+
+    public void setRetailPrice(String retailPrice) {
+        this.retailPrice = retailPrice;
+    }
+
+    public String getWarNum() {
+        return warNum;
+    }
+
+    public void setWarNum(String warNum) {
+        this.warNum = warNum;
+    }
+
     /**
      * 商品sku编码
      *

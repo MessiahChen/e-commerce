@@ -18,6 +18,102 @@ public class StoreAddVO {
     @ApiModelProperty(value = " 主键")
     private Integer strId;
 
+    public Integer getStrId() {
+        return strId;
+    }
+
+    public void setStrId(Integer strId) {
+        this.strId = strId;
+    }
+
+    public Integer getDsrId() {
+        return dsrId;
+    }
+
+    public void setDsrId(Integer dsrId) {
+        this.dsrId = dsrId;
+    }
+
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
+    public String getStoreStsCd() {
+        return storeStsCd;
+    }
+
+    public void setStoreStsCd(String storeStsCd) {
+        this.storeStsCd = storeStsCd;
+    }
+
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    public String getLastUpdateBy() {
+        return lastUpdateBy;
+    }
+
+    public void setLastUpdateBy(String lastUpdateBy) {
+        this.lastUpdateBy = lastUpdateBy;
+    }
+
+    public Date getLastUpdateDate() {
+        return lastUpdateDate;
+    }
+
+    public void setLastUpdateDate(Date lastUpdateDate) {
+        this.lastUpdateDate = lastUpdateDate;
+    }
+
+    public Integer getCallCnt() {
+        return callCnt;
+    }
+
+    public void setCallCnt(Integer callCnt) {
+        this.callCnt = callCnt;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    public String getStsCd() {
+        return stsCd;
+    }
+
+    public void setStsCd(String stsCd) {
+        this.stsCd = stsCd;
+    }
+
     /**
      * 借卖id
      *
@@ -25,6 +121,21 @@ public class StoreAddVO {
      */
     @ApiModelProperty(value = "借卖id")
     private Integer dsrId;
+
+    public String getDsrName() {
+        return dsrName;
+    }
+
+    public void setDsrName(String dsrName) {
+        this.dsrName = dsrName;
+    }
+
+    /**
+     * 借卖人姓名
+     *
+     */
+    @ApiModelProperty(value = "借卖人姓名")
+    private String dsrName;
 
     /**
      * 平台类别,1:Amazon;2:ebay

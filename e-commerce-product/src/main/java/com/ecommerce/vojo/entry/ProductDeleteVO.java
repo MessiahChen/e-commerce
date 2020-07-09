@@ -13,4 +13,12 @@ public class ProductDeleteVO {
 
     @NotNull(message = "无商品ID", groups = {DeleteGroup.class})
     private List<Integer> proIds;
+
+    public List<Integer> getProIds() {
+        return proIds;
+    }
+
+    public void setProIds(List<Integer> proIds) {
+        this.proIds = proIds;
+    }
 }

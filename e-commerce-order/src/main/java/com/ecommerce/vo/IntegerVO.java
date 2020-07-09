@@ -11,7 +11,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @CreateDate: 2020/7/8 11:04
  */
 public class IntegerVO {
-    @ApiModelProperty(value = "指代前端往后端传入的整数数据，如各种id")
+
+    @ApiModelProperty("指代前端往后端传入的整数数据，如各种id")
     int i;
 
     public int getI() {

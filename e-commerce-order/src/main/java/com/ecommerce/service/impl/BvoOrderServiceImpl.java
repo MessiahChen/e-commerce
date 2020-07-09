@@ -163,36 +163,49 @@ public class BvoOrderServiceImpl implements BvoOrderService {
     }
 
     @Override
-    public double getFreightFeeBySaoId(int saoId){
-        //获取sao对象，然后从sao对象里面获取stoId
-        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
-        if(saoSalesOrder == null){
-            return -1;
+    public double getFreightFee(String state , String city){
+        String code = "";
+        if(state.equals(city)){
+            code = state;
         }
-        int stoId = saoSalesOrder.getStoId();
-        //根据stoId,并用example来进行筛选数据,获取sha对象
-        ShaShippingAddressExample shaShippingAddressExample = new ShaShippingAddressExample();
-        ShaShippingAddressExample.Criteria criteria = shaShippingAddressExample.createCriteria();
-        criteria.andStoIdEqualTo(stoId);
-        List<ShaShippingAddress> shaShippingAddresses = shaShippingAddressMapper.selectByExample(shaShippingAddressExample);
-        if(shaShippingAddresses == null || shaShippingAddresses.size() == 0){
-            return -1;
-        }else {
-            ShaShippingAddress shaShippingAddress = shaShippingAddresses.get(0);
-            String code = shaShippingAddress.getCountryIsoCd()+shaShippingAddress.getStateOrProvinceCd();
-            if(code == "" || code == null){
-                return -1;
-            }else {
-                double fee = freightCostMapper.selectByPrimaryKey(code).getShippingFee();
-                return fee;
-            }
-        }
+        code = state+city;
+        return freightCostMapper.selectByPrimaryKey(code).getShippingFee();
+
+//        //获取sao对象，然后从sao对象里面获取stoId
+//        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
+//        if(saoSalesOrder == null){
+//            return -1;
+//        }
+//        int stoId = saoSalesOrder.getStoId();
+//        //根据stoId,并用example来进行筛选数据,获取sha对象
+//        ShaShippingAddressExample shaShippingAddressExample = new ShaShippingAddressExample();
+//        ShaShippingAddressExample.Criteria criteria = shaShippingAddressExample.createCriteria();
+//        criteria.andStoIdEqualTo(stoId);
+//        List<ShaShippingAddress> shaShippingAddresses = shaShippingAddressMapper.selectByExample(shaShippingAddressExample);
+//        if(shaShippingAddresses == null || shaShippingAddresses.size() == 0){
+//            return -1;
+//        }else {
+//            ShaShippingAddress shaShippingAddress = shaShippingAddresses.get(0);
+//            String code = shaShippingAddress.getCountryIsoCd()+shaShippingAddress.getStateOrProvinceCd();
+//            if(code == "" || code == null){
+//                return -1;
+//            }else {
+//                double fee = freightCostMapper.selectByPrimaryKey(code).getShippingFee();
+//                return fee;
+//            }
+//        }
     }
 
     @Override
-    public int updateOrderBySaoId(int saoId){
-        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
-        saoSalesOrder.setOrderSts("2");
-        return saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder);
+    public int updateOrderBySaoId(int[] saoIds){
+        int result = 0;
+        for(int i = 0; i < saoIds.length; i++){
+            int saoId = saoIds[i];
+            SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
+            saoSalesOrder.setOrderSts("2");
+            result += saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder);
+        }
+
+        return result;
     }
 }

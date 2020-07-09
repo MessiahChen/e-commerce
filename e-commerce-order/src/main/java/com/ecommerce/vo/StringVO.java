@@ -11,7 +11,8 @@ import io.swagger.annotations.ApiModelProperty;
  * @CreateDate: 2020/7/8 11:03
  */
 public class StringVO {
-    @ApiModelProperty(value = "指代前端往后端传入的String数据，如各种String型的id或者username等")
+    @ApiModelProperty("指代前端往后端传入的String数据，如各种String型的id或者username等")
+
     String string;
 
     public String getString() {

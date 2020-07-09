@@ -7,6 +7,38 @@ import lombok.Setter;
 @Setter
 @Getter
 public class StoreEntryVO {
+    public Integer getStrId() {
+        return strId;
+    }
+
+    public void setStrId(Integer strId) {
+        this.strId = strId;
+    }
+
+    public Integer getDsrId() {
+        return dsrId;
+    }
+
+    public void setDsrId(Integer dsrId) {
+        this.dsrId = dsrId;
+    }
+
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType;
+    }
+
+    public String getStoreName() {
+        return storeName;
+    }
+
+    public void setStoreName(String storeName) {
+        this.storeName = storeName;
+    }
+
     /**
      *  主键
      *

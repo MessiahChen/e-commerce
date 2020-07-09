@@ -55,8 +55,8 @@ public class BvoOrderController extends BaseController {
 
     @ApiOperation("支付以后，根据saoId修改对应的订单状态")
     @PostMapping("/update")
-    public CommonResult<Integer> update(@RequestBody IntegerVO integerVO){
-        int result = bvoOrderService.updateOrderBySaoId(integerVO.getI());
+    public CommonResult<Integer> update(@RequestBody int[] saoIds){
+        int result = bvoOrderService.updateOrderBySaoId(saoIds);
         if(result == 0){
             throw BusinessException.UPDATE_FAIL;
         }else {
