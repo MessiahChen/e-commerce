@@ -9,6 +9,7 @@ import com.ecommerce.pojo.StrStore;
 import com.ecommerce.service.BvoOrderService;
 import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
+import com.ecommerce.vo.StringVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -66,8 +67,8 @@ public class BvoOrderController extends BaseController {
 
     @ApiOperation("根据saoId获取运费")
     @PostMapping("/getFeeBySaoId")
-    public CommonResult<Double> getFeeBySaoId(@RequestBody IntegerVO integerVO){
-        double fee = bvoOrderService.getFreightFeeBySaoId(integerVO.getI());
+    public CommonResult<Double> getFeeBySaoId(@RequestBody StringVO stringVO){
+        double fee = bvoOrderService.getFreightFee  (stringVO.getString());
         if(fee == -1){
             throw BusinessException.SELECT_FAIL;
         }else {
