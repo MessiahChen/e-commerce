@@ -87,16 +87,21 @@ public class BvoOrderServiceImpl implements BvoOrderService {
 
     @Override
     //根据saoId 查询 sal
-    public SalSalesOrderLineItem getSalBySaoId(Integer saoId){
+    public List<SalSalesOrderLineItem> getSalBySaoId(int[] saoIds){
+        List<SalSalesOrderLineItem> result = new ArrayList<>();
         SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
         SalSalesOrderLineItemExample.Criteria criteria = salSalesOrderLineItemExample.createCriteria();
-        criteria.andSaoIdEqualTo(saoId);
-        List<SalSalesOrderLineItem> salSalesOrderLineItems = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample);
-        if(salSalesOrderLineItems == null || salSalesOrderLineItems.size() == 0){
-            return null;
-        }else {
-            return salSalesOrderLineItems.get(0);
+        for(int i = 0; i < saoIds.length; i++){
+            int saoId = saoIds[i];
+            criteria.andSaoIdEqualTo(saoId);
+            List<SalSalesOrderLineItem> salSalesOrderLineItems = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample);
+            if(salSalesOrderLineItems == null || salSalesOrderLineItems.size() == 0){
+                return null;
+            }else {
+                result.add(salSalesOrderLineItems.get(0));
+            }
         }
+        return result;
     }
 
     @Override
@@ -141,7 +146,8 @@ public class BvoOrderServiceImpl implements BvoOrderService {
         List<SaoSalesOrderVO> saoSalesOrderVOs = new ArrayList<>();
         SaoSalesOrderVO tempVO;
         for(SaoSalesOrder saoSalesOrder : saoSalesOrders){
-            SalSalesOrderLineItem salTemp = this.getSalBySaoId(saoSalesOrder.getSaoId());
+            int[] saoIds = {saoSalesOrder.getSaoId()};
+            SalSalesOrderLineItem salTemp = this.getSalBySaoId(saoIds).get(0);
             if(salTemp == null){
                 continue;
             }else {
