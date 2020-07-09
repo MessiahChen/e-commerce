@@ -24,7 +24,7 @@ public interface BvoOrderService {
     SaoSalesOrder getSaoByStoId(int stoId);
 
     //根据saoId 查询 sal
-    SalSalesOrderLineItem getSalBySaoId(Integer saoId);
+    List<SalSalesOrderLineItem> getSalBySaoId(int[] saoIds);
 
     //根据sal的proId查询pro
     ProProduct getProBySalId(Integer salId);

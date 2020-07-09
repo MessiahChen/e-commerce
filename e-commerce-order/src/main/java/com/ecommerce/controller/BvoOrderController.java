@@ -45,12 +45,12 @@ public class BvoOrderController extends BaseController {
 
     @ApiOperation("根据saoId获取sal对象")
     @PostMapping("/getSalBySaoId")
-    public CommonResult<SalSalesOrderLineItem> getSalBySaoId(@RequestBody IntegerVO integerVO){
-        SalSalesOrderLineItem sal = bvoOrderService.getSalBySaoId(integerVO.getI());
-        if(sal == null){
+    public CommonResult<List<SalSalesOrderLineItem>> getSalBySaoId(@RequestBody int[] saoIds){
+        List<SalSalesOrderLineItem> sals = bvoOrderService.getSalBySaoId(saoIds);
+        if(sals == null || sals.size() == 0){
             throw BusinessException.SELECT_FAIL;
         }else {
-            return CommonResult.success(sal,"返回数据成功");
+            return CommonResult.success(sals,"返回数据成功");
         }
     }
 
