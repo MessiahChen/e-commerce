@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
-public class GetCompanyInfoVO {
+public class CompanyEntryVO {
     @ApiModelProperty(value = "主键，制造商ID")
     private Integer manId;
 

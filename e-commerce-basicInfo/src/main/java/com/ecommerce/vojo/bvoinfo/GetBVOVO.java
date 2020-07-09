@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class GetBVOInfoVO {
+public class GetBVOVO {
     private Integer dsrId;
     private Integer pageNum;
     private Integer pageSize;
