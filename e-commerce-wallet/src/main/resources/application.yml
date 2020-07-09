@@ -29,3 +29,19 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
+
+value:
+  zuul-uri: "http://e-commerce-zuul"
+
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 60000
+
+ribbon:
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
