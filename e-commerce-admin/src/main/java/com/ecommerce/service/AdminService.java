@@ -1,27 +1,36 @@
 package com.ecommerce.service;
 
-import com.ecommerce.pojo.SysMenu;
+import com.ecommerce.pojo.SysUser;
+import com.ecommerce.vojo.LoginBackVO;
+import com.ecommerce.vojo.RegisterVO;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-/**
- * @author 马洪升 2020年7月1日16:32:19
- */
 public interface AdminService {
 
     /**
-     * 注册新的钱包
+     * 根据用户名获取后台管理员
      */
-    Boolean addWallet(WalletAccountVO walletAccountVO);
+    SysUser getAdminByUsername(String username);
 
     /**
-     * 获取钱包信息
-     * @return
+     * 注册功能
      */
-    List<WalletBalanceVO> getWalletInfo(String accountName);
+    Boolean register(RegisterVO registerVO);
 
     /**
-     * 更改支付密码
+     * 登录功能
+     * @param username 用户名
+     * @param password 密码
+     * @return 生成的JWT的token
      */
-    Boolean changePassword(WalletPasswordVO passwordVO);
+    LoginBackVO login(String username, String password);
+
+    UserDetails loadUserByUsername(String username);
+
+    /**
+     * 获取用户所有权限（包括角色权限和+-权限）
+     */
+//    List<UmsPermission> getPermissionList(Long adminId);
 }

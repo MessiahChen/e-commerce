@@ -1,37 +1,36 @@
 package com.ecommerce.utils;
 
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import com.ecommerce.pojo.SysUser;
+import lombok.Data;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
-import java.util.stream.Collectors;
 
+
+@Data
+@Component
 public class AdminUserDetails implements UserDetails {
-    private UmsAdmin umsAdmin;
-    private List<UmsPermission> permissionList;
-    public AdminUserDetails(UmsAdmin umsAdmin, List<UmsPermission> permissionList) {
-        this.umsAdmin = umsAdmin;
-        this.permissionList = permissionList;
+    private SysUser sysUser;
+    public AdminUserDetails(SysUser sysUser){
+        this.sysUser = sysUser;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         //返回当前用户的权限
-        return permissionList.stream()
-                .filter(permission -> permission.getValue()!=null)
-                .map(permission ->new SimpleGrantedAuthority(permission.getValue()))
-                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
     public String getPassword() {
-        return umsAdmin.getPassword();
+        return sysUser.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return umsAdmin.getUsername();
+        return sysUser.getUsername();
     }
 
     @Override
@@ -51,6 +50,6 @@ public class AdminUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return umsAdmin.getStatus().equals(1);
+        return true;
     }
 }

@@ -1,59 +1,70 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
+import com.ecommerce.service.AdminService;
+import com.ecommerce.vojo.LoginBackVO;
+import com.ecommerce.vojo.LoginVO;
+import com.ecommerce.vojo.RegisterVO;
+import com.sun.deploy.association.RegisterFailedException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Api(value = "注册，登录，更改密码",tags = "管理员控制类")
 @CrossOrigin
 @RestController
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends BaseController {
 
-    @ApiOperation("注册新用户")
-    @PutMapping("/register")
-    public CommonResult<List<WalletBalanceVO>> register(@Validated({InsertGroup.class}) @RequestBody WalletAccountVO info, BindingResult bindingResult) throws BusinessException {
-        if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
-        } else {
-            if (walletService.addWallet(info)) {
-                return new CommonResult<>(20000,"register new wallet account successful",walletService.getWalletInfo(info.getAccountName()));
-            } else {
-                throw BusinessException.INSERT_FAIL;
-            }
+    @Resource
+    private AdminService adminService;
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    @ApiOperation(value = "用户注册")
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult<LoginBackVO> register(@Validated @RequestBody RegisterVO registerVO, BindingResult result) {
+        if (result.hasErrors()){
+            throw new BusinessException().newInstance(this.getErrorResponse(result),registerVO.toString());
         }
+        if (!adminService.register(registerVO)) {
+            CommonResult.failed();
+        }
+        return CommonResult.success(adminService.login(registerVO.getUsername(),registerVO.getPassword()),"注册成功");
     }
 
-    @ApiOperation("登录")
-    @PostMapping("/logIn")
-    public CommonResult<List<WalletBalanceVO>> getInfo(@RequestBody StringVO info){
-        List<WalletBalanceVO> balanceVOs = walletService.getWalletInfo(info.getAccountName());
-        if (balanceVOs != null) {
-            return CommonResult.success(balanceVOs,"get wallet info successful");
-        } else {
-            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
-        }
+    @ApiOperation(value = "登录以后返回token")
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @ResponseBody
+    public CommonResult<LoginBackVO> login(@Validated @RequestBody LoginVO loginVO, BindingResult result) {
+        LoginBackVO loginBackVO = adminService.login(loginVO.getUsername(), loginVO.getPassword());
+        loginBackVO.setTokenHead(tokenHead);
+        return CommonResult.success(loginBackVO,"");
     }
 
-    @ApiOperation("更改登录密码")
-    @PatchMapping("/changePassword")
-    public CommonResult changePassword(@Validated({UpdateGroup.class}) @RequestBody WalletPasswordVO info, BindingResult bindingResult) throws BusinessException {
-        if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
-        } else {
-            if (walletService.changePassword(info)) {
-                return new CommonResult(20000,"change password successful");
-            } else {
-                throw BusinessException.UPDATE_FAIL;
-            }
-        }
-    }
+//    @ApiOperation("获取用户所有权限（包括+-权限）")
+//    @RequestMapping(value = "/permission/{adminId}", method = RequestMethod.GET)
+//    @ResponseBody
+//    public CommonResult<List<UmsPermission>> getPermissionList(@PathVariable Long adminId) {
+//        List<UmsPermission> permissionList = adminService.getPermissionList(adminId);
+//        return CommonResult.success(permissionList);
+//    }
 }
