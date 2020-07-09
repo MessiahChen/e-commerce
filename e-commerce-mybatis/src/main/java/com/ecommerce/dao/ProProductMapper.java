@@ -1,9 +1,12 @@
 package com.ecommerce.dao;
 
+import com.ecommerce.dto.product.browse.ProductBrowseDTO;
 import com.ecommerce.pojo.ProProduct;
 import com.ecommerce.pojo.ProProductExample;
 import io.swagger.annotations.ApiModelProperty;
+
 import java.util.List;
+
 import org.apache.ibatis.annotations.Param;
 
 public interface ProProductMapper {
@@ -34,4 +37,6 @@ public interface ProProductMapper {
     int updateByPrimaryKeyWithBLOBs(ProProduct record);
 
     int updateByPrimaryKey(ProProduct record);
+
+    List<ProductBrowseDTO> selectProByPrcCat(@Param("catId") Integer catId);
 }

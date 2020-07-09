@@ -12,6 +12,8 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="sts_cd" jdbcType="CHAR" property="stsCd" />
     <result column="register_date" jdbcType="TIMESTAMP" property="registerDate" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="phone_number" jdbcType="VARCHAR" property="phoneNumber" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,7 +75,7 @@
   </sql>
   <sql id="Base_Column_List">
     dsr_id, name, created_by, creation_date, last_update_by, last_update_date, call_cnt, 
-    remark, sts_cd, register_date
+    remark, sts_cd, register_date, email, phone_number
   </sql>
   <select id="selectByExample" parameterType="com.ecommerce.pojo.DsrDropshipperExample" resultMap="BaseResultMap">
     select
@@ -109,11 +111,13 @@
     insert into dsr_dropshipper (dsr_id, name, created_by, 
       creation_date, last_update_by, last_update_date, 
       call_cnt, remark, sts_cd, 
-      register_date)
+      register_date, email, phone_number
+      )
     values (#{dsrId,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
       #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
       #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
-      #{registerDate,jdbcType=TIMESTAMP})
+      #{registerDate,jdbcType=TIMESTAMP}, #{email,jdbcType=VARCHAR}, #{phoneNumber,jdbcType=VARCHAR}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.ecommerce.pojo.DsrDropshipper" useGeneratedKeys="true" keyProperty="dsr_id">
     insert into dsr_dropshipper
@@ -148,6 +152,12 @@
       <if test="registerDate != null">
         register_date,
       </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="phoneNumber != null">
+        phone_number,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="dsrId != null">
@@ -179,6 +189,12 @@
       </if>
       <if test="registerDate != null">
         #{registerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        #{phoneNumber,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -221,6 +237,12 @@
       <if test="record.registerDate != null">
         register_date = #{record.registerDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.email != null">
+        email = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.phoneNumber != null">
+        phone_number = #{record.phoneNumber,jdbcType=VARCHAR},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -237,7 +259,9 @@
       call_cnt = #{record.callCnt,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       sts_cd = #{record.stsCd,jdbcType=CHAR},
-      register_date = #{record.registerDate,jdbcType=TIMESTAMP}
+      register_date = #{record.registerDate,jdbcType=TIMESTAMP},
+      email = #{record.email,jdbcType=VARCHAR},
+      phone_number = #{record.phoneNumber,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -272,6 +296,12 @@
       <if test="registerDate != null">
         register_date = #{registerDate,jdbcType=TIMESTAMP},
       </if>
+      <if test="email != null">
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="phoneNumber != null">
+        phone_number = #{phoneNumber,jdbcType=VARCHAR},
+      </if>
     </set>
     where dsr_id = #{dsrId,jdbcType=INTEGER}
   </update>
@@ -285,7 +315,9 @@
       call_cnt = #{callCnt,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       sts_cd = #{stsCd,jdbcType=CHAR},
-      register_date = #{registerDate,jdbcType=TIMESTAMP}
+      register_date = #{registerDate,jdbcType=TIMESTAMP},
+      email = #{email,jdbcType=VARCHAR},
+      phone_number = #{phoneNumber,jdbcType=VARCHAR}
     where dsr_id = #{dsrId,jdbcType=INTEGER}
   </update>
 </mapper>
