@@ -8,5 +8,4 @@ import lombok.Setter;
 public class GetCompanyVO {
     private Integer manId;
     private Integer pageNum;
-    private Integer pageSize;
 }

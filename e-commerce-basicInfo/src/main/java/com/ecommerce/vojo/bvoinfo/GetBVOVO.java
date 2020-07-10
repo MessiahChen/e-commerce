@@ -7,6 +7,4 @@ import lombok.Setter;
 @Getter
 public class GetBVOVO {
     private Integer dsrId;
-    private Integer pageNum;
-    private Integer pageSize;
 }
