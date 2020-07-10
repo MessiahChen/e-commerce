@@ -30,5 +30,8 @@ public interface OrderService {
     ProProduct getProBySalId(Integer salId);
 
     //根据saoId更新订单状态
-    boolean updateOrder(Integer saoId);
+    boolean updateOrder(int[] saoIds);
+
+    //退货
+    boolean cancelOrder(int[] saoIds);
 }

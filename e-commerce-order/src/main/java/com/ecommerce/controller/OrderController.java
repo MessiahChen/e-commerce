@@ -50,11 +50,21 @@ public class OrderController extends BaseController {
 
     @ApiOperation("发货接口,根据saoId更新订单状态")
     @PostMapping("/shipment")
-    public CommonResult<Boolean> getShipped(@RequestBody IntegerVO integerVO){
-        if(orderService.updateOrder(integerVO.getI())){
-            return CommonResult.success(orderService.updateOrder(integerVO.getI()),"发货成功");
+    public CommonResult<Boolean> getShipped(@RequestBody int[] saoIds){
+        if(orderService.updateOrder(saoIds)){
+            return CommonResult.success(orderService.updateOrder(saoIds),"发货成功");
         }else {
-            throw BusinessException.SELECT_FAIL;
+            throw BusinessException.UPDATE_FAIL;
+        }
+    }
+
+    @ApiOperation("退货")
+    @PostMapping("/cancel")
+    public CommonResult<Boolean> cancelOrder(@RequestBody int[] saoIds){
+        if(orderService.cancelOrder(saoIds)){
+            return CommonResult.success(orderService.cancelOrder(saoIds),"发货成功");
+        }else {
+            throw BusinessException.UPDATE_FAIL;
         }
     }
 }

@@ -180,13 +180,33 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     //根据saoId更新订单状态
-    public boolean updateOrder(Integer saoId){
-        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
-        saoSalesOrder.setOrderSts("3");
-        if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
-            return true;
-        }else {
-            return false;
+    public boolean updateOrder(int[] saoIds){
+        for(int i = 0; i < saoIds.length; i++){
+            int saoId = saoIds[i];
+            SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
+            saoSalesOrder.setOrderSts("3");
+            if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
+                continue;
+            }else {
+                return false;
+            }
         }
+        return  true;
+    }
+
+    @Override
+    //退货
+    public boolean cancelOrder(int[] saoIds){
+        for(int i = 0; i < saoIds.length; i++){
+            int saoId = saoIds[i];
+            SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
+            saoSalesOrder.setOrderSts("5");
+            if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
+                continue;
+            }else {
+                return false;
+            }
+        }
+        return  true;
     }
 }
