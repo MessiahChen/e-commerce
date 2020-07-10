@@ -36,7 +36,7 @@ public class WalletFlowController extends BaseController {
     @Resource
     RestTemplate restTemplate;
 
-    @Value("${value.zuulURI}")
+    @Value("${value.zuul-uri}")
     private String zuulURI;
 
     @Resource
@@ -82,12 +82,12 @@ public class WalletFlowController extends BaseController {
 
     @ApiOperation("支付")
     @PatchMapping("/pay")
-    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult,int[] oderNum) throws BusinessException {
+    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult,int[] orderNum) throws BusinessException {
         if (bindingResult.hasErrors()) {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.pay(info)) {
-                ResponseEntity<CommonResult> entity = restTemplate.getForEntity(zuulURI + "/order/bvoOrder/getSalBySaoId/{oderNum}",CommonResult.class, oderNum);
+                ResponseEntity<CommonResult> entity = restTemplate.postForEntity("http://localhost:9030/bvoOrder/update", orderNum ,CommonResult.class);
                 if (entity.getStatusCode().is2xxSuccessful()){
                     return new CommonResult(20000,"pay successful");
                 }else {
