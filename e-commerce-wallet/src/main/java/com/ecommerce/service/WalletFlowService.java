@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.vojo.WalletFlowRecordVO;
 import com.ecommerce.vojo.WalletFlowVO;
+import com.ecommerce.vojo.WalletOrderVO;
 
 import java.util.List;
 
@@ -30,10 +31,14 @@ public interface WalletFlowService {
     /**
      * 支付
      */
-    Boolean pay(WalletFlowVO walletFlowVO);
+    Boolean pay(WalletOrderVO WalletOrderVO);
 
     /**
      * 申请退款
      */
-    Boolean refund(WalletFlowVO walletFlowVO);
+    Boolean refund(WalletOrderVO WalletOrderVO);
+
+
+
+
 }

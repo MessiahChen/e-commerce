@@ -9,6 +9,7 @@ import com.ecommerce.service.WalletFlowService;
 import com.ecommerce.vojo.StringVO;
 import com.ecommerce.vojo.WalletFlowRecordVO;
 import com.ecommerce.vojo.WalletFlowVO;
+import com.ecommerce.vojo.WalletOrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
@@ -82,12 +83,12 @@ public class WalletFlowController extends BaseController {
 
     @ApiOperation("支付")
     @PatchMapping("/pay")
-    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult,int[] orderNum) throws BusinessException {
+    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.pay(info)) {
-                ResponseEntity<CommonResult> entity = restTemplate.postForEntity("http://localhost:9030/bvoOrder/update", orderNum ,CommonResult.class);
+                ResponseEntity<CommonResult> entity = restTemplate.postForEntity("http://localhost:9030/bvoOrder/update", info.getOrderNums() ,CommonResult.class);
                 if (entity.getStatusCode().is2xxSuccessful()){
                     return new CommonResult(20000,"pay successful");
                 }else {
@@ -101,12 +102,17 @@ public class WalletFlowController extends BaseController {
 
     @ApiOperation("申请退款")
     @PatchMapping("/refund")
-    public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
+    public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.refund(info)) {
-                return new CommonResult(20000,"apply for refund successful");
+                ResponseEntity<CommonResult> entity = restTemplate.postForEntity("http://localhost:9030/bvoOrder/update", info.getOrderNums() ,CommonResult.class);
+                if (entity.getStatusCode().is2xxSuccessful()){
+                    return new CommonResult(20000,"pay successful");
+                }else {
+                    return new CommonResult(500,"更新订单状态失败");
+                }
             } else {
                 throw BusinessException.UPDATE_FAIL;
             }
