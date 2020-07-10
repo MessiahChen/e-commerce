@@ -4,6 +4,7 @@ import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.OrderService;
 import com.ecommerce.vo.SaoSalesOrderVO;
+import com.ecommerce.vo.ShippingVO;
 import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -180,11 +181,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     //根据saoId更新订单状态
-    public boolean updateOrder(int[] saoIds){
-        for(int i = 0; i < saoIds.length; i++){
-            int saoId = saoIds[i];
+    public boolean updateOrder(List<ShippingVO> shippingVOS){
+        for(ShippingVO shippingVO : shippingVOS){
+            int saoId = shippingVO.getSaoId();
+            String trackingNo = shippingVO.getTrackNo();
             SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
             saoSalesOrder.setOrderSts("3");
+
+            SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
+            SalSalesOrderLineItemExample.Criteria criteria = salSalesOrderLineItemExample.createCriteria();
+            criteria.andSaoIdEqualTo(saoId);
+            SalSalesOrderLineItem salSalesOrderLineItem = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample).get(0);
+            if(salSalesOrderLineItem == null){
+                return false;
+            }
+            salSalesOrderLineItem.setTrackingNo(trackingNo);
+            salSalesOrderLineItemMapper.updateByPrimaryKey(salSalesOrderLineItem);
             if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
                 continue;
             }else {

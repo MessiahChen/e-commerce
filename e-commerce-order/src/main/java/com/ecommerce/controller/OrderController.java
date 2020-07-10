@@ -8,6 +8,7 @@ import com.ecommerce.pojo.*;
 import com.ecommerce.service.OrderService;
 import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
+import com.ecommerce.vo.ShippingVO;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,11 +49,12 @@ public class OrderController extends BaseController {
         }
     }
 
-    @ApiOperation("发货接口,根据saoId更新订单状态")
+    @ApiOperation("发货接口,根据'订单号和订单物流号'更新订单状态")
     @PostMapping("/shipment")
-    public CommonResult<Boolean> getShipped(@RequestBody int[] saoIds){
-        if(orderService.updateOrder(saoIds)){
-            return CommonResult.success(orderService.updateOrder(saoIds),"发货成功");
+    public CommonResult<Boolean> getShipped(@RequestBody List<ShippingVO> shippingVOS){
+        boolean result = orderService.updateOrder(shippingVOS);
+        if(result){
+            return CommonResult.success(result,"发货成功");
         }else {
             throw BusinessException.UPDATE_FAIL;
         }

@@ -2,6 +2,7 @@ package com.ecommerce.service;
 
 import com.ecommerce.pojo.*;
 import com.ecommerce.vo.SaoSalesOrderVO;
+import com.ecommerce.vo.ShippingVO;
 
 import java.util.List;
 
@@ -30,7 +31,7 @@ public interface OrderService {
     ProProduct getProBySalId(Integer salId);
 
     //根据saoId更新订单状态
-    boolean updateOrder(int[] saoIds);
+    boolean updateOrder(List<ShippingVO> shippingVOS);
 
     //退货
     boolean cancelOrder(int[] saoIds);

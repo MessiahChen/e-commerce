@@ -169,8 +169,8 @@ public class BvoOrderServiceImpl implements BvoOrderService {
     }
 
     @Override
-    public double getFreightFee(String state){
-        return freightCostMapper.selectByPrimaryKey(state).getShippingFee();
+    public double getFeeByProvinceCode(String stateCode){
+        return freightCostMapper.selectByPrimaryKey(stateCode).getShippingFee();
 
 //        //获取sao对象，然后从sao对象里面获取stoId
 //        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);

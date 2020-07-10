@@ -33,7 +33,7 @@ public interface BvoOrderService {
     List<SaoSalesOrderVO> getSaoVosByDsrId(int dsrId);
 
     //根据省、市返回运费
-    double getFreightFee(String state);
+    double getFeeByProvinceCode(String state);
 
     //根据saoId更新订单状态
     int updateOrderBySaoId(int[] saoIds);

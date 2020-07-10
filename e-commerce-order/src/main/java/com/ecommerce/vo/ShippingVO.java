@@ -11,4 +11,20 @@ package com.ecommerce.vo;
 public class ShippingVO {
     int saoId;
     String trackNo;
+
+    public int getSaoId() {
+        return saoId;
+    }
+
+    public void setSaoId(int saoId) {
+        this.saoId = saoId;
+    }
+
+    public String getTrackNo() {
+        return trackNo;
+    }
+
+    public void setTrackNo(String trackNo) {
+        this.trackNo = trackNo;
+    }
 }
