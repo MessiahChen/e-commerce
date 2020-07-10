@@ -66,7 +66,7 @@ public class BvoOrderController extends BaseController {
     }
 
     @ApiOperation("根据收货地址获取运费")
-    @PostMapping("/getFreightFee")
+    @PostMapping("/getFeeByProvinceCode")
     public CommonResult<Double> getFeeByProvinceCode(@RequestBody StringVO stringVO){
 
         double fee = bvoOrderService.getFeeByProvinceCode(stringVO.getString());

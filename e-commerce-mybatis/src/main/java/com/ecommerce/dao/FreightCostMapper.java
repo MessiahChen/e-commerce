@@ -11,7 +11,7 @@ public interface FreightCostMapper {
 
     int deleteByExample(FreightCostExample example);
 
-    int deleteByPrimaryKey(String countryAndProvinceCode);
+    int deleteByPrimaryKey(String provinceCode);
 
     int insert(FreightCost record);
 
@@ -19,7 +19,7 @@ public interface FreightCostMapper {
 
     List<FreightCost> selectByExample(FreightCostExample example);
 
-    FreightCost selectByPrimaryKey(String countryAndProvinceCode);
+    FreightCost selectByPrimaryKey(String provinceCode);
 
     int updateByExampleSelective(@Param("record") FreightCost record, @Param("example") FreightCostExample example);
 

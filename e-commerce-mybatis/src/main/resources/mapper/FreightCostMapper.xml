@@ -2,7 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ecommerce.dao.FreightCostMapper">
   <resultMap id="BaseResultMap" type="com.ecommerce.pojo.FreightCost">
-    <id column="country_and_province_code" jdbcType="VARCHAR" property="countryAndProvinceCode" />
+    <id column="province_code" jdbcType="VARCHAR" property="provinceCode" />
+    <result column="province_name" jdbcType="VARCHAR" property="provinceName" />
     <result column="shipping_fee" jdbcType="DOUBLE" property="shippingFee" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -64,7 +65,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    country_and_province_code, shipping_fee
+    province_code, province_name, shipping_fee
   </sql>
   <select id="selectByExample" parameterType="com.ecommerce.pojo.FreightCostExample" resultMap="BaseResultMap">
     select
@@ -84,11 +85,11 @@
     select 
     <include refid="Base_Column_List" />
     from freight_cost
-    where country_and_province_code = #{countryAndProvinceCode,jdbcType=VARCHAR}
+    where province_code = #{provinceCode,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
     delete from freight_cost
-    where country_and_province_code = #{countryAndProvinceCode,jdbcType=VARCHAR}
+    where province_code = #{provinceCode,jdbcType=VARCHAR}
   </delete>
   <delete id="deleteByExample" parameterType="com.ecommerce.pojo.FreightCostExample">
     delete from freight_cost
@@ -97,24 +98,30 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.ecommerce.pojo.FreightCost">
-    insert into freight_cost (country_and_province_code, shipping_fee
+    insert into freight_cost (province_code, province_name, shipping_fee
       )
-    values (#{countryAndProvinceCode,jdbcType=VARCHAR}, #{shippingFee,jdbcType=DOUBLE}
+    values (#{provinceCode,jdbcType=VARCHAR}, #{provinceName,jdbcType=VARCHAR}, #{shippingFee,jdbcType=DOUBLE}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.ecommerce.pojo.FreightCost">
     insert into freight_cost
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="countryAndProvinceCode != null">
-        country_and_province_code,
+      <if test="provinceCode != null">
+        province_code,
+      </if>
+      <if test="provinceName != null">
+        province_name,
       </if>
       <if test="shippingFee != null">
         shipping_fee,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="countryAndProvinceCode != null">
-        #{countryAndProvinceCode,jdbcType=VARCHAR},
+      <if test="provinceCode != null">
+        #{provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="provinceName != null">
+        #{provinceName,jdbcType=VARCHAR},
       </if>
       <if test="shippingFee != null">
         #{shippingFee,jdbcType=DOUBLE},
@@ -130,8 +137,11 @@
   <update id="updateByExampleSelective" parameterType="map">
     update freight_cost
     <set>
-      <if test="record.countryAndProvinceCode != null">
-        country_and_province_code = #{record.countryAndProvinceCode,jdbcType=VARCHAR},
+      <if test="record.provinceCode != null">
+        province_code = #{record.provinceCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.provinceName != null">
+        province_name = #{record.provinceName,jdbcType=VARCHAR},
       </if>
       <if test="record.shippingFee != null">
         shipping_fee = #{record.shippingFee,jdbcType=DOUBLE},
@@ -143,7 +153,8 @@
   </update>
   <update id="updateByExample" parameterType="map">
     update freight_cost
-    set country_and_province_code = #{record.countryAndProvinceCode,jdbcType=VARCHAR},
+    set province_code = #{record.provinceCode,jdbcType=VARCHAR},
+      province_name = #{record.provinceName,jdbcType=VARCHAR},
       shipping_fee = #{record.shippingFee,jdbcType=DOUBLE}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -152,15 +163,19 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.FreightCost">
     update freight_cost
     <set>
+      <if test="provinceName != null">
+        province_name = #{provinceName,jdbcType=VARCHAR},
+      </if>
       <if test="shippingFee != null">
         shipping_fee = #{shippingFee,jdbcType=DOUBLE},
       </if>
     </set>
-    where country_and_province_code = #{countryAndProvinceCode,jdbcType=VARCHAR}
+    where province_code = #{provinceCode,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.FreightCost">
     update freight_cost
-    set shipping_fee = #{shippingFee,jdbcType=DOUBLE}
-    where country_and_province_code = #{countryAndProvinceCode,jdbcType=VARCHAR}
+    set province_name = #{provinceName,jdbcType=VARCHAR},
+      shipping_fee = #{shippingFee,jdbcType=DOUBLE}
+    where province_code = #{provinceCode,jdbcType=VARCHAR}
   </update>
 </mapper>

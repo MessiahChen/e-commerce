@@ -10,7 +10,9 @@ public class FreightCost implements Serializable {
      * @mbg.generated
      */
     @ApiModelProperty(value = "国家及省份编码的组合，作为主键")
-    private String countryAndProvinceCode;
+    private String provinceCode;
+
+    private String provinceName;
 
     /**
      * 运费
@@ -22,12 +24,20 @@ public class FreightCost implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public String getCountryAndProvinceCode() {
-        return countryAndProvinceCode;
+    public String getProvinceCode() {
+        return provinceCode;
     }
 
-    public void setCountryAndProvinceCode(String countryAndProvinceCode) {
-        this.countryAndProvinceCode = countryAndProvinceCode;
+    public void setProvinceCode(String provinceCode) {
+        this.provinceCode = provinceCode;
+    }
+
+    public String getProvinceName() {
+        return provinceName;
+    }
+
+    public void setProvinceName(String provinceName) {
+        this.provinceName = provinceName;
     }
 
     public Double getShippingFee() {
@@ -44,7 +54,8 @@ public class FreightCost implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", countryAndProvinceCode=").append(countryAndProvinceCode);
+        sb.append(", provinceCode=").append(provinceCode);
+        sb.append(", provinceName=").append(provinceName);
         sb.append(", shippingFee=").append(shippingFee);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
