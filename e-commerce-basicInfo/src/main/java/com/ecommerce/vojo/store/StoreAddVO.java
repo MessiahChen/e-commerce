@@ -122,20 +122,6 @@ public class StoreAddVO {
     @ApiModelProperty(value = "借卖id")
     private Integer dsrId;
 
-    public String getDsrName() {
-        return dsrName;
-    }
-
-    public void setDsrName(String dsrName) {
-        this.dsrName = dsrName;
-    }
-
-    /**
-     * 借卖人姓名
-     *
-     */
-    @ApiModelProperty(value = "借卖人姓名")
-    private String dsrName;
 
     /**
      * 平台类别,1:Amazon;2:ebay

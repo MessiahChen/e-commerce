@@ -7,9 +7,7 @@ import com.ecommerce.dao.StrStoreMapper;
 import com.ecommerce.dao.SysUserMapper;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.StoreService;
-import com.ecommerce.vojo.store.GetStoreVO;
-import com.ecommerce.vojo.store.StoreAddVO;
-import com.ecommerce.vojo.store.StoreEntryVO;
+import com.ecommerce.vojo.store.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,14 +49,39 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
-    public boolean addStore(StoreAddVO storeAddVO){
-        //判断是否为第一次新增网店的用户
-        DsrDropshipper tempDsr = dsrDropshipperMapper.selectByPrimaryKey(storeAddVO.getDsrId());
-        if(tempDsr == null){
-            tempDsr.setDsrId(storeAddVO.getDsrId());
-            tempDsr.setName(storeAddVO.getDsrName());
+    public boolean addDsr(DsrVO dsrVO){
+        DsrDropshipper tempDsr = new DsrDropshipper();
+        tempDsr.setName(dsrVO.getName());
+        tempDsr.setCreatedBy(dsrVO.getCreatedBy());
+        tempDsr.setCreationDate(dsrVO.getCreationDate());
+        tempDsr.setDsrId(dsrVO.getDsrId());
+        if(dsrDropshipperMapper.insert(tempDsr) > 0){
+            return true;
+        }else {
+            return false;
         }
+    }
 
+    @Override
+    public List<StrStore> getStrsByDsrId(int dsrId){
+        StrStoreExample strStoreExample = new StrStoreExample();
+        StrStoreExample.Criteria criteria = strStoreExample.createCriteria();
+        criteria.andDsrIdEqualTo(dsrId);
+        return strStoreMapper.selectByExample(strStoreExample);
+    }
 
+    @Override
+    //更新sys_user表
+    public boolean updateSysUser(SysUserVO sysUserVO){
+        SysUser sysUser = new SysUser();
+        sysUser.setManBuyerId(sysUserVO.getManBuyerId());
+        sysUser.setUsername(sysUserVO.getUserName());
+        sysUser.setPassword(sysUserVO.getPassWord());
+        int result = sysUserMapper.insert(sysUser);
+        if(result > 0){
+            return true;
+        }else {
+            return false;
+        }
     }
 }

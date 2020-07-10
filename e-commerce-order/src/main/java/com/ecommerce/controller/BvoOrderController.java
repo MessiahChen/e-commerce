@@ -65,10 +65,10 @@ public class BvoOrderController extends BaseController {
         }
     }
 
-    @ApiOperation("根据saoId获取运费")
+    @ApiOperation("根据收货地址获取运费")
     @PostMapping("/getFeeBySaoId")
-    public CommonResult<Double> getFeeBySaoId(@RequestBody StringVO stringVO){
-        double fee = bvoOrderService.getFreightFee  (stringVO.getString());
+    public CommonResult<Double> getFreightFee(@RequestBody StringVO stringVO){
+        double fee = bvoOrderService.getFreightFee(stringVO.getString());
         if(fee == -1){
             throw BusinessException.SELECT_FAIL;
         }else {
