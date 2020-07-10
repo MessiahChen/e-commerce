@@ -69,7 +69,7 @@ public class BvoOrderController extends BaseController {
     @PostMapping("/getFreightFee")
     public CommonResult<Double> getFeeByProvinceCode(@RequestBody StringVO stringVO){
 
-        double fee = bvoOrderService.getFreightFee(stringVO.getString());
+        double fee = bvoOrderService.getFeeByProvinceCode(stringVO.getString());
         if(fee == -1){
             throw BusinessException.SELECT_FAIL;
         }else {
