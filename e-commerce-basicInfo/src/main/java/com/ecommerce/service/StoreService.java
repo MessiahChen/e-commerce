@@ -19,4 +19,7 @@ public interface StoreService {
 
     //更新sys_user表
     boolean updateSysUser(SysUserVO sysUserVO);
+
+    //插入网店信息
+    boolean insertStrStore(StoreAddVO storeAddVO);
 }

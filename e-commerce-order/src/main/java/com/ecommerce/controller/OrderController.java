@@ -26,7 +26,7 @@ public class OrderController extends BaseController {
     @PostMapping("/sao")
     public CommonResult<List<SaoSalesOrderVO>> getSaoByManId(@RequestBody IntegerVO integerVO){
         if(orderService.getSaoByManId(integerVO.getI()) != null){
-            return CommonResult.success("获取sao数据成功");
+            return CommonResult.success(orderService.getSaoByManId(integerVO.getI()),"获取sao数据成功");
         }else {
             throw BusinessException.SELECT_FAIL;
         }
@@ -39,7 +39,7 @@ public class OrderController extends BaseController {
         if(salSalesOrderLineItem != null){
             ProProduct proProduct = orderService.getProBySalId(salSalesOrderLineItem.getSalId());
             if(proProduct != null){
-                return CommonResult.success("获取pro数据成功");
+                return CommonResult.success(proProduct,"获取pro数据成功");
             }else {
                 throw BusinessException.SELECT_FAIL;
             }

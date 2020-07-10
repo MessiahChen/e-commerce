@@ -84,4 +84,28 @@ public class StoreServiceImpl implements StoreService {
             return false;
         }
     }
+
+    @Override
+    //插入网店信息
+    public boolean insertStrStore(StoreAddVO storeAddVO){
+        StrStore strStore = new StrStore();
+        strStore.setCallCnt(storeAddVO.getCallCnt());
+        strStore.setCreatedBy(storeAddVO.getCreatedBy());
+        strStore.setCreationDate(storeAddVO.getCreationDate());
+        strStore.setDsrId(storeAddVO.getDsrId());
+        strStore.setLastUpdateBy(storeAddVO.getLastUpdateBy());
+        strStore.setLastUpdateDate(storeAddVO.getLastUpdateDate());
+        strStore.setPlatformType(storeAddVO.getPlatformType());
+        strStore.setRemark(storeAddVO.getRemark());
+        strStore.setStoreName(storeAddVO.getStoreName());
+        strStore.setStoreStsCd(storeAddVO.getStoreStsCd());
+        strStore.setStrId(storeAddVO.getStrId());
+        strStore.setStsCd(storeAddVO.getStsCd());
+        int result = strStoreMapper.insert(strStore);
+        if(result > 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
 }
