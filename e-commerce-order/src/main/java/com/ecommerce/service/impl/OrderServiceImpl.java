@@ -132,7 +132,7 @@ public class OrderServiceImpl implements OrderService {
         //根据sao对象来获取对应的sal对象，并且根据sal对象中的proId获取对应的pro对象，然后把所有的信息封装到VO中，再把VO添加进返回列表里
         for(SaoSalesOrder temp : saoSalesOrders){
             salCriteria.andSaoIdEqualTo(temp.getSaoId());
-            tempList =salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample);
+            tempList = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample);
             if(tempList == null){
                 continue;
             }else {
