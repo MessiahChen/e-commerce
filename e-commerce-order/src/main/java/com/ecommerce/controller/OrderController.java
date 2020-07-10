@@ -64,7 +64,7 @@ public class OrderController extends BaseController {
     @PostMapping("/cancel")
     public CommonResult<Boolean> cancelOrder(@RequestBody int[] saoIds){
         if(orderService.cancelOrder(saoIds)){
-            return CommonResult.success(orderService.cancelOrder(saoIds),"发货成功");
+            return CommonResult.success(orderService.cancelOrder(saoIds),"退货成功");
         }else {
             throw BusinessException.UPDATE_FAIL;
         }
