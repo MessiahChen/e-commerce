@@ -4,6 +4,7 @@ import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.pojo.StrStore;
 import com.ecommerce.service.StoreService;
+import com.ecommerce.vojo.store.StoreAddVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,16 @@ public class StoreController {
             throw BusinessException.SELECT_FAIL;
         }else {
             return CommonResult.success(strStores,"返回数据成功");
+        }
+    }
+
+    @ApiOperation("插入网店信息")
+    @GetMapping("/insertStr")
+    public CommonResult<Boolean> insertStr(StoreAddVO storeAddVO){
+        if(storeService.insertStrStore(storeAddVO)){
+            return CommonResult.success(storeService.insertStrStore(storeAddVO),"插入成功");
+        }else {
+            throw BusinessException.UPDATE_FAIL;
         }
     }
 }
