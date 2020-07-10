@@ -112,9 +112,7 @@ public class OrderServiceImpl implements OrderService {
         //用SaoSalesOrderExample来获取对应的Sao列表
         SaoSalesOrderExample saoSalesOrderExample = new SaoSalesOrderExample();
         SaoSalesOrderExample.Criteria saoCriteria = saoSalesOrderExample.createCriteria();
-        //用SalSalesOrderLineItemExample来获取对应的Sal列表
-        SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
-        SalSalesOrderLineItemExample.Criteria salCriteria = salSalesOrderLineItemExample.createCriteria();
+
         //选中条件-> manId相等；获取对应的sao
         saoCriteria.andManIdEqualTo(manId);
         List<SaoSalesOrder> saoSalesOrders =  saoSalesOrderMapper.selectByExample(saoSalesOrderExample);
@@ -131,9 +129,12 @@ public class OrderServiceImpl implements OrderService {
         SaoSalesOrderVO tempVO;
         //根据sao对象来获取对应的sal对象，并且根据sal对象中的proId获取对应的pro对象，然后把所有的信息封装到VO中，再把VO添加进返回列表里
         for(SaoSalesOrder temp : saoSalesOrders){
+            //用SalSalesOrderLineItemExample来获取对应的Sal列表
+            SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
+            SalSalesOrderLineItemExample.Criteria salCriteria = salSalesOrderLineItemExample.createCriteria();
             salCriteria.andSaoIdEqualTo(temp.getSaoId());
             tempList = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample);
-            if(tempList == null){
+            if(tempList == null || tempList.size() == 0){
                 continue;
             }else {
                 //获取对应的sal对象
