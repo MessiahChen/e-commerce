@@ -5,14 +5,12 @@ import com.ecommerce.dao.ImgImageMapper;
 import com.ecommerce.dao.PrcProductCategoryMapper;
 import com.ecommerce.dao.ProProductMapper;
 import com.ecommerce.dto.product.browse.ProductBrowseDTO;
-import com.ecommerce.pojo.CatCategory;
-import com.ecommerce.pojo.CatCategoryExample;
-import com.ecommerce.pojo.ProProduct;
-import com.ecommerce.pojo.ProProductExample;
+import com.ecommerce.dto.product.browse.ProductDetailDTO;
+import com.ecommerce.pojo.*;
 import com.ecommerce.service.ProductBrowseService;
 import com.ecommerce.vojo.browse.ProductBrowseWithCatVO;
-import com.ecommerce.vojo.image.ProductCategoryVO;
-import com.ecommerce.vojo.image.ViceCategory;
+import com.ecommerce.vojo.browse.ProductDetailVO;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +52,32 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
 
             result.add(productBrowseWithCatVO);
         }
+        return result;
+    }
 
+    @Override
+    public ProductDetailVO getProductInfoDetailById(Integer proId) {
+        ProductDetailDTO productDetailDTO = proProductMapper.selectProDetailById(proId);
+        ProductDetailVO result = new ProductDetailVO();
+        result.setProId(proId);
+        result.setTitle(productDetailDTO.getTitle());
+        String[] cats = productDetailDTO.getCategoryPath().split("/");
+        result.setMainCatName(cats[0]);
+        result.setViceCatName(cats[1]);
+        result.setMinRetailPrice(productDetailDTO.getMinRetailPrice());
+        result.setRetailPrice(productDetailDTO.getRetailPrice());
+
+        ImgImageExample imgImageExample = new ImgImageExample();
+        ImgImageExample.Criteria criteria = imgImageExample.createCriteria();
+        criteria.andEntityIdEqualTo(String.valueOf(proId));
+
+        List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
+        ArrayList<String> images = new ArrayList<>();
+        imgImages.forEach(imgImage -> {
+            images.add(imgImage.getUri());
+        });
+
+        result.setImages(images);
         return result;
     }
 }

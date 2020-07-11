@@ -28,4 +28,5 @@ public interface WitWishlistMapper {
     int updateByPrimaryKeySelective(WitWishlist record);
 
     int updateByPrimaryKey(WitWishlist record);
+
 }

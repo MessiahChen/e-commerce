@@ -592,4 +592,10 @@
     WHERE pro.pro_id = prc_product_category.pro_id and pro.pro_id = img_image.entity_id and prc_product_category.category_id = #{catId,jdbcType=INTEGER} and pro.sts_cd = "d";
   </select>
 
+  <select id="selectProDetailById" resultType="com.ecommerce.dto.product.browse.ProductDetailDTO">
+    SELECT pro.pro_id proId, pro.title, pro.mininum_retail_price minRetailPrice, pro.retail_price retailPrice, prc.category_path categoryPath
+    FROM pro_product pro, prc_product_category prc
+    WHERE pro.pro_id = prc.pro_id AND pro.pro_id = #{proId,jdbcType=INTEGER} GROUP BY pro.pro_id;
+  </select>
+
 </mapper>

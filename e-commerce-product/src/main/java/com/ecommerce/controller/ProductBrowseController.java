@@ -6,6 +6,7 @@ import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.service.ProductBrowseService;
 import com.ecommerce.vojo.browse.ProductBrowseWithCatVO;
+import com.ecommerce.vojo.browse.ProductDetailVO;
 import com.ecommerce.vojo.entry.ProductEntryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,7 +33,13 @@ public class ProductBrowseController extends BaseController {
         } else {
             return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
         }
+    }
 
+    @ApiOperation("根据商品ID获取到该商品的详细信息")
+    @GetMapping("/getProductInfoDetailById")
+    public CommonResult<ProductDetailVO> getProductInfoDetailById(@RequestParam("proId") Integer proId) {
+        ProductDetailVO result = productBrowseService.getProductInfoDetailById(proId);
+        return CommonResult.success(result, "获得商品详情成功");
     }
 
 }

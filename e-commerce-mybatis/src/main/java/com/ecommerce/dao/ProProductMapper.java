@@ -1,6 +1,7 @@
 package com.ecommerce.dao;
 
 import com.ecommerce.dto.product.browse.ProductBrowseDTO;
+import com.ecommerce.dto.product.browse.ProductDetailDTO;
 import com.ecommerce.pojo.ProProduct;
 import com.ecommerce.pojo.ProProductExample;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,4 +40,6 @@ public interface ProProductMapper {
     int updateByPrimaryKey(ProProduct record);
 
     List<ProductBrowseDTO> selectProByPrcCat(@Param("catId") Integer catId);
+
+    ProductDetailDTO selectProDetailById(@Param("proId") Integer proId);
 }
