@@ -10,19 +10,14 @@ import com.ecommerce.service.AdminService;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.LoginVO;
 import com.ecommerce.vojo.RegisterVO;
-import com.sun.deploy.association.RegisterFailedException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import java.util.Base64;
-import java.util.HashMap;
-import java.util.Map;
 
 
 @Api(value = "注册，登录，更改密码",tags = "管理员控制类")

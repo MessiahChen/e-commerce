@@ -1,12 +1,10 @@
 package com.ecommerce.service.impl;
 
-import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.AdminService;
 import com.ecommerce.utils.AdminUserDetails;
-import com.ecommerce.utils.JwtTokenUtil;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.RegisterVO;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -15,13 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

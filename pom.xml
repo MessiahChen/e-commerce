@@ -24,6 +24,7 @@
         <module>e-commerce-redis</module>
         <module>e-commerce-common</module>
         <module>e-commerce-mybatis</module>
+        <module>e-commerce-security</module>
     </modules>
 
     <properties>
@@ -53,7 +54,10 @@
         <e-commerce-common.version>1.0-SNAPSHOT</e-commerce-common.version>
         <e-commerce.redis.version>1.0-SNAPSHOT</e-commerce.redis.version>
         <e-commerce.mybatis.version>1.0-SNAPSHOT</e-commerce.mybatis.version>
+        <e-commerce.security.version>1.0-SNAPSHOT</e-commerce.security.version>
         <lombok.version>1.18.12</lombok.version>
+        <security.version>2.2.6.RELEASE</security.version>
+        <configuration.version>2.2.6.RELEASE</configuration.version>
         <!--        <mall-mbg.version>1.0-SNAPSHOT</mall-mbg.version>-->
         <!--        <mall-security.version>1.0-SNAPSHOT</mall-security.version>-->
     </properties>
@@ -111,6 +115,11 @@
                 <groupId>com.ecommerce</groupId>
                 <artifactId>e-commerce-mybatis</artifactId>
                 <version>${e-commerce.mybatis.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.ecommerce</groupId>
+                <artifactId>e-commerce-security</artifactId>
+                <version>${e-commerce.security.version}</version>
             </dependency>
             <!--            &lt;!&ndash;mall安全模块&ndash;&gt;-->
             <!--            <dependency>-->
@@ -223,8 +232,14 @@
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
-                <version>2.2.6.RELEASE</version>
+                <version>${security.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-configuration-processor</artifactId>
+                <version>${configuration.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>
