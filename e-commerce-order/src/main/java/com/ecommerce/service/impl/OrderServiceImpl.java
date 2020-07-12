@@ -3,6 +3,7 @@ package com.ecommerce.service.impl;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.OrderService;
+import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import com.ecommerce.vo.ShippingVO;
 import com.netflix.discovery.converters.Auto;
@@ -206,7 +207,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     //退货
-    public boolean cancelOrder(int saoId){
+    public boolean cancelOrder(IntegerVO integerVO){
+        int saoId = integerVO.getI();
         SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
         saoSalesOrder.setOrderSts("5");
         if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){

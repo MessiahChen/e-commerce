@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.pojo.*;
+import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import com.ecommerce.vo.ShippingVO;
 
@@ -34,5 +35,5 @@ public interface OrderService {
     boolean updateOrder(ShippingVO shippingVO);
 
     //退货
-    boolean cancelOrder(int saoId);
+    boolean cancelOrder(IntegerVO integerVO);
 }
