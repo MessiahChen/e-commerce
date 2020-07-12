@@ -5,7 +5,7 @@ import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.SelectGroup;
-import com.ecommerce.service.AdminService;
+import com.ecommerce.service.UserService;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.LoginVO;
 import com.ecommerce.vojo.RegisterVO;
@@ -19,14 +19,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.Resource;
 
 
+/**
+ * @author yousabla
+ */
 @Api(value = "注册，登录，更改密码",tags = "管理员控制类")
 @CrossOrigin
 @RestController
-@RequestMapping("/admin")
-public class AdminController extends BaseController {
+@RequestMapping("/user")
+public class UserController extends BaseController {
 
     @Resource
-    private AdminService adminService;
+    private UserService userService;
     @Value("${jwt.tokenHeader}")
     private String tokenHeader;
     @Value("${jwt.tokenHead}")
@@ -39,17 +42,17 @@ public class AdminController extends BaseController {
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),registerVO.toString());
         }
-        if (!adminService.register(registerVO)) {
+        if (!userService.register(registerVO)) {
             CommonResult.failed();
         }
-        return CommonResult.success(adminService.login(registerVO.getUsername(),registerVO.getPassword()),"注册成功");
+        return CommonResult.success(userService.login(registerVO.getUsername(),registerVO.getPassword()),"注册成功");
     }
 
     @ApiOperation(value = "登录以后返回token")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
     public CommonResult<LoginBackVO> login(@Validated({SelectGroup.class}) @RequestBody LoginVO loginVO, BindingResult result) {
-        LoginBackVO loginBackVO = adminService.login(loginVO.getUsername(), loginVO.getPassword());
+        LoginBackVO loginBackVO = userService.login(loginVO.getUsername(), loginVO.getPassword());
         loginBackVO.setTokenHead(tokenHead);
         return CommonResult.success(loginBackVO,"");
     }
@@ -58,7 +61,7 @@ public class AdminController extends BaseController {
 //    @RequestMapping(value = "/permission/{adminId}", method = RequestMethod.GET)
 //    @ResponseBody
 //    public CommonResult<List<UmsPermission>> getPermissionList(@PathVariable Long adminId) {
-//        List<UmsPermission> permissionList = adminService.getPermissionList(adminId);
+//        List<UmsPermission> permissionList = userService.getPermissionList(adminId);
 //        return CommonResult.success(permissionList);
 //    }
 }

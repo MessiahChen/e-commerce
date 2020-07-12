@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
-public interface AdminService {
+public interface UserService {
 
     /**
      * 根据用户名获取后台管理员

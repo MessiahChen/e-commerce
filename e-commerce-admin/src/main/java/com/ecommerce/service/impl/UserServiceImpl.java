@@ -3,8 +3,7 @@ package com.ecommerce.service.impl;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
-import com.ecommerce.security.util.JwtTokenUtil;
-import com.ecommerce.service.AdminService;
+import com.ecommerce.service.UserService;
 import com.ecommerce.utils.AdminUserDetails;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.RegisterVO;
@@ -16,9 +15,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -26,9 +23,9 @@ import java.util.Date;
 import java.util.List;
 
 @Service("AdminService")
-public class AdminServiceImpl implements AdminService {
+public class UserServiceImpl implements UserService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminServiceImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
     
 //    @Resource
 //    UserDetailsService userDetailsService;

@@ -1,7 +1,7 @@
 package com.ecommerce.config;
 
 import com.ecommerce.security.config.SecurityConfig;
-import com.ecommerce.service.AdminService;
+import com.ecommerce.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -16,11 +16,12 @@ import javax.annotation.Resource;
 public class AdminSecurityConfig extends SecurityConfig {
 
     @Resource
-    private AdminService adminService;
+    private UserService userService;
 
+    @Override
     @Bean
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return username -> adminService.loadUserByUsername(username);
+        return username -> userService.loadUserByUsername(username);
     }
 }
