@@ -1,14 +1,14 @@
 package com.ecommerce.service.impl;
 
 import com.ecommerce.dao.WitWishlistMapper;
-import com.ecommerce.pojo.WitWishlist;
+import com.ecommerce.dto.product.wishlist.ProductCatsDTO;
+import com.ecommerce.dto.product.wishlist.ProductWishlistDTO;
 import com.ecommerce.pojo.WitWishlistExample;
 import com.ecommerce.service.ProductWishlistService;
-import com.ecommerce.vojo.wishlist.ProductWishlistVO;
+import com.ecommerce.vojo.wishlist.ProductCatsVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,11 +18,18 @@ public class ProductWishlistServiceImpl implements ProductWishlistService {
     private WitWishlistMapper witWishlistMapper;
 
     @Override
-    public List<ProductWishlistVO> getWishlistById(Integer dsrId) {
-        List<ProductWishlistVO> result = new ArrayList<>();
+    public List<ProductCatsDTO> getAllCatFromWishlist(Integer dsrId) {
+        return witWishlistMapper.getAllCatFromWishlist(dsrId);
+    }
 
-
-
+    @Override
+    public List<ProductWishlistDTO> getWishlistByIdAndCat(Integer dsrId, Integer catId) {
+        List<ProductWishlistDTO> result;
+        if (catId != null) {
+            result = witWishlistMapper.getWishlistByIdAndCat(dsrId, catId);
+        } else {
+            result = witWishlistMapper.getWishlistByIdNoCat(dsrId);
+        }
         return result;
     }
 
@@ -39,10 +46,8 @@ public class ProductWishlistServiceImpl implements ProductWishlistService {
 
     @Override
     public boolean batchDeleteProFromWit(Integer dsrId, List<Integer> proIds) {
-
-
-        return false;
+        int result = witWishlistMapper.batchDeleteWishlist(dsrId, proIds);
+        return result == 1;
     }
-
 
 }

@@ -5,7 +5,9 @@ import com.ecommerce.pojo.ImgImageExample;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public interface ImgImageMapper {
     long countByExample(ImgImageExample example);
 

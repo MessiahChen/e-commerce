@@ -11,21 +11,5 @@ import java.util.List;
 public class ProductBrowseWithCatVO {
     private String catName;
 
-    public String getCatName() {
-        return catName;
-    }
-
-    public void setCatName(String catName) {
-        this.catName = catName;
-    }
-
-    public List<ProductBrowseDTO> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<ProductBrowseDTO> products) {
-        this.products = products;
-    }
-
     private List<ProductBrowseDTO> products;
 }

@@ -288,4 +288,28 @@
       sts_cd = #{stsCd,jdbcType=CHAR}
     where wit_id = #{witId,jdbcType=INTEGER}
   </update>
+  <delete id="batchDeleteWishlist" parameterType="map">
+    delete from wit_wishlist
+    where dsr_id = #{dsrId,jdbcType=INTEGER}
+    and pro_id in
+    <foreach collection="proIds" item="proId" open="(" separator="," close=")">
+      #{proId, jdbcType=INTEGER}
+    </foreach>
+  </delete>
+  <select id="getWishlistByIdAndCat" resultType="com.ecommerce.dto.product.wishlist.ProductWishlistDTO">
+    SELECT pro.pro_id proId, wit.dsr_id dsrId, img.uri image,pro.title, pro.mininum_retail_price minRetailPrice, pro.retail_price retailPrice
+    FROM wit_wishlist wit, pro_product pro, prc_product_category prc, img_image img
+    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND prc.category_id = #{catId, jdbcType=INTEGER} AND pro.pro_id = img.entity_id AND img.entity_cd = "PM";
+  </select>
+  <select id="getWishlistByIdNoCat" resultType="com.ecommerce.dto.product.wishlist.ProductWishlistDTO">
+    SELECT pro.pro_id proId, wit.dsr_id dsrId, img.uri image,pro.title, pro.mininum_retail_price minRetailPrice, pro.retail_price retailPrice
+    FROM wit_wishlist wit, pro_product pro, prc_product_category prc, img_image img
+    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND pro.pro_id = img.entity_id AND img.entity_cd = "PM";
+  </select>
+  <select id="getAllCatFromWishlist" resultType="com.ecommerce.dto.product.wishlist.ProductCatsDTO">
+    SELECT prc.category_id catId, prc.category_name catName
+    FROM wit_wishlist wit, pro_product pro, prc_product_category prc
+    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id GROUP BY category_id;
+  </select>
+
 </mapper>
