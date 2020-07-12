@@ -2,10 +2,9 @@ package com.ecommerce.controller;
 
 import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
-import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.InsertGroup;
-import com.ecommerce.common.validationGroup.UpdateGroup;
+import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.service.AdminService;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.LoginVO;
@@ -36,7 +35,7 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "用户注册")
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult<LoginBackVO> register(@Validated @RequestBody RegisterVO registerVO, BindingResult result) {
+    public CommonResult<LoginBackVO> register(@Validated({InsertGroup.class}) @RequestBody RegisterVO registerVO, BindingResult result) {
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),registerVO.toString());
         }
@@ -49,7 +48,7 @@ public class AdminController extends BaseController {
     @ApiOperation(value = "登录以后返回token")
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     @ResponseBody
-    public CommonResult<LoginBackVO> login(@Validated @RequestBody LoginVO loginVO, BindingResult result) {
+    public CommonResult<LoginBackVO> login(@Validated({SelectGroup.class}) @RequestBody LoginVO loginVO, BindingResult result) {
         LoginBackVO loginBackVO = adminService.login(loginVO.getUsername(), loginVO.getPassword());
         loginBackVO.setTokenHead(tokenHead);
         return CommonResult.success(loginBackVO,"");

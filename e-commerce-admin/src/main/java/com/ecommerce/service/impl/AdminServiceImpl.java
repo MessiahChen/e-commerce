@@ -3,6 +3,7 @@ package com.ecommerce.service.impl;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
+import com.ecommerce.security.util.JwtTokenUtil;
 import com.ecommerce.service.AdminService;
 import com.ecommerce.utils.AdminUserDetails;
 import com.ecommerce.vojo.LoginBackVO;
@@ -15,7 +16,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -41,6 +44,8 @@ public class AdminServiceImpl implements AdminService {
     ManManufacturerMapper manManufacturerMapper;
     @Resource
     UllUserLoginLogoutLogMapper ullUserLoginLogoutLogMapper;
+    @Resource
+    SysMenuMapper sysMenuMapper;
     
     @Value("${jwt.tokenHead}")
     private String tokenHead;
@@ -64,8 +69,8 @@ public class AdminServiceImpl implements AdminService {
         //查询是否有相同用户名的用户
         SysUserExample example = new SysUserExample();
         example.createCriteria().andUsernameEqualTo(sysUser.getUsername());
-        List<SysUser> SysUserList = sysUserMapper.selectByExample(example);
-        if (SysUserList.size() > 0) {
+        List<SysUser> sysUserList = sysUserMapper.selectByExample(example);
+        if (sysUserList.size() > 0) {
             throw BusinessException.USERNAME_DUPLICATE;
         }
         //将密码进行加密操作
@@ -74,7 +79,7 @@ public class AdminServiceImpl implements AdminService {
 
         int manBuyerId;
         //插入公司表/借卖方表
-        if (registerVO.getRoleId().equals("BVO")){
+        if ("BVO".equals(registerVO.getRoleId())){
             DsrDropshipper dsrDropshipper = new DsrDropshipper();
             dsrDropshipper.setName(registerVO.getName());
             dsrDropshipper.setRegisterDate(new Date());
@@ -133,7 +138,10 @@ public class AdminServiceImpl implements AdminService {
         //获取用户信息
         SysUser sysUser = getAdminByUsername(username);
         if (sysUser != null) {
-            return new AdminUserDetails(sysUser);
+            SysMenuExample example = new SysMenuExample();
+            example.createCriteria().andParentIdEqualTo(sysUser.getUserId());
+            List<SysMenu> resourceList = sysMenuMapper.selectByExample(example);
+            return new AdminUserDetails(sysUser,resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }
