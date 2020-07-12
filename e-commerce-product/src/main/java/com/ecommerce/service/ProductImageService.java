@@ -24,6 +24,4 @@ public interface ProductImageService {
 
     boolean addProductCategory(ProductCategoryAddVO productCategoryAddVO);
 
-    List<String> uploadImages(List<MultipartFile> files);
-
 }

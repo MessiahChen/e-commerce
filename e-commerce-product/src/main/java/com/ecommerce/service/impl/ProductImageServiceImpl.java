@@ -246,32 +246,4 @@ public class ProductImageServiceImpl implements ProductImageService {
         return result;
     }
 
-    @Override
-    public List<String> uploadImages(List<MultipartFile> files) {
-        List<String> imgUrls = new ArrayList<>();
-        if (files.isEmpty()) System.out.println(1);
-        try {
-            OSSClientUtil ossClient = new OSSClientUtil();
-//            if (files == null || files.getSize() <= 0) {
-//                throw new Exception("某一图片为空");
-//            }
-//            String name = ossClient.uploadHomeImageOSS(files);
-//            String imgUrl = ossClient.getHomeImageUrl(name);
-//            System.out.println(name + "  " + imgUrl);
-//            imgUrls.add(imgUrl);
-
-            for (int i = 0; i < files.size(); i++) {
-                if (files.get(i) == null || files.get(i).getSize() <= 0) {
-                    throw new Exception("某一图片为空");
-                }
-                String name = ossClient.uploadHomeImageOSS(files.get(i));
-                String imgUrl = ossClient.getHomeImageUrl(name);
-                System.out.println(name + "  " + imgUrl);
-                imgUrls.add(imgUrl);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return imgUrls;
-    }
 }

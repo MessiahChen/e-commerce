@@ -19,8 +19,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-@Controller
-@RequestMapping("/tool/oss")
+
 public class OSSClientUtil {
     Log log = LogFactory.getLog(OSSClientUtil.class);
 
@@ -34,11 +33,12 @@ public class OSSClientUtil {
     protected static String bucketName = "e-commerce-oss";
 
     //阿里云图片文件存储目录
-    private String homeImageDir = "images/";
+    private String homeImageDir;
 
     private OSSClient ossClient;
 
-    public OSSClientUtil() {
+    public OSSClientUtil(String homeImageDir) {
+        this.homeImageDir = homeImageDir;
         ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
     }
 
@@ -192,8 +192,8 @@ public class OSSClientUtil {
      * @return
      * @throws Exception
      */
-    public String updateHomeImage(MultipartFile file) throws Exception {
-        OSSClientUtil ossClient = new OSSClientUtil();
+    public String updateHomeImage(MultipartFile file, String homeImageDir) throws Exception {
+        OSSClientUtil ossClient = new OSSClientUtil(homeImageDir);
         if (file == null || file.getSize() <= 0) {
             throw new Exception("图片不能为空");
         }
@@ -214,25 +214,25 @@ public class OSSClientUtil {
         return true;
     }
 
-    //处理文件上传
-    @RequestMapping(value = "/homeImageUpload", method = RequestMethod.POST)
-    @ResponseBody
-    public Map<String, Object> homeImageUpload(MultipartFile file) {
-        Map<String, Object> value = new HashMap<String, Object>();
-        value.put("success", true);
-        value.put("errorCode", 0);
-        value.put("errorMsg", "");
-        try {
-            String head = updateHomeImage(file);//此处是调用上传服务接口
-            value.put("data", head);
-        } catch (IOException e) {
-            e.printStackTrace();
-            value.put("success", false);
-            value.put("errorCode", 200);
-            value.put("errorMsg", "图片上传失败");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return value;
-    }
+//    //处理文件上传
+//    @RequestMapping(value = "/homeImageUpload", method = RequestMethod.POST)
+//    @ResponseBody
+//    public Map<String, Object> homeImageUpload(MultipartFile file) {
+//        Map<String, Object> value = new HashMap<String, Object>();
+//        value.put("success", true);
+//        value.put("errorCode", 0);
+//        value.put("errorMsg", "");
+//        try {
+//            String head = updateHomeImage(file);//此处是调用上传服务接口
+//            value.put("data", head);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            value.put("success", false);
+//            value.put("errorCode", 200);
+//            value.put("errorMsg", "图片上传失败");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return value;
+//    }
 }

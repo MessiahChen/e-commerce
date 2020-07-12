@@ -105,14 +105,4 @@ public class ProductImageController extends BaseController {
         }
     }
 
-    @ApiOperation("批量上传商品主图到阿里云OSS")
-    @PostMapping(value = "/uploadImages")
-    public CommonResult uploadImages(@RequestParam("files") List<MultipartFile> file) {
-//        if (file == null) System.out.println("卧槽");
-//        if (files.length == 0) System.out.println("卧槽");
-//        System.out.println(files.length);
-        List<String> imageUrls = productImageService.uploadImages(file);
-        return CommonResult.success(imageUrls, "上传成功");
-//        return CommonResult.success("上传成功");
-    }
 }
