@@ -182,44 +182,37 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     //根据saoId更新订单状态
-    public boolean updateOrder(List<ShippingVO> shippingVOS){
-        for(ShippingVO shippingVO : shippingVOS){
-            int saoId = shippingVO.getSaoId();
-            String trackingNo = shippingVO.getTrackNo();
-            SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
-            saoSalesOrder.setOrderSts("3");
+    public boolean updateOrder(ShippingVO shippingVO){
+        int saoId = shippingVO.getSaoId();
+        String trackingNo = shippingVO.getTrackNo();
+        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
+        saoSalesOrder.setOrderSts("3");
 
-            SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
-            SalSalesOrderLineItemExample.Criteria criteria = salSalesOrderLineItemExample.createCriteria();
-            criteria.andSaoIdEqualTo(saoId);
-            SalSalesOrderLineItem salSalesOrderLineItem = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample).get(0);
-            if(salSalesOrderLineItem == null){
-                return false;
-            }
-            salSalesOrderLineItem.setTrackingNo(trackingNo);
-            salSalesOrderLineItemMapper.updateByPrimaryKey(salSalesOrderLineItem);
-            if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
-                continue;
-            }else {
-                return false;
-            }
+        SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
+        SalSalesOrderLineItemExample.Criteria criteria = salSalesOrderLineItemExample.createCriteria();
+        criteria.andSaoIdEqualTo(saoId);
+        SalSalesOrderLineItem salSalesOrderLineItem = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample).get(0);
+        if(salSalesOrderLineItem == null){
+            return false;
         }
-        return  true;
+        salSalesOrderLineItem.setTrackingNo(trackingNo);
+        salSalesOrderLineItemMapper.updateByPrimaryKey(salSalesOrderLineItem);
+        if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
+            return  true;
+        }else {
+            return false;
+        }
     }
 
     @Override
     //退货
-    public boolean cancelOrder(int[] saoIds){
-        for(int i = 0; i < saoIds.length; i++){
-            int saoId = saoIds[i];
-            SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
-            saoSalesOrder.setOrderSts("5");
-            if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
-                continue;
-            }else {
-                return false;
-            }
+    public boolean cancelOrder(int saoId){
+        SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);
+        saoSalesOrder.setOrderSts("5");
+        if(saoSalesOrderMapper.updateByPrimaryKey(saoSalesOrder)==1){
+            return  true;
+        }else {
+            return false;
         }
-        return  true;
     }
 }
