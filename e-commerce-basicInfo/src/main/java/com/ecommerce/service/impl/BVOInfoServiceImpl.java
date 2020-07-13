@@ -5,6 +5,7 @@ import com.ecommerce.pojo.DsrDropshipper;
 import com.ecommerce.pojo.DsrDropshipperExample;
 import com.ecommerce.service.BVOInfoService;
 import com.ecommerce.vojo.bvoinfo.BVOEntryVO;
+import com.ecommerce.vojo.bvoinfo.BVOInfoInitVO;
 import com.ecommerce.vojo.bvoinfo.BVOInfoUpdateVO;
 import com.ecommerce.vojo.bvoinfo.GetBVOVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,26 @@ public class BVOInfoServiceImpl implements BVOInfoService {
     }
 
     @Override
+    public boolean initBVOInfo(BVOInfoInitVO bvoInfoInitVO) {
+        DsrDropshipper dsrDropshipper = new DsrDropshipper();
+        dsrDropshipper.setDsrId(bvoInfoInitVO.getDsrId());
+        dsrDropshipper.setEmail(bvoInfoInitVO.getEmail());
+        dsrDropshipper.setName(bvoInfoInitVO.getName());
+        dsrDropshipper.setPhoneNumber(bvoInfoInitVO.getPhoneNumber());
+        dsrDropshipper.setCallCnt(bvoInfoInitVO.getCallCnt());
+        dsrDropshipper.setCreatedBy(bvoInfoInitVO.getCreatedBy());
+        dsrDropshipper.setCreationDate(bvoInfoInitVO.getCreationDate());
+        dsrDropshipper.setLastUpdateBy(bvoInfoInitVO.getLastUpdateBy());
+        dsrDropshipper.setLastUpdateDate(bvoInfoInitVO.getLastUpdateDate());
+        dsrDropshipper.setRegisterDate(bvoInfoInitVO.getRegisterDate());
+        dsrDropshipper.setRemark(bvoInfoInitVO.getRemark());
+        dsrDropshipper.setStsCd(bvoInfoInitVO.getStsCd());
+
+        dsrDropshipperMapper.insertSelective(dsrDropshipper);
+        return true;
+    }
+
+    @Override
     public boolean updateBVOInfo(BVOInfoUpdateVO bvoInfoUpdateVO) {
         DsrDropshipperExample dsrDropshipperExample = new DsrDropshipperExample();
         DsrDropshipperExample.Criteria criteria = dsrDropshipperExample.createCriteria();
@@ -44,6 +65,14 @@ public class BVOInfoServiceImpl implements BVOInfoService {
         dsrDropshipper.setEmail(bvoInfoUpdateVO.getEmail());
         dsrDropshipper.setName(bvoInfoUpdateVO.getName());
         dsrDropshipper.setPhoneNumber(bvoInfoUpdateVO.getPhoneNumber());
+        dsrDropshipper.setCallCnt(bvoInfoUpdateVO.getCallCnt());
+        dsrDropshipper.setCreatedBy(bvoInfoUpdateVO.getCreatedBy());
+        dsrDropshipper.setCreationDate(bvoInfoUpdateVO.getCreationDate());
+        dsrDropshipper.setLastUpdateBy(bvoInfoUpdateVO.getLastUpdateBy());
+        dsrDropshipper.setLastUpdateDate(bvoInfoUpdateVO.getLastUpdateDate());
+        dsrDropshipper.setRegisterDate(bvoInfoUpdateVO.getRegisterDate());
+        dsrDropshipper.setRemark(bvoInfoUpdateVO.getRemark());
+        dsrDropshipper.setStsCd(bvoInfoUpdateVO.getStsCd());
 
         dsrDropshipperMapper.updateByExampleSelective(dsrDropshipper, dsrDropshipperExample);
 

@@ -6,6 +6,7 @@ import com.ecommerce.pojo.ManManufacturerExample;
 import com.ecommerce.service.CompanyService;
 import com.ecommerce.vojo.company.CompanyEntryVO;
 import com.ecommerce.vojo.company.CompanyInfoUpdateVO;
+import com.ecommerce.vojo.company.CompanyInitVO;
 import com.ecommerce.vojo.company.GetCompanyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,28 @@ public class CompanyServiceImpl implements CompanyService {
         companyEntryVO.setNameEn(manManufacturer.getNameEn());
 
         return companyEntryVO;
+    }
+
+    @Override
+    public boolean initCompany(CompanyInitVO companyInitVO) {
+        ManManufacturer manManufacturer = new ManManufacturer();
+        manManufacturer.setGmcReportType(companyInitVO.getGmcReportType());
+        manManufacturer.setGmcReportUrl(companyInitVO.getGmcReportUrl());
+        manManufacturer.setManId(companyInitVO.getManId());
+        manManufacturer.setNameCn(companyInitVO.getNameCn());
+        manManufacturer.setNameEn(companyInitVO.getNameEn());
+        manManufacturer.setCallCnt(companyInitVO.getCallCnt());
+        manManufacturer.setCreatedBy(companyInitVO.getCreatedBy());
+        manManufacturer.setCreationDate(companyInitVO.getCreationDate());
+        manManufacturer.setDescription(companyInitVO.getDescription());
+        manManufacturer.setLastUpdateBy(companyInitVO.getLastUpdateBy());
+        manManufacturer.setLastUpdateDate(companyInitVO.getLastUpdateDate());
+        manManufacturer.setRemark(companyInitVO.getRemark());
+        manManufacturer.setStsCd(companyInitVO.getStsCd());
+
+        manManufacturerMapper.insertSelective(manManufacturer);
+        return true;
+
     }
 
     @Override

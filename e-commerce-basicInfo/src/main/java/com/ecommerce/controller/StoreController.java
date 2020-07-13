@@ -22,21 +22,21 @@ public class StoreController {
 
     @ApiOperation("通过dsrId获得str对象列表")
     @GetMapping("/getStrsByDsrId")
-    public CommonResult<List<StrStore>> getStrsByDsrId(@RequestParam int dsrId){
+    public CommonResult<List<StrStore>> getStrsByDsrId(@RequestParam int dsrId) {
         List<StrStore> strStores = storeService.getStrsByDsrId(dsrId);
-        if(strStores.size() == 0 || strStores == null){
+        if (strStores.size() == 0 || strStores == null) {
             throw BusinessException.SELECT_FAIL;
-        }else {
-            return CommonResult.success(strStores,"返回数据成功");
+        } else {
+            return CommonResult.success(strStores, "返回数据成功");
         }
     }
 
     @ApiOperation("插入网店信息")
     @GetMapping("/insertStr")
-    public CommonResult<Boolean> insertStr(StoreAddVO storeAddVO){
-        if(storeService.insertStrStore(storeAddVO)){
-            return CommonResult.success(storeService.insertStrStore(storeAddVO),"插入成功");
-        }else {
+    public CommonResult<Boolean> insertStr(StoreAddVO storeAddVO) {
+        if (storeService.insertStrStore(storeAddVO)) {
+            return CommonResult.success(storeService.insertStrStore(storeAddVO), "插入成功");
+        } else {
             throw BusinessException.UPDATE_FAIL;
         }
     }
