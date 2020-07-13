@@ -22,4 +22,7 @@ public interface StoreService {
 
     //插入网店信息
     boolean insertStrStore(StoreAddVO storeAddVO);
+
+    //插入eba信息
+    boolean insertEba(EbaVO ebaVO);
 }

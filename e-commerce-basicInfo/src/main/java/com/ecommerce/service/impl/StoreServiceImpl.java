@@ -99,10 +99,43 @@ public class StoreServiceImpl implements StoreService {
         strStore.setRemark(storeAddVO.getRemark());
         strStore.setStoreName(storeAddVO.getStoreName());
         strStore.setStoreStsCd(storeAddVO.getStoreStsCd());
-        strStore.setStrId(storeAddVO.getStrId());
+        if(storeAddVO.getStrId() != 0 && storeAddVO.getStrId() != null){
+            strStore.setStrId(storeAddVO.getStrId());
+        }
         strStore.setStsCd(storeAddVO.getStsCd());
         int result = strStoreMapper.insert(strStore);
         if(result > 0){
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
+    //插入eba信息
+    public boolean insertEba(EbaVO ebaVO){
+        EbaEbayAuthprization ebaEbayAuthprization = new EbaEbayAuthprization();
+        ebaEbayAuthprization.setAccountId(ebaVO.getAccountId());
+        ebaEbayAuthprization.setAppId(ebaVO.getAppId());
+        ebaEbayAuthprization.setCallCnt(ebaVO.getCallCnt());
+        ebaEbayAuthprization.setCancelDate(ebaVO.getCancelDate());
+        ebaEbayAuthprization.setCreatedBy(ebaVO.getCreatedBy());
+        ebaEbayAuthprization.setCreationDate(ebaVO.getCreationDate());
+        if(ebaVO.getEbaId() != 0 && ebaVO.getEbaId() != null){
+            ebaEbayAuthprization.setEbaId(ebaVO.getEbaId());
+        }
+        ebaEbayAuthprization.setExpDate(ebaVO.getExpDate());
+        ebaEbayAuthprization.setLastModifiedTime(ebaVO.getLastModifiedTime());
+        ebaEbayAuthprization.setLastUpdateBy(ebaVO.getLastUpdateBy());
+        ebaEbayAuthprization.setLastUpdateDate(ebaVO.getLastUpdateDate());
+        ebaEbayAuthprization.setRemark(ebaVO.getRemark());
+        ebaEbayAuthprization.setSecretKey(ebaVO.getSecretKey());
+        ebaEbayAuthprization.setStrId(ebaVO.getStrId());
+        ebaEbayAuthprization.setStsCd(ebaVO.getStsCd());
+        ebaEbayAuthprization.setToken(ebaVO.getToken());
+
+        int result = ebaEbayAuthprizationMapper.insert(ebaEbayAuthprization);
+        if(result == 1){
             return true;
         }else {
             return false;
