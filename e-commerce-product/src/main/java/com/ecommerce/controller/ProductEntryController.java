@@ -14,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @CrossOrigin
 @Api(value = "品牌商-商品录入模块控制器", tags = "品牌商-商品录入模块控制器")
 @RestController
@@ -84,6 +86,16 @@ public class ProductEntryController extends BaseController {
     public CommonResult deleteProductInfo(@RequestParam(value = "proId") Integer proId) {
         if (productEntryService.deleteProductInfo(proId)) {
             return CommonResult.success("删除成功");
+        } else {
+            throw BusinessException.DELETE_FAIL;
+        }
+    }
+
+    @ApiOperation("通过商品ID批量删除商品信息")
+    @PostMapping("/batchDeleteProInfo")
+    public CommonResult batchDeleteProInfo(@RequestBody List<Integer> proIds) {
+        if (productEntryService.batchDeleteProductInfo(proIds)) {
+            return CommonResult.success("批量删除成功");
         } else {
             throw BusinessException.DELETE_FAIL;
         }

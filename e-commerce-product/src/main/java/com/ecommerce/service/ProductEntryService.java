@@ -3,6 +3,8 @@ package com.ecommerce.service;
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.vojo.entry.*;
 
+import java.util.List;
+
 public interface ProductEntryService {
 
     CommonPage<ProductEntryVO> getAllProduct(GetAllProductVO getAllProductVO);
@@ -17,5 +19,5 @@ public interface ProductEntryService {
 
     boolean deleteProductInfo(Integer proId);
 
-
+    boolean batchDeleteProductInfo(List<Integer> proIds);
 }

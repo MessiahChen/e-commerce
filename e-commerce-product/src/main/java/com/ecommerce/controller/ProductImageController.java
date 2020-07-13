@@ -67,16 +67,12 @@ public class ProductImageController extends BaseController {
     }
 
     @ApiOperation("通过商品ID删除商品主图")
-    @DeleteMapping("/deleteProductImage")
-    public CommonResult deleteProductImage(@Validated({DeleteGroup.class}) @RequestBody ProductImageDeleteVO productImageDeleteVO, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            throw BusinessException.DELETE_FAIL.newInstance(this.getErrorResponse(bindingResult), productImageDeleteVO.toString());
+    @PostMapping("/deleteProductImage")
+    public CommonResult deleteProductImage(@RequestBody List<Integer> proIds) {
+        if (productImageService.deleteProductImage(proIds)) {
+            return CommonResult.success("更新成功");
         } else {
-            if (productImageService.deleteProductImage(productImageDeleteVO)) {
-                return CommonResult.success("更新成功");
-            } else {
-                throw BusinessException.DELETE_FAIL;
-            }
+            throw BusinessException.DELETE_FAIL;
         }
     }
 
@@ -101,6 +97,20 @@ public class ProductImageController extends BaseController {
                 return CommonResult.success("添加成功");
             } else {
                 throw BusinessException.INSERT_FAIL;
+            }
+        }
+    }
+
+    @ApiOperation("改变商品状态")
+    @PatchMapping("/changeProStatus")
+    public CommonResult changeProStatus(@Validated({InsertGroup.class}) @RequestBody ProductStatusVO productStatusVO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), productStatusVO.toString());
+        } else {
+            if (productImageService.changeProStatus(productStatusVO)) {
+                return CommonResult.success("修改成功");
+            } else {
+                throw BusinessException.UPDATE_FAIL;
             }
         }
     }

@@ -387,7 +387,7 @@
     img_image
     where entity_id in
     <foreach collection="proIds" item="proId" open="(" separator="," close=")">
-      #{id, jdbcType=VARCHAR}
+      #{proId, jdbcType=VARCHAR}
     </foreach>
   </delete>
 </mapper>

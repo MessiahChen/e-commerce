@@ -74,8 +74,8 @@ public class DataDictionaryController extends BaseController {
 
     @ApiOperation(value = "修改前获取原数据字典记录")
     @GetMapping(value = "/getCdmWhenUpdate")
-    public CommonResult<CdmInfoVO> getCdmWhenUpdate(@RequestParam("parId") Integer parId) {
-        return CommonResult.success(dataDictionaryService.getCdmWhenUpdate(parId),"get cdm successful");
+    public CommonResult<CdmInfoVO> getCdmWhenUpdate(@RequestParam("cdmId") Integer cdmId) {
+        return CommonResult.success(dataDictionaryService.getCdmWhenUpdate(cdmId),"get cdm successful");
     }
 
     @ApiOperation(value = "更新数据字典")
@@ -93,8 +93,8 @@ public class DataDictionaryController extends BaseController {
 
     @ApiOperation(value = "删除数据字典")
     @DeleteMapping(value = "/deleteCdm")
-    public CommonResult deleteCdm(@RequestParam("parId") Integer parId) {
-        if (!dataDictionaryService.deleteCdm(parId)) {
+    public CommonResult deleteCdm(@RequestParam("cdmId") Integer cdmId) {
+        if (!dataDictionaryService.deleteCdm(cdmId)) {
             return CommonResult.failed();
         }else {
             return CommonResult.success("delete cdm successful");
@@ -102,9 +102,9 @@ public class DataDictionaryController extends BaseController {
     }
 
     @ApiOperation(value = "批量删除数据字典")
-    @DeleteMapping(value = "/batchDeleteCdm")
-    public CommonResult batchDeleteCdm(@RequestParam("parIds") List<Integer> parIds) {
-        if (!dataDictionaryService.batchDeleteCdm(parIds)) {
+    @PostMapping(value = "/batchDeleteCdm")
+    public CommonResult batchDeleteCdm(@RequestBody List<Integer> cdmIds) {
+        if (!dataDictionaryService.batchDeleteCdm(cdmIds)) {
             return CommonResult.failed();
         }else {
             return CommonResult.success("delete cdms successful");

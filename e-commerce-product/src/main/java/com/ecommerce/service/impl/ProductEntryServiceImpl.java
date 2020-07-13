@@ -170,4 +170,12 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         pckPackageInfoMapper.deleteByExample(pckPackageInfoExample);
         return true;
     }
+
+    @Override
+    public boolean batchDeleteProductInfo(List<Integer> proIds) {
+        for (int proId : proIds) {
+            proProductMapper.deleteByPrimaryKey(proId);
+        }
+        return true;
+    }
 }

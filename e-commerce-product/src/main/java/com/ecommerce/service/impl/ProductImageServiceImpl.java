@@ -153,6 +153,27 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
+    public boolean changeProStatus(ProductStatusVO vo) {
+        String status = vo.getStatus();
+        String statusChar = "";
+        if (status.equals("待入仓")) {
+            statusChar = "b";
+        } else if (status.equals("待上架")) {
+            statusChar = "d";
+        } else if (status.equals("上架中")) {
+            statusChar = "c";
+        } else {
+            statusChar = "b";
+        }
+        ProProduct proProduct = new ProProduct();
+        proProduct.setProId(vo.getProId());
+        proProduct.setStsCd(statusChar);
+
+        return proProductMapper.updateByPrimaryKeySelective(proProduct) == 1;
+
+    }
+
+    @Override
     public ProductCategoryAddVO getProductCatWhenUpdate(Integer proId) {
         ProductCategoryAddVO productCategoryAddVO = new ProductCategoryAddVO();
         productCategoryAddVO.setProId(proId);
@@ -200,15 +221,15 @@ public class ProductImageServiceImpl implements ProductImageService {
     }
 
     @Override
-    public boolean deleteProductImage(ProductImageDeleteVO vo) {
+    public boolean deleteProductImage(List<Integer> proIds) {
         // 删除商品图片、分类
-        List<String> proIds = new ArrayList<>();
-        for (int pro_id : vo.getProIds()) {
-            proIds.add(String.valueOf(pro_id));
+        List<String> stringProIds = new ArrayList<>();
+        for (int pro_id : proIds) {
+            stringProIds.add(String.valueOf(pro_id));
         }
 
-        imgImageMapper.deleteProductImageByList(proIds);
-        prcProductCategoryMapper.deleteProductCategoryByList(vo.getProIds());
+        imgImageMapper.deleteProductImageByList(stringProIds);
+        prcProductCategoryMapper.deleteProductCategoryByList(proIds);
         return true;
     }
 

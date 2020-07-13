@@ -29,3 +29,16 @@ eureka:
     instance-id: ${spring.cloud.client.ip-address}:${server.port}
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
+# OSS相关配置信息
+aliyun:
+  oss:
+    endpoint: oss-cn-beijing.aliyuncs.com # oss对外服务的访问域名
+    accessKeyId: LTAI4GEPFYczatnVE49qRUTX # 访问身份验证中用到用户标识
+    accessKeySecret: WlfShTg8D4KQwE24WnhNskpLbJUZhf # 用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    bucketName: e-commerce-oss # oss的存储空间
+    policy:
+      expire: 300 # 签名有效期(S)
+    maxSize: 5 # 上传文件大小(M)
+    callback: http://59.44.227.58:8080/aliyun/oss/callback # 文件上传成功后的回调地址
+    dir:
+      prefix: images/ # 上传文件夹路径前缀

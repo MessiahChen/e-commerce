@@ -102,8 +102,8 @@ public class ParameterController extends BaseController {
     }
 
     @ApiOperation(value = "批量删除参数")
-    @DeleteMapping(value = "/batchDeletePar")
-    public CommonResult batchDeletePar(@RequestParam("parIds") List<Integer> parIds) {
+    @PostMapping(value = "/batchDeletePar")
+    public CommonResult batchDeletePar(@RequestBody List<Integer> parIds) {
         if (!parameterService.batchDeletePar(parIds)) {
             return CommonResult.failed();
         }else {

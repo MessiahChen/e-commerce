@@ -18,10 +18,11 @@ public interface ProductImageService {
 
     boolean updateProductImage(ProductCategoryUpdateVO productCategoryUpdateVO);
 
-    boolean deleteProductImage(ProductImageDeleteVO productImageDeleteVO);
+    boolean deleteProductImage(List<Integer> proIds);
 
     List<ProductCategoryVO> getAllCategory();
 
     boolean addProductCategory(ProductCategoryAddVO productCategoryAddVO);
 
+    boolean changeProStatus(ProductStatusVO productStatusVO);
 }
