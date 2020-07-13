@@ -11,7 +11,7 @@ import java.util.List;
 public interface ParameterService {
     boolean add(AddParameterVO addParameterVO);
 
-    CommonPage<ParInfoVO> getAllParInfo(ParPageVO parPageVO);
+    CommonPage<ParInfoVO> getAllParInfo(PageVO pageVO);
 
     CommonPage<ParInfoVO> searchPar(SearchParVO searchParVO);
 

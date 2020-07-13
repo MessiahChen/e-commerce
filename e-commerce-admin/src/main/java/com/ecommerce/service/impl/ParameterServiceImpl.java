@@ -12,7 +12,6 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,13 +36,7 @@ public class ParameterServiceImpl implements ParameterService {
         return parParameterMapper.insertSelective(parParameter) == 1;
     }
 
-    @Override
-    public CommonPage<ParInfoVO> getAllParInfo(ParPageVO parPageVO) {
-        Page<ParParameter> flowPage = PageHelper.startPage(parPageVO.getPageNum(), parPageVO.getPageSize()).doSelectPage(() -> {
-            ParParameterExample example = new ParParameterExample();
-            parParameterMapper.selectByExample(example);
-        });
-
+    private List<ParInfoVO> convert(Page<ParParameter> flowPage){
         List<ParInfoVO> infos = new ArrayList<>();
         for (ParParameter parParameter:flowPage.getResult()) {
             ParInfoVO parInfoVO = new ParInfoVO();
@@ -53,7 +46,16 @@ public class ParameterServiceImpl implements ParameterService {
             parInfoVO.setParValue(parParameter.getParamValue());
             infos.add(parInfoVO);
         }
-        return CommonPage.restPage(infos,flowPage);
+        return infos;
+    }
+
+    @Override
+    public CommonPage<ParInfoVO> getAllParInfo(PageVO pageVO) {
+        Page<ParParameter> flowPage = PageHelper.startPage(pageVO.getPageNum(), pageVO.getPageSize()).doSelectPage(() -> {
+            ParParameterExample example = new ParParameterExample();
+            parParameterMapper.selectByExample(example);
+        });
+        return CommonPage.restPage(convert(flowPage),flowPage);
     }
 
     @Override
@@ -63,17 +65,7 @@ public class ParameterServiceImpl implements ParameterService {
             example.createCriteria().andParamCdLike("%" + searchParVO.getParCd() + "%");
             parParameterMapper.selectByExample(example);
         });
-
-        List<ParInfoVO> infos = new ArrayList<>();
-        for (ParParameter parParameter:flowPage.getResult()) {
-            ParInfoVO parInfoVO = new ParInfoVO();
-            parInfoVO.setDescription(parParameter.getDescription());
-            parInfoVO.setParCd(parParameter.getParamCd());
-            parInfoVO.setParId(parParameter.getParId());
-            parInfoVO.setParValue(parParameter.getParamValue());
-            infos.add(parInfoVO);
-        }
-        return CommonPage.restPage(infos,flowPage);
+        return CommonPage.restPage(convert(flowPage),flowPage);
     }
 
     @Override

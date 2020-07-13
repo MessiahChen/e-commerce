@@ -5,7 +5,6 @@ import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
-import com.ecommerce.common.validationGroup.DeleteGroup;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
@@ -17,7 +16,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.util.List;
 
@@ -48,11 +46,11 @@ public class ParameterController extends BaseController {
 
     @ApiOperation("获取所有参数")
     @PostMapping("/getAllParInfo")
-    public CommonResult<CommonPage<ParInfoVO>> getAllFlow(@Validated({SelectGroup.class}) @RequestBody ParPageVO parPageVO, BindingResult bindingResult) throws BusinessException {
+    public CommonResult<CommonPage<ParInfoVO>> getAllFlow(@Validated({SelectGroup.class}) @RequestBody PageVO pageVO, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()){
-            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult),parPageVO.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), pageVO.toString());
         }
-        CommonPage<ParInfoVO> commonPage = parameterService.getAllParInfo(parPageVO);
+        CommonPage<ParInfoVO> commonPage = parameterService.getAllParInfo(pageVO);
         if (!commonPage.getList().isEmpty()) {
             return CommonResult.success(commonPage, "get all parameters successful");
         } else {

@@ -7,7 +7,10 @@ import lombok.Data;
  * @author yousabla
  */
 @Data
-public class ParPageVO {
+public class SearchCdmVO {
+    @ApiModelProperty(value = "数据字典类型")
+    private String cdmType;
+
     @ApiModelProperty("页数")
     private Integer pageNum;
 
