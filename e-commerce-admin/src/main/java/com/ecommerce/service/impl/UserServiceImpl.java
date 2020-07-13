@@ -4,7 +4,7 @@ import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.UserService;
-import com.ecommerce.utils.AdminUserDetails;
+//import com.ecommerce.utils.AdminUserDetails;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.RegisterVO;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -12,10 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -109,7 +105,7 @@ public class UserServiceImpl implements UserService {
             }
             SysUser user = users.get(0);
             if (!password.equals(DigestUtils.sha1Hex(user.getPassword()))) {
-                throw new BadCredentialsException("密码不正确");
+//                throw new BadCredentialsException("密码不正确");
             }
 //            loginBackVO.setToken(token);
             BeanUtils.copyProperties(user,loginBackVO);
@@ -124,24 +120,25 @@ public class UserServiceImpl implements UserService {
             ullUserLoginLogoutLog.setOperatingDate(new Date());
             ullUserLoginLogoutLogMapper.insertSelective(ullUserLoginLogoutLog);
 
-        } catch (AuthenticationException e) {
+        }
+        catch (Exception e) {
             LOGGER.warn("登录异常:{}", e.getMessage());
         }
         return loginBackVO;
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username){
-        //获取用户信息
-        SysUser sysUser = getAdminByUsername(username);
-        if (sysUser != null) {
-            SysMenuExample example = new SysMenuExample();
-            example.createCriteria().andParentIdEqualTo(sysUser.getUserId());
-            List<SysMenu> resourceList = sysMenuMapper.selectByExample(example);
-            return new AdminUserDetails(sysUser,resourceList);
-        }
-        throw new UsernameNotFoundException("用户名或密码错误");
-    }
+//    @Override
+//    public UserDetails loadUserByUsername(String username){
+//        //获取用户信息
+//        SysUser sysUser = getAdminByUsername(username);
+//        if (sysUser != null) {
+//            SysMenuExample example = new SysMenuExample();
+//            example.createCriteria().andParentIdEqualTo(sysUser.getUserId());
+//            List<SysMenu> resourceList = sysMenuMapper.selectByExample(example);
+//            return new AdminUserDetails(sysUser,resourceList);
+//        }
+//        throw new UsernameNotFoundException("用户名或密码错误");
+//    }
 
 
 //    @Override
