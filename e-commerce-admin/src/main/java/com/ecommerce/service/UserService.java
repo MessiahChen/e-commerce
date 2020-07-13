@@ -3,7 +3,6 @@ package com.ecommerce.service;
 import com.ecommerce.pojo.SysUser;
 import com.ecommerce.vojo.LoginBackVO;
 import com.ecommerce.vojo.RegisterVO;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public interface UserService {
      */
     LoginBackVO login(String username, String password);
 
-    UserDetails loadUserByUsername(String username);
+//    UserDetails loadUserByUsername(String username);
 
     /**
      * 获取用户所有权限（包括角色权限和+-权限）

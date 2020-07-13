@@ -4,6 +4,7 @@ import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.pojo.StrStore;
 import com.ecommerce.service.StoreService;
+import com.ecommerce.vojo.store.EbaVO;
 import com.ecommerce.vojo.store.StoreAddVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -32,12 +33,23 @@ public class StoreController {
     }
 
     @ApiOperation("插入网店信息")
-    @GetMapping("/insertStr")
-    public CommonResult<Boolean> insertStr(StoreAddVO storeAddVO) {
+    @PostMapping("/insertStr")
+    public CommonResult<Boolean> insertStr(@RequestBody StoreAddVO storeAddVO) {
         if (storeService.insertStrStore(storeAddVO)) {
-            return CommonResult.success(storeService.insertStrStore(storeAddVO), "插入成功");
+            return CommonResult.success(true, "插入成功");
         } else {
-            throw BusinessException.UPDATE_FAIL;
+            throw BusinessException.INSERT_FAIL;
+        }
+    }
+
+    @ApiOperation("插入网店授权记录信息")
+    @PostMapping("/insertEba")
+    public CommonResult<Boolean> insertEba(@RequestBody EbaVO ebaVO) {
+        boolean result = storeService.insertEba(ebaVO);
+        if (result) {
+            return CommonResult.success(result, "插入成功");
+        } else {
+            throw BusinessException.INSERT_FAIL;
         }
     }
 }
