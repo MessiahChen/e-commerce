@@ -26,8 +26,9 @@ public class OrderController extends BaseController {
     @ApiOperation("根据manId获得saoVo对象列表，sao->销售订单")
     @PostMapping("/sao")
     public CommonResult<List<SaoSalesOrderVO>> getSaoByManId(@RequestBody IntegerVO integerVO){
-        if(orderService.getSaoByManId(integerVO.getI()) != null){
-            return CommonResult.success(orderService.getSaoByManId(integerVO.getI()),"获取sao数据成功");
+        List<SaoSalesOrderVO> saoSalesOrderVOS = orderService.getSaoByManId(integerVO.getI());
+        if(saoSalesOrderVOS != null){
+            return CommonResult.success(saoSalesOrderVOS,"获取sao数据成功");
         }else {
             throw BusinessException.SELECT_FAIL;
         }

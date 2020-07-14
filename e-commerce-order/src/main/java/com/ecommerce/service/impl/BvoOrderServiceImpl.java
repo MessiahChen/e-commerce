@@ -89,19 +89,23 @@ public class BvoOrderServiceImpl implements BvoOrderService {
     //根据saoId 查询 sal
     public List<SalSalesOrderLineItem> getSalBySaoId(int[] saoIds){
         List<SalSalesOrderLineItem> result = new ArrayList<>();
-        SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
-        SalSalesOrderLineItemExample.Criteria criteria = salSalesOrderLineItemExample.createCriteria();
+
         for(int i = 0; i < saoIds.length; i++){
+            SalSalesOrderLineItemExample salSalesOrderLineItemExample = new SalSalesOrderLineItemExample();
+            SalSalesOrderLineItemExample.Criteria criteria = salSalesOrderLineItemExample.createCriteria();
             int saoId = saoIds[i];
             criteria.andSaoIdEqualTo(saoId);
             List<SalSalesOrderLineItem> salSalesOrderLineItems = salSalesOrderLineItemMapper.selectByExample(salSalesOrderLineItemExample);
             if(salSalesOrderLineItems == null || salSalesOrderLineItems.size() == 0){
-                return null;
+                continue;
             }else {
                 result.add(salSalesOrderLineItems.get(0));
             }
         }
-        return result;
+        if(result == null || result.size() == 0){
+            return null;
+        }else
+            return result;
     }
 
     @Override
