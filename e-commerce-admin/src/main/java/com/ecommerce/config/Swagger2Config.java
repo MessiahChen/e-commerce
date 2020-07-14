@@ -31,9 +31,9 @@ public class Swagger2Config {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.ecommerce.controller"))
                 .paths(PathSelectors.any())
-                .build();
-//                .securitySchemes(securitySchemes())
-//                .securityContexts(securityContexts());
+                .build()
+                .securitySchemes(securitySchemes())
+                .securityContexts(securityContexts());
     }
 
     private ApiInfo apiInfo() {
@@ -52,21 +52,21 @@ public class Swagger2Config {
         return result;
     }
 
-//    private List<SecurityContext> securityContexts() {
-//        //设置需要登录认证的路径
-//        List<SecurityContext> result = new ArrayList<>();
-//        result.add(getContextByPath("/brand/.*"));
-//        result.add(getContextByPath("/product/.*"));
-//        result.add(getContextByPath("/productCategory/.*"));
-//        return result;
-//    }
-//
-//    private SecurityContext getContextByPath(String pathRegex){
-//        return SecurityContext.builder()
-//                .securityReferences(defaultAuth())
-//                .forPaths(PathSelectors.regex(pathRegex))
-//                .build();
-//    }
+    private List<SecurityContext> securityContexts() {
+        //设置需要登录认证的路径
+        List<SecurityContext> result = new ArrayList<>();
+        result.add(getContextByPath("/brand/.*"));
+        result.add(getContextByPath("/product/.*"));
+        result.add(getContextByPath("/productCategory/.*"));
+        return result;
+    }
+
+    private SecurityContext getContextByPath(String pathRegex){
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.regex(pathRegex))
+                .build();
+    }
 
     private List<SecurityReference> defaultAuth() {
         List<SecurityReference> result = new ArrayList<>();

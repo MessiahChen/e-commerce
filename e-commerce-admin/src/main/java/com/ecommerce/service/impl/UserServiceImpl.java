@@ -1,149 +1,275 @@
-//package com.ecommerce.service.impl;
+package com.ecommerce.service.impl;
+
+import com.ecommerce.dao.SysResourceMapper;
+import com.ecommerce.dao.SysUserMapper;
+import com.ecommerce.pojo.*;
+import com.ecommerce.security.util.JwtTokenUtil;
+import com.ecommerce.service.UserService;
+import com.ecommerce.utils.AdminUserDetails;
+import com.ecommerce.vojo.RegisterVO;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.annotation.Resource;
+import java.util.Date;
+import java.util.List;
+
+@Slf4j
+@Service
+public class UserServiceImpl implements UserService {
+    @Resource
+    private JwtTokenUtil jwtTokenUtil;
+    @Resource
+    private PasswordEncoder passwordEncoder;
+    @Resource
+    private SysUserMapper sysUserMapper;
+//    @Resource
+//    private SysUserRoleRelationMapper adminRoleRelationMapper;
+    @Resource
+    private SysResourceMapper sysResourceMapper;
+
+//    @Resource
+//    private UmsAdminRoleRelationDao adminRoleRelationDao;
+//    @Resource
+//    private SysUserPermissionRelationMapper adminPermissionRelationMapper;
+//    @Resource
+//    private UmsAdminPermissionRelationDao adminPermissionRelationDao;
+//    @Resource
+//    private UmsAdminLoginLogMapper loginLogMapper;
+
+    @Override
+    public SysUser getUserByName(String username) {
+        SysUserExample example = new SysUserExample();
+        example.createCriteria().andUsernameEqualTo(username);
+        List<SysUser> users = sysUserMapper.selectByExample(example);
+        if (users != null && users.size() > 0) {
+            return users.get(0);
+        }
+        return null;
+    }
+
+    @Override
+    public SysUser register(RegisterVO registerVO) {
+        SysUser user = new SysUser();
+        BeanUtils.copyProperties(registerVO, user);
+        user.setCreateTime(new Date());
+        user.setStatus(1);
+        //查询是否有相同用户名的用户
+        SysUserExample example = new SysUserExample();
+        example.createCriteria().andUsernameEqualTo(user.getUsername());
+        List<SysUser> umsAdminList = sysUserMapper.selectByExample(example);
+        if (umsAdminList.size() > 0) {
+            return null;
+        }
+        //将密码进行加密操作
+        String encodePassword = passwordEncoder.encode(user.getPassword());
+        user.setPassword(encodePassword);
+        sysUserMapper.insert(user);
+        return user;
+    }
+
+    @Override
+    public String login(String username, String password) {
+        String token = null;
+        //密码需要客户端加密后传递
+        try {
+            UserDetails userDetails = loadUserByUsername(username);
+            if(!passwordEncoder.matches(password,userDetails.getPassword())){
+                throw new BadCredentialsException("密码不正确");
+            }
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            token = jwtTokenUtil.generateToken(userDetails);
+//            updateLoginTimeByUsername(username);
+//            insertLoginLog(username);
+        } catch (AuthenticationException e) {
+            log.warn("登录异常:{}", e.getMessage());
+        }
+        return token;
+    }
+
+//    /**
+//     * 添加登录记录
+//     * @param username 用户名
+//     */
+//    private void insertLoginLog(String username) {
+//        SysUser admin = getAdminByUsername(username);
+//        SysUserLoginLog loginLog = new UmsAdminLoginLog();
+//        loginLog.setAdminId(admin.getId());
+//        loginLog.setCreateTime(new Date());
+//        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+//        HttpServletRequest request = attributes.getRequest();
+//        loginLog.setIp(request.getRemoteAddr());
+//        loginLogMapper.insert(loginLog);
+//    }
 //
-//import com.ecommerce.common.exception.BusinessException;
-//import com.ecommerce.dao.*;
-//import com.ecommerce.pojo.*;
-//import com.ecommerce.service.UserService;
-//import com.ecommerce.utils.AdminUserDetails;
-//import com.ecommerce.vojo.LoginBackVO;
-//import com.ecommerce.vojo.RegisterVO;
-//import org.apache.commons.codec.digest.DigestUtils;
-//import org.slf4j.Logger;
-//import org.slf4j.LoggerFactory;
-//import org.springframework.beans.BeanUtils;
-//import org.springframework.beans.factory.annotation.Value;
-//import org.springframework.stereotype.Service;
-//
-//import javax.annotation.Resource;
-//import java.util.Date;
-//import java.util.List;
-//
-//@Service("AdminService")
-//public class UserServiceImpl implements UserService {
-//
-//    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-    
-//    @Resource
-//    UserDetailsService userDetailsService;
-//    @Resource
-//    JwtTokenUtil jwtTokenUtil;
-//    @Resource
-//    PasswordEncoder passwordEncoder;
-//    @Resource
-//    SysUserMapper sysUserMapper;
-//    @Resource
-//    DsrDropshipperMapper dsrDropshipperMapper;
-//    @Resource
-//    ManManufacturerMapper manManufacturerMapper;
-//    @Resource
-//    SysUserLoginLogoutLogMapper ullUserLoginLogoutLogMapper;
-//    @Resource
-//    SysMenuMapper sysMenuMapper;
-//
-//    @Value("${jwt.tokenHead}")
-//    private String tokenHead;
-//
-//    //TODO 用途未知
-//    @Override
-//    public SysUser getAdminByUsername(String username) {
-//        SysUserExample example = new SysUserExample();
+//    /**
+//     * 根据用户名修改登录时间
+//     */
+//    private void updateLoginTimeByUsername(String username) {
+//        UmsAdmin record = new UmsAdmin();
+//        record.setLoginTime(new Date());
+//        UmsAdminExample example = new UmsAdminExample();
 //        example.createCriteria().andUsernameEqualTo(username);
-//        List<SysUser> adminList = sysUserMapper.selectByExample(example);
-//        if (adminList != null && adminList.size() > 0) {
-//            return adminList.get(0);
+//        adminMapper.updateByExampleSelective(record, example);
+//    }
+//
+    @Override
+    public String refreshToken(String oldToken) {
+        return jwtTokenUtil.refreshHeadToken(oldToken);
+    }
+
+    @Override
+    public SysUser getItem(Long id) {
+        return sysUserMapper.selectByPrimaryKey(id);
+    }
+//
+//    @Override
+//    public List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum) {
+//        PageHelper.startPage(pageNum, pageSize);
+//        UmsAdminExample example = new UmsAdminExample();
+//        UmsAdminExample.Criteria criteria = example.createCriteria();
+//        if (!StringUtils.isEmpty(keyword)) {
+//            criteria.andUsernameLike("%" + keyword + "%");
+//            example.or(example.createCriteria().andNickNameLike("%" + keyword + "%"));
 //        }
-//        return null;
+//        return adminMapper.selectByExample(example);
 //    }
 //
 //    @Override
-//    public Boolean register(RegisterVO registerVO) {
-//        SysUser sysUser = new SysUser();
-//        BeanUtils.copyProperties(registerVO, sysUser);
-//        //查询是否有相同用户名的用户
-//        SysUserExample example = new SysUserExample();
-//        example.createCriteria().andUsernameEqualTo(sysUser.getUsername());
-//        List<SysUser> sysUserList = sysUserMapper.selectByExample(example);
-//        if (sysUserList.size() > 0) {
-//            throw BusinessException.USERNAME_DUPLICATE;
-//        }
-//        //将密码进行加密操作
-//        sysUser.setPassword(DigestUtils.sha1Hex(sysUser.getPassword()));
-////        sysUser.setPassword(passwordEncoder.encode(sysUser.getPassword()));
-//
-//        int manBuyerId;
-//        //插入公司表/借卖方表
-//        if ("BVO".equals(registerVO.getRoleId())){
-//            DsrDropshipper dsrDropshipper = new DsrDropshipper();
-//            dsrDropshipper.setName(registerVO.getName());
-//            dsrDropshipper.setRegisterDate(new Date());
-//            manBuyerId = dsrDropshipperMapper.insertSelective(dsrDropshipper);
-//        }else {
-//            ManManufacturer manManufacturer = new ManManufacturer();
-//            manManufacturer.setNameCn(registerVO.getName());
-//            manManufacturer.setCreationDate(new Date());
-//            manBuyerId = manManufacturerMapper.insertSelective(manManufacturer);
-//        }
-//        sysUser.setManBuyerId(manBuyerId);
-//        return sysUserMapper.insertSelective(sysUser) == 1;
-//    }
-//
-//    @Override
-//    public LoginBackVO login(String username, String password) {
-//        LoginBackVO loginBackVO = new LoginBackVO();
-//        try {
-////            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//
-////            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-////            SecurityContextHolder.getContext().setAuthentication(authentication);
-////            String token = jwtTokenUtil.generateToken(userDetails);
-//
-//            SysUserExample example = new SysUserExample();
-//            example.createCriteria().andUsernameEqualTo(username);
-//            List<SysUser> users = sysUserMapper.selectByExample(example);
-//            if (users.isEmpty()) {
-//                throw BusinessException.USERNAME_NOT_EXISTS;
+//    public int update(Long id, UmsAdmin admin) {
+//        admin.setId(id);
+//        UmsAdmin rawAdmin = adminMapper.selectByPrimaryKey(id);
+//        if(rawAdmin.getPassword().equals(admin.getPassword())){
+//            //与原加密密码相同的不需要修改
+//            admin.setPassword(null);
+//        }else{
+//            //与原加密密码不同的需要加密修改
+//            if(StrUtil.isEmpty(admin.getPassword())){
+//                admin.setPassword(null);
+//            }else{
+//                admin.setPassword(passwordEncoder.encode(admin.getPassword()));
 //            }
-//            SysUser user = users.get(0);
-//            if (!password.equals(DigestUtils.sha1Hex(user.getPassword()))) {
-////                throw new BadCredentialsException("密码不正确");
-//            }
-////            loginBackVO.setToken(token);
-//            BeanUtils.copyProperties(user,loginBackVO);
-////            if (token == null) {
-////                throw new BadCredentialsException("token值为空");
-////            }
-//            //插入记录
-//            UllUserLoginLogoutLog ullUserLoginLogoutLog = new UllUserLoginLogoutLog();
-////            ullUserLoginLogoutLog.setToken(token);
-//            ullUserLoginLogoutLog.setUsiId(user.getUserId());
-//            ullUserLoginLogoutLog.setOperatingType("1");
-//            ullUserLoginLogoutLog.setOperatingDate(new Date());
-//            ullUserLoginLogoutLogMapper.insertSelective(ullUserLoginLogoutLog);
+//        }
+//        return adminMapper.updateByPrimaryKeySelective(admin);
+//    }
 //
-//        }
-//        catch (Exception e) {
-//            LOGGER.warn("登录异常:{}", e.getMessage());
-//        }
-//        return loginBackVO;
-//    }
-
 //    @Override
-//    public UserDetails loadUserByUsername(String username){
-//        //获取用户信息
-//        SysUser sysUser = getAdminByUsername(username);
-//        if (sysUser != null) {
-//            SysMenuExample example = new SysMenuExample();
-//            example.createCriteria().andParentIdEqualTo(sysUser.getUserId());
-//            List<SysMenu> resourceList = sysMenuMapper.selectByExample(example);
-//            return new AdminUserDetails(sysUser,resourceList);
-//        }
-//        throw new UsernameNotFoundException("用户名或密码错误");
+//    public int delete(Long id) {
+//        return adminMapper.deleteByPrimaryKey(id);
 //    }
-
-
+//
+//    @Override
+//    public int updateRole(Long adminId, List<Long> roleIds) {
+//        int count = roleIds == null ? 0 : roleIds.size();
+//        //先删除原来的关系
+//        SysUserRoleRelationExample adminRoleRelationExample = new UmsAdminRoleRelationExample();
+//        adminRoleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
+//        adminRoleRelationMapper.deleteByExample(adminRoleRelationExample);
+//        //建立新关系
+//        if (!CollectionUtils.isEmpty(roleIds)) {
+//            List<SysUserRoleRelation> list = new ArrayList<>();
+//            for (Long roleId : roleIds) {
+//                SysUserRoleRelation roleRelation = new SysUserRoleRelation();
+//                roleRelation.setAdminId(adminId);
+//                roleRelation.setRoleId(roleId);
+//                list.add(roleRelation);
+//            }
+//            adminRoleRelationDao.insertList(list);
+//        }
+//        return count;
+//    }
+//
+//    @Override
+//    public List<UmsRole> getRoleList(Long adminId) {
+//        return adminRoleRelationDao.getRoleList(adminId);
+//    }
+//
+    @Override
+    public List<SysResource> getResourceList(Long userId) {
+        return sysResourceMapper.getResourceList(userId);
+    }
+//
+//    @Override
+//    public int updatePermission(Long adminId, List<Long> permissionIds) {
+//        //删除原所有权限关系
+//        UmsAdminPermissionRelationExample relationExample = new UmsAdminPermissionRelationExample();
+//        relationExample.createCriteria().andAdminIdEqualTo(adminId);
+//        adminPermissionRelationMapper.deleteByExample(relationExample);
+//        //获取用户所有角色权限
+//        List<UmsPermission> permissionList = adminRoleRelationDao.getRolePermissionList(adminId);
+//        List<Long> rolePermissionList = permissionList.stream().map(UmsPermission::getId).collect(Collectors.toList());
+//        if (!CollectionUtils.isEmpty(permissionIds)) {
+//            List<UmsAdminPermissionRelation> relationList = new ArrayList<>();
+//            //筛选出+权限
+//            List<Long> addPermissionIdList = permissionIds.stream().filter(permissionId -> !rolePermissionList.contains(permissionId)).collect(Collectors.toList());
+//            //筛选出-权限
+//            List<Long> subPermissionIdList = rolePermissionList.stream().filter(permissionId -> !permissionIds.contains(permissionId)).collect(Collectors.toList());
+//            //插入+-权限关系
+//            relationList.addAll(convert(adminId,1,addPermissionIdList));
+//            relationList.addAll(convert(adminId,-1,subPermissionIdList));
+//            return adminPermissionRelationDao.insertList(relationList);
+//        }
+//        return 0;
+//    }
+//
+//    /**
+//     * 将+-权限关系转化为对象
+//     */
+//    private List<UmsAdminPermissionRelation> convert(Long adminId,Integer type,List<Long> permissionIdList) {
+//        List<UmsAdminPermissionRelation> relationList = permissionIdList.stream().map(permissionId -> {
+//            UmsAdminPermissionRelation relation = new UmsAdminPermissionRelation();
+//            relation.setAdminId(adminId);
+//            relation.setType(type);
+//            relation.setPermissionId(permissionId);
+//            return relation;
+//        }).collect(Collectors.toList());
+//        return relationList;
+//    }
+//
 //    @Override
 //    public List<UmsPermission> getPermissionList(Long adminId) {
 //        return adminRoleRelationDao.getPermissionList(adminId);
 //    }
-
-//}
+//
+//    @Override
+//    public int updatePassword(com.macro.mall.dto.UpdateAdminPasswordParam param) {
+//        if(StrUtil.isEmpty(param.getUsername())
+//                ||StrUtil.isEmpty(param.getOldPassword())
+//                ||StrUtil.isEmpty(param.getNewPassword())){
+//            return -1;
+//        }
+//        UmsAdminExample example = new UmsAdminExample();
+//        example.createCriteria().andUsernameEqualTo(param.getUsername());
+//        List<UmsAdmin> adminList = adminMapper.selectByExample(example);
+//        if(CollUtil.isEmpty(adminList)){
+//            return -2;
+//        }
+//        UmsAdmin umsAdmin = adminList.get(0);
+//        if(!passwordEncoder.matches(param.getOldPassword(),umsAdmin.getPassword())){
+//            return -3;
+//        }
+//        umsAdmin.setPassword(passwordEncoder.encode(param.getNewPassword()));
+//        adminMapper.updateByPrimaryKey(umsAdmin);
+//        return 1;
+//    }
+//
+    @Override
+    public UserDetails loadUserByUsername(String username){
+        //获取用户信息
+        SysUser admin = getUserByName(username);
+        if (admin != null) {
+            List<SysResource> resourceList = getResourceList(admin.getId());
+            return new AdminUserDetails(admin,resourceList);
+        }
+        throw new UsernameNotFoundException("用户名或密码错误");
+    }
+}

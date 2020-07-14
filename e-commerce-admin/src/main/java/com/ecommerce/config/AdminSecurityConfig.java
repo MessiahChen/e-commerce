@@ -5,7 +5,7 @@ import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysResourceExample;
 import com.ecommerce.security.component.DynamicSecurityService;
 import com.ecommerce.security.config.SecurityConfig;
-import com.ecommerce.service.UmsAdminService;
+import com.ecommerce.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.ConfigAttribute;
@@ -24,7 +24,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AdminSecurityConfig extends SecurityConfig {
 
     @Resource
-    private UmsAdminService umsAdminService;
+    private UserService userService;
 
     @Resource
     private SysResourceMapper sysResourceMapper;
@@ -33,7 +33,7 @@ public class AdminSecurityConfig extends SecurityConfig {
     @Bean
     public UserDetailsService userDetailsService() {
         //获取登录用户信息
-        return username -> umsAdminService.loadUserByUsername(username);
+        return username -> userService.loadUserByUsername(username);
     }
 
     @Bean
