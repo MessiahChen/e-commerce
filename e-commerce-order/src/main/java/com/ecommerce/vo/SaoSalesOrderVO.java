@@ -115,5 +115,18 @@ public class SaoSalesOrderVO {
         this.saoId = saoId;
     }
 
-
+    @Override
+    public String toString() {
+        return "SaoSalesOrderVO{" +
+                "productTitle='" + productTitle + '\'' +
+                ", productPrice=" + productPrice +
+                ", productNum=" + productNum +
+                ", productSku='" + productSku + '\'' +
+                ", productCreateTime=" + productCreateTime +
+                ", productOrderNum='" + productOrderNum + '\'' +
+                ", type='" + type + '\'' +
+                ", saoId=" + saoId +
+                ", trackingNo='" + trackingNo + '\'' +
+                '}';
+    }
 }

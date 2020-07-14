@@ -10,7 +10,9 @@ import com.netflix.discovery.converters.Auto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service("orderService")
@@ -110,6 +112,10 @@ public class OrderServiceImpl implements OrderService {
     @Override
     //根据manId查询sao信息,
     public List<SaoSalesOrderVO> getSaoByManId(int manId){
+        List<SaoSalesOrderVO> test = new ArrayList<>();
+        SaoSalesOrderVO testVo = new SaoSalesOrderVO("", BigDecimal.ZERO,1
+        ,"", new Date(),"","",1,"");
+
         //用SaoSalesOrderExample来获取对应的Sao列表
         SaoSalesOrderExample saoSalesOrderExample = new SaoSalesOrderExample();
         SaoSalesOrderExample.Criteria saoCriteria = saoSalesOrderExample.createCriteria();
@@ -118,9 +124,11 @@ public class OrderServiceImpl implements OrderService {
         saoCriteria.andManIdEqualTo(manId);
         List<SaoSalesOrder> saoSalesOrders =  saoSalesOrderMapper.selectByExample(saoSalesOrderExample);
 
+
         //没找到符合状态的sao列表，返回null
-        if(saoSalesOrders.size() == 0 || saoSalesOrders == null){
-            return null;
+        if(saoSalesOrders == null || saoSalesOrders.size() == 0){
+            test.add(testVo);
+            return test;
         }
 
         //用来暂时储存找到的sal对象，如果一个sal对象都没找到，就返回null
@@ -143,6 +151,11 @@ public class OrderServiceImpl implements OrderService {
                 //获取proId，然后获取pro对象
                 int proId = sal.getProId();
                 ProProduct pro = proProductMapper.selectByPrimaryKey(proId);
+                if(pro == null){
+                    test.add(testVo);
+                    return test;
+//                    return null;
+                }
                 //把所有的信息封装到VO中，再把VO添加进返回列表里
                 tempVO = new SaoSalesOrderVO(pro.getTitle(),sal.getPrice(),
                     sal.getQty(),pro.getSkuCd(),sal.getCreationDate(), temp.getOrderNo(), temp.getOrderSts() ,temp.getSaoId(),
@@ -151,7 +164,9 @@ public class OrderServiceImpl implements OrderService {
             }
         }
         if(tempList == null || tempList.size() == 0){
-            return null;
+            test.add(testVo);
+            return test;
+            //            return null;
         }else {
             return saoSalesOrderVOs;
         }
