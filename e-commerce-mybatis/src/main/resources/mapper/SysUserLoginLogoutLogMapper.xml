@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ecommerce.dao.UllUserLoginLogoutLogMapper">
-  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.UllUserLoginLogoutLog">
+<mapper namespace="com.ecommerce.dao.SysUserLoginLogoutLogMapper">
+  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.SysUserLoginLogoutLog">
     <id column="ull_id" jdbcType="INTEGER" property="ullId" />
     <result column="usi_id" jdbcType="VARCHAR" property="usiId" />
     <result column="token" jdbcType="VARCHAR" property="token" />
@@ -78,13 +78,13 @@
     ull_id, usi_id, token, terminal_type, operating_type, operating_date, created_by, 
     creation_date, last_update_by, last_update_date, call_cnt, remark, sts_cd
   </sql>
-  <select id="selectByExample" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLogExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLogExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from ull_user_login_logout_log
+    from sys_user_login_logout_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -95,21 +95,21 @@
   <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
-    from ull_user_login_logout_log
+    from sys_user_login_logout_log
     where ull_id = #{ullId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from ull_user_login_logout_log
+    delete from sys_user_login_logout_log
     where ull_id = #{ullId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLogExample">
-    delete from ull_user_login_logout_log
+  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLogExample">
+    delete from sys_user_login_logout_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
-    insert into ull_user_login_logout_log (ull_id, usi_id, token, 
+  <insert id="insert" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLog">
+    insert into sys_user_login_logout_log (ull_id, usi_id, token, 
       terminal_type, operating_type, operating_date, 
       created_by, creation_date, last_update_by, 
       last_update_date, call_cnt, remark, 
@@ -120,8 +120,8 @@
       #{lastUpdateDate,jdbcType=TIMESTAMP}, #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
       #{stsCd,jdbcType=CHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
-    insert into ull_user_login_logout_log
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLog">
+    insert into sys_user_login_logout_log
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="ullId != null">
         ull_id,
@@ -205,14 +205,14 @@
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLogExample" resultType="java.lang.Long">
-    select count(*) from ull_user_login_logout_log
+  <select id="countByExample" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLogExample" resultType="java.lang.Long">
+    select count(*) from sys_user_login_logout_log
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update ull_user_login_logout_log
+    update sys_user_login_logout_log
     <set>
       <if test="record.ullId != null">
         ull_id = #{record.ullId,jdbcType=INTEGER},
@@ -259,7 +259,7 @@
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update ull_user_login_logout_log
+    update sys_user_login_logout_log
     set ull_id = #{record.ullId,jdbcType=INTEGER},
       usi_id = #{record.usiId,jdbcType=VARCHAR},
       token = #{record.token,jdbcType=VARCHAR},
@@ -277,8 +277,8 @@
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
-    update ull_user_login_logout_log
+  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLog">
+    update sys_user_login_logout_log
     <set>
       <if test="usiId != null">
         usi_id = #{usiId,jdbcType=VARCHAR},
@@ -319,8 +319,8 @@
     </set>
     where ull_id = #{ullId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.UllUserLoginLogoutLog">
-    update ull_user_login_logout_log
+  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.SysUserLoginLogoutLog">
+    update sys_user_login_logout_log
     set usi_id = #{usiId,jdbcType=VARCHAR},
       token = #{token,jdbcType=VARCHAR},
       terminal_type = #{terminalType,jdbcType=VARCHAR},

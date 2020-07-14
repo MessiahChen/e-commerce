@@ -4,7 +4,6 @@ import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.dao.DsrDropshipperMapper;
 import com.ecommerce.dao.EbaEbayAuthprizationMapper;
 import com.ecommerce.dao.StrStoreMapper;
-import com.ecommerce.dao.SysUserMapper;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.StoreService;
 import com.ecommerce.vojo.store.*;

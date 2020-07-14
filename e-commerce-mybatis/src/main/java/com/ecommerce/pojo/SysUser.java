@@ -2,22 +2,17 @@ package com.ecommerce.pojo;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class SysUser implements Serializable {
-    /**
-     * 主键
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "主键")
-    private String userId;
+    private Long id;
 
     /**
-     * 用户名，唯一
+     * 用户名
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "用户名，唯一")
+    @ApiModelProperty(value = "用户名")
     private String username;
 
     /**
@@ -29,68 +24,12 @@ public class SysUser implements Serializable {
     private String password;
 
     /**
-     * 昵称（可重复）
+     * 头像
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "昵称（可重复）")
-    private String name;
-
-    /**
-     * 权限
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "权限")
-    private String rights;
-
-    /**
-     * 角色ID
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "角色ID")
-    private String roleId;
-
-    /**
-     * 上次登录时间
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "上次登录时间")
-    private String lastLogin;
-
-    /**
-     * 登录IP
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "登录IP")
-    private String ip;
-
-    /**
-     * 状态
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "状态")
-    private String status;
-
-    /**
-     * 备注
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "备注")
-    private String bz;
-
-    /**
-     * 皮肤样式
-     *
-     * @mbg.generated
-     */
-    @ApiModelProperty(value = "皮肤样式")
-    private String skin;
+    @ApiModelProperty(value = "头像")
+    private String icon;
 
     /**
      * 邮箱
@@ -101,37 +40,53 @@ public class SysUser implements Serializable {
     private String email;
 
     /**
-     * 固话号码
+     * 昵称
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "固话号码")
-    private Integer number;
+    @ApiModelProperty(value = "昵称")
+    private String nickName;
 
     /**
-     * 手机
+     * 备注信息
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "手机")
-    private String phone;
+    @ApiModelProperty(value = "备注信息")
+    private String note;
 
     /**
-     * 产商,借卖方ID
+     * 创建时间
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "产商,借卖方ID")
-    private Integer manBuyerId;
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
+
+    /**
+     * 最后登录时间
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "最后登录时间")
+    private Date loginTime;
+
+    /**
+     * 帐号启用状态：0->禁用；1->启用
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
+    private Integer status;
 
     private static final long serialVersionUID = 1L;
 
-    public String getUserId() {
-        return userId;
+    public Long getId() {
+        return id;
     }
 
-    public void setUserId(String userId) {
-        this.userId = userId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getUsername() {
@@ -150,68 +105,12 @@ public class SysUser implements Serializable {
         this.password = password;
     }
 
-    public String getName() {
-        return name;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getRights() {
-        return rights;
-    }
-
-    public void setRights(String rights) {
-        this.rights = rights;
-    }
-
-    public String getRoleId() {
-        return roleId;
-    }
-
-    public void setRoleId(String roleId) {
-        this.roleId = roleId;
-    }
-
-    public String getLastLogin() {
-        return lastLogin;
-    }
-
-    public void setLastLogin(String lastLogin) {
-        this.lastLogin = lastLogin;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public void setIp(String ip) {
-        this.ip = ip;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getBz() {
-        return bz;
-    }
-
-    public void setBz(String bz) {
-        this.bz = bz;
-    }
-
-    public String getSkin() {
-        return skin;
-    }
-
-    public void setSkin(String skin) {
-        this.skin = skin;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getEmail() {
@@ -222,28 +121,44 @@ public class SysUser implements Serializable {
         this.email = email;
     }
 
-    public Integer getNumber() {
-        return number;
+    public String getNickName() {
+        return nickName;
     }
 
-    public void setNumber(Integer number) {
-        this.number = number;
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getNote() {
+        return note;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public Integer getManBuyerId() {
-        return manBuyerId;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setManBuyerId(Integer manBuyerId) {
-        this.manBuyerId = manBuyerId;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     @Override
@@ -252,21 +167,16 @@ public class SysUser implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", userId=").append(userId);
+        sb.append(", id=").append(id);
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
-        sb.append(", name=").append(name);
-        sb.append(", rights=").append(rights);
-        sb.append(", roleId=").append(roleId);
-        sb.append(", lastLogin=").append(lastLogin);
-        sb.append(", ip=").append(ip);
-        sb.append(", status=").append(status);
-        sb.append(", bz=").append(bz);
-        sb.append(", skin=").append(skin);
+        sb.append(", icon=").append(icon);
         sb.append(", email=").append(email);
-        sb.append(", number=").append(number);
-        sb.append(", phone=").append(phone);
-        sb.append(", manBuyerId=").append(manBuyerId);
+        sb.append(", nickName=").append(nickName);
+        sb.append(", note=").append(note);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", loginTime=").append(loginTime);
+        sb.append(", status=").append(status);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
