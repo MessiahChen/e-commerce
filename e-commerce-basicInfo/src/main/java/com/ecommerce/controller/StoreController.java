@@ -16,7 +16,7 @@ import java.util.List;
 @CrossOrigin
 @Api(value = "BVO-店铺管理控制器", tags = "BVO-店铺管理控制器")
 @RestController
-@RequestMapping("")
+@RequestMapping("/store")
 public class StoreController {
     @Autowired
     private StoreService storeService;
