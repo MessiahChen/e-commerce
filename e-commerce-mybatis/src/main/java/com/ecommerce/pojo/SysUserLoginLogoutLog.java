@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class UllUserLoginLogoutLog implements Serializable {
+public class SysUserLoginLogoutLog implements Serializable {
     /**
      * 主键
      *

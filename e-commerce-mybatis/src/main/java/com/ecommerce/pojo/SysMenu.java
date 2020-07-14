@@ -2,15 +2,26 @@ package com.ecommerce.pojo;
 
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import java.util.Date;
 
 public class SysMenu implements Serializable {
+    private Long id;
+
     /**
-     * 主键
+     * 父级ID
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "主键")
-    private Integer menuId;
+    @ApiModelProperty(value = "父级ID")
+    private Long parentId;
+
+    /**
+     * 创建时间
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "创建时间")
+    private Date createTime;
 
     /**
      * 菜单名称
@@ -18,104 +29,120 @@ public class SysMenu implements Serializable {
      * @mbg.generated
      */
     @ApiModelProperty(value = "菜单名称")
-    private String menuName;
+    private String title;
 
     /**
-     * 路径
+     * 菜单级数
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "路径")
-    private String menuUrl;
+    @ApiModelProperty(value = "菜单级数")
+    private Integer level;
 
     /**
-     * 父类ID
+     * 菜单排序
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "父类ID")
-    private String parentId;
+    @ApiModelProperty(value = "菜单排序")
+    private Integer sort;
 
     /**
-     * 排序标识
+     * 前端名称
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "排序标识")
-    private String menuOrder;
+    @ApiModelProperty(value = "前端名称")
+    private String name;
 
     /**
-     * 菜单图标样式
+     * 前端图标
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "菜单图标样式")
-    private String menuIcon;
+    @ApiModelProperty(value = "前端图标")
+    private String icon;
 
     /**
-     * 菜单类型
+     * 前端隐藏
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = "菜单类型")
-    private String menuType;
+    @ApiModelProperty(value = "前端隐藏")
+    private Integer hidden;
 
     private static final long serialVersionUID = 1L;
 
-    public Integer getMenuId() {
-        return menuId;
+    public Long getId() {
+        return id;
     }
 
-    public void setMenuId(Integer menuId) {
-        this.menuId = menuId;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getMenuName() {
-        return menuName;
-    }
-
-    public void setMenuName(String menuName) {
-        this.menuName = menuName;
-    }
-
-    public String getMenuUrl() {
-        return menuUrl;
-    }
-
-    public void setMenuUrl(String menuUrl) {
-        this.menuUrl = menuUrl;
-    }
-
-    public String getParentId() {
+    public Long getParentId() {
         return parentId;
     }
 
-    public void setParentId(String parentId) {
+    public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    public String getMenuOrder() {
-        return menuOrder;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setMenuOrder(String menuOrder) {
-        this.menuOrder = menuOrder;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getMenuIcon() {
-        return menuIcon;
+    public String getTitle() {
+        return title;
     }
 
-    public void setMenuIcon(String menuIcon) {
-        this.menuIcon = menuIcon;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
-    public String getMenuType() {
-        return menuType;
+    public Integer getLevel() {
+        return level;
     }
 
-    public void setMenuType(String menuType) {
-        this.menuType = menuType;
+    public void setLevel(Integer level) {
+        this.level = level;
+    }
+
+    public Integer getSort() {
+        return sort;
+    }
+
+    public void setSort(Integer sort) {
+        this.sort = sort;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public Integer getHidden() {
+        return hidden;
+    }
+
+    public void setHidden(Integer hidden) {
+        this.hidden = hidden;
     }
 
     @Override
@@ -124,13 +151,15 @@ public class SysMenu implements Serializable {
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", menuId=").append(menuId);
-        sb.append(", menuName=").append(menuName);
-        sb.append(", menuUrl=").append(menuUrl);
+        sb.append(", id=").append(id);
         sb.append(", parentId=").append(parentId);
-        sb.append(", menuOrder=").append(menuOrder);
-        sb.append(", menuIcon=").append(menuIcon);
-        sb.append(", menuType=").append(menuType);
+        sb.append(", createTime=").append(createTime);
+        sb.append(", title=").append(title);
+        sb.append(", level=").append(level);
+        sb.append(", sort=").append(sort);
+        sb.append(", name=").append(name);
+        sb.append(", icon=").append(icon);
+        sb.append(", hidden=").append(hidden);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();

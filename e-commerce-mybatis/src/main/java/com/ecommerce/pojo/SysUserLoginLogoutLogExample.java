@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class UllUserLoginLogoutLogExample {
+public class SysUserLoginLogoutLogExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public UllUserLoginLogoutLogExample() {
+    public SysUserLoginLogoutLogExample() {
         oredCriteria = new ArrayList<>();
     }
 
