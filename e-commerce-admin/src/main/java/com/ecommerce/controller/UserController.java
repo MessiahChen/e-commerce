@@ -55,7 +55,7 @@ public class UserController extends BaseController {
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),loginVO.toString());
         }
-        String token = adminService.login(loginVO.getUsername(), loginVO.getPassword());
+        String token = adminService.login(loginVO.getUsername(),loginVO.getPassword());
         if (token == null) {
             return CommonResult.validateFailed("用户名或密码错误");
         }

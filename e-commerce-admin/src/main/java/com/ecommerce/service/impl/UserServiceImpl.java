@@ -25,6 +25,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -81,7 +82,7 @@ public class UserServiceImpl implements UserService {
         sysUserRoleRelation.setAdminId((long) userId);
         sysUserRoleRelation.setRoleId((long) registerVO.getRoleId());
         sysUserRoleRelationMapper.insertSelective(sysUserRoleRelation);
-
+        //TODO 插入对应角色表 并返回给user表其ID
         return user;
     }
 
@@ -90,6 +91,7 @@ public class UserServiceImpl implements UserService {
         String token = null;
         //密码需要客户端加密后传递
         try {
+            //通过自定义方法装载UserDetails类
             UserDetails userDetails = loadUserByUsername(username);
             if(!passwordEncoder.matches(password,userDetails.getPassword())){
                 throw new BadCredentialsException("密码不正确");
@@ -169,13 +171,14 @@ public class UserServiceImpl implements UserService {
         example.createCriteria().andRoleIdEqualTo(roleId);
         sysRoleResourceRelationMapper.deleteByExample(example);
 
+        int count = 0;
         for (Long resourceId:resourceIds) {
             SysRoleResourceRelation sysRoleResourceRelation = new SysRoleResourceRelation();
             sysRoleResourceRelation.setRoleId(roleId);
             sysRoleResourceRelation.setResourceId(resourceId);
-            sysRoleResourceRelationMapper.insertSelective(sysRoleResourceRelation);
+            count += sysRoleResourceRelationMapper.insertSelective(sysRoleResourceRelation);
         }
-        return 0;
+        return count;
     }
 
     @Override
@@ -183,9 +186,9 @@ public class UserServiceImpl implements UserService {
         SysRoleResourceRelationExample example = new SysRoleResourceRelationExample();
         example.createCriteria().andRoleIdEqualTo(roleId);
         List<SysRoleResourceRelation> relations =  sysRoleResourceRelationMapper.selectByExample(example);
-        List<Long> resources = null;
+        List<Long> resources = new ArrayList<>();
         for (SysRoleResourceRelation relation:relations) {
-            resources.add(relation.getRoleId());
+            resources.add(relation.getResourceId());
         }
         return resources;
     }

@@ -3,6 +3,7 @@ package com.ecommerce.config;
 import com.ecommerce.dao.SysResourceMapper;
 import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysResourceExample;
+import com.ecommerce.pojo.SysUser;
 import com.ecommerce.security.component.DynamicSecurityService;
 import com.ecommerce.security.config.SecurityConfig;
 import com.ecommerce.service.UserService;
