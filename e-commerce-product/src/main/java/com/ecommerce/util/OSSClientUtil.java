@@ -1,6 +1,8 @@
 package com.ecommerce.util;
 
+import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.OSSClientBuilder;
 import com.aliyun.oss.model.ObjectMetadata;
 import com.aliyun.oss.model.PutObjectResult;
 import org.apache.commons.logging.Log;
@@ -35,11 +37,11 @@ public class OSSClientUtil {
     //阿里云图片文件存储目录
     private String homeImageDir;
 
-    private OSSClient ossClient;
+    private OSS ossClient;
 
     public OSSClientUtil(String homeImageDir) {
         this.homeImageDir = homeImageDir;
-        ossClient = new OSSClient(endpoint, accessKeyId, accessKeySecret);
+        ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 
     /**

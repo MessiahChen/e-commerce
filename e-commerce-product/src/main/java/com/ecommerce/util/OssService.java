@@ -3,6 +3,7 @@ package com.ecommerce.util;
 
 import com.ecommerce.dto.product.OssCallbackResult;
 import com.ecommerce.dto.product.OssPolicyResult;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -20,4 +21,8 @@ public interface OssService {
      * oss上传成功回调
      */
     OssCallbackResult callback(HttpServletRequest request);
+
+    String uploadHomeImageOSS(MultipartFile file) throws Exception;
+
+    boolean deleteFile(String filePath);
 }
