@@ -23,4 +23,6 @@ public class RegisterVO {
     private String nickName;
     @ApiModelProperty(value = "备注")
     private String note;
+    @ApiModelProperty(value = "用户类型，1-BVO，2-MVO，3-admin")
+    private int roleId;
 }

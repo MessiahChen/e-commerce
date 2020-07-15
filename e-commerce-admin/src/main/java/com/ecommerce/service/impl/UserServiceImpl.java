@@ -1,7 +1,9 @@
 package com.ecommerce.service.impl;
 
 import com.ecommerce.dao.SysResourceMapper;
+import com.ecommerce.dao.SysUserLoginLogMapper;
 import com.ecommerce.dao.SysUserMapper;
+import com.ecommerce.dao.SysUserRoleRelationMapper;
 import com.ecommerce.pojo.*;
 import com.ecommerce.security.util.JwtTokenUtil;
 import com.ecommerce.service.UserService;
@@ -17,8 +19,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
 
@@ -31,10 +36,12 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
     @Resource
     private SysUserMapper sysUserMapper;
-//    @Resource
-//    private SysUserRoleRelationMapper adminRoleRelationMapper;
+    @Resource
+    private SysUserRoleRelationMapper sysUserRoleRelationMapper;
     @Resource
     private SysResourceMapper sysResourceMapper;
+    @Resource
+    private SysUserLoginLogMapper sysUserLoginLogMapper;
 
 //    @Resource
 //    private UmsAdminRoleRelationDao adminRoleRelationDao;
@@ -42,8 +49,7 @@ public class UserServiceImpl implements UserService {
 //    private SysUserPermissionRelationMapper adminPermissionRelationMapper;
 //    @Resource
 //    private UmsAdminPermissionRelationDao adminPermissionRelationDao;
-//    @Resource
-//    private UmsAdminLoginLogMapper loginLogMapper;
+
 
     @Override
     public SysUser getUserByName(String username) {
@@ -72,7 +78,13 @@ public class UserServiceImpl implements UserService {
         //将密码进行加密操作
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
-        sysUserMapper.insert(user);
+        int userId = sysUserMapper.insertSelective(user);
+
+        SysUserRoleRelation sysUserRoleRelation = new SysUserRoleRelation();
+        sysUserRoleRelation.setAdminId((long) userId);
+        sysUserRoleRelation.setRoleId((long) registerVO.getRoleId());
+        sysUserRoleRelationMapper.insertSelective(sysUserRoleRelation);
+
         return user;
     }
 
@@ -96,20 +108,20 @@ public class UserServiceImpl implements UserService {
         return token;
     }
 
-//    /**
-//     * 添加登录记录
-//     * @param username 用户名
-//     */
-//    private void insertLoginLog(String username) {
-//        SysUser admin = getAdminByUsername(username);
-//        SysUserLoginLog loginLog = new UmsAdminLoginLog();
-//        loginLog.setAdminId(admin.getId());
-//        loginLog.setCreateTime(new Date());
-//        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-//        HttpServletRequest request = attributes.getRequest();
-//        loginLog.setIp(request.getRemoteAddr());
-//        loginLogMapper.insert(loginLog);
-//    }
+    /**
+     * 添加登录记录
+     * @param username 用户名
+     */
+    private void insertLoginLog(String username) {
+        SysUser user = getUserByName(username);
+        SysUserLoginLog loginLog = new SysUserLoginLog();
+        loginLog.setMemberId(user.getId());
+        loginLog.setCreateTime(new Date());
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes != null ? attributes.getRequest() : null;
+        loginLog.setIp(request != null ? request.getRemoteAddr() : null);
+        sysUserLoginLogMapper.insertSelective(loginLog);
+    }
 //
 //    /**
 //     * 根据用户名修改登录时间
