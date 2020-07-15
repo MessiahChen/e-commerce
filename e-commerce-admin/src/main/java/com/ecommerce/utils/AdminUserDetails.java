@@ -1,6 +1,7 @@
 package com.ecommerce.utils;
 
 import com.ecommerce.pojo.SysResource;
+import com.ecommerce.pojo.SysUser;
 import lombok.Data;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
