@@ -21,14 +21,14 @@ public class UploadImageController extends BaseController {
     private UploadImageService uploadImages;
 
     @ApiOperation("批量上传商品主图到阿里云OSS")
-    @PostMapping(value = "/uploadImages")
-    public CommonResult<List<String>> uploadImages(@RequestParam("files") List<MultipartFile> file) {
+    @PostMapping(value = "/uploadImage")
+    public CommonResult<String> uploadImages(MultipartFile file) {
 //        if (file == null) System.out.println("卧槽");
 //        if (files.length == 0) System.out.println("卧槽");
 //        System.out.println(files.length);
-        List<String> imageUrls = uploadImages.uploadImages(file);
-        if (!imageUrls.isEmpty())
-            return CommonResult.success(imageUrls, "上传成功");
+        String imageUrl = uploadImages.uploadImages(file);
+        if (!imageUrl.equals(""))
+            return CommonResult.success(imageUrl, "上传成功");
         else return CommonResult.failed("上传失败");
     }
 }

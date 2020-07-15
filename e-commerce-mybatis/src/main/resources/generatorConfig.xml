@@ -39,7 +39,7 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.ecommerce.dao"
                              targetProject="e-commerce-mybatis/src/main/java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="sys_menu">
+        <table tableName="sys_user">
             <generatedKey column="pro_id" sqlStatement="MySql" identity="true"/>
         </table>
     </context>
