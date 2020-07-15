@@ -225,7 +225,7 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <select id="getResourceList" resultType="com.ecommerce.pojo.SysResource" parameterType="java.lang.long">
+  <select id="getResourceList" resultType="com.ecommerce.pojo.SysResource" parameterType="java.lang.Long">
         SELECT
             ur.id id,
             ur.create_time createTime,
