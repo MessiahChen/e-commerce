@@ -134,12 +134,13 @@ public class OssServiceImpl implements OssService {
         }
         String substring = Objects.requireNonNull(file.getContentType()).split("/")[1];
         Random random = new Random();
-        String name = random.nextInt(10000) + System.currentTimeMillis() + substring;
+        String name = random.nextInt(10000) + System.currentTimeMillis() + "." + substring;
         try {
             InputStream inputStream = file.getInputStream();
-            this.uploadHomeImageFileOSS(inputStream, name);
+            if (this.uploadHomeImageFileOSS(inputStream, name).equals("")) throw new Exception("图片上传失败");
             return name;
         } catch (Exception e) {
+            e.printStackTrace();
             throw new Exception("图片上传失败");
         }
     }
@@ -261,5 +262,21 @@ public class OssServiceImpl implements OssService {
             return url.toString();
         }
         return null;
+    }
+
+    /**
+     * 判断图片
+     *
+     * @param file
+     * @return
+     * @throws Exception
+     */
+    public String updateHomeImage(MultipartFile file, String homeImageDir) throws Exception {
+        if (file == null || file.getSize() <= 0) {
+            throw new Exception("图片不能为空");
+        }
+        String name = this.uploadHomeImageOSS(file);
+        String imgUrl = this.getHomeImageUrl(name);
+        return imgUrl;
     }
 }

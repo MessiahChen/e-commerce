@@ -1,5 +1,6 @@
 package com.ecommerce.service;
 
+import com.ecommerce.vojo.browse.OperateWishlistVO;
 import com.ecommerce.vojo.browse.ProductBrowseWithCatVO;
 import com.ecommerce.vojo.browse.ProductDetailVO;
 
@@ -10,5 +11,9 @@ public interface ProductBrowseService {
     // 获得数据接口
     List<ProductBrowseWithCatVO> getAllProductWithStatD();
 
-    ProductDetailVO getProductInfoDetailById(Integer proId);
+    ProductDetailVO getProductInfoDetailById(Integer dsrId, Integer proId);
+
+    boolean addToWishlist(OperateWishlistVO operateWishlistVO);
+
+    boolean deleteFromWishlist(OperateWishlistVO operateWishlistVO);
 }

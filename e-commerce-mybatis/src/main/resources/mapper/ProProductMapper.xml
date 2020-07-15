@@ -589,7 +589,8 @@
   <select id="selectProByPrcCat" resultType="com.ecommerce.dto.product.browse.ProductBrowseDTO">
     SELECT pro.pro_id proId, pro.title,pro.retail_price retailPrice,pro.mininum_retail_price minRetailPrice, img_image.uri image
     FROM pro_product AS pro, prc_product_category, img_image
-    WHERE pro.pro_id = prc_product_category.pro_id and pro.pro_id = img_image.entity_id and prc_product_category.category_id = #{catId,jdbcType=INTEGER} and pro.sts_cd = "d";
+    WHERE pro.pro_id = prc_product_category.pro_id and pro.pro_id = img_image.entity_id and prc_product_category.category_id = #{catId,jdbcType=INTEGER} and pro.sts_cd = "d"
+    GROUP BY pro.pro_id;
   </select>
 
   <select id="selectProDetailById" resultType="com.ecommerce.dto.product.browse.ProductDetailDTO">

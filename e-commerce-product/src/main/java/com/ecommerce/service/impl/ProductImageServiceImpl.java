@@ -7,13 +7,11 @@ import com.ecommerce.dao.PrcProductCategoryMapper;
 import com.ecommerce.dao.ProProductMapper;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.ProductImageService;
-import com.ecommerce.util.OSSClientUtil;
 import com.ecommerce.vojo.image.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.Date;
