@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,39 +31,40 @@ public class BvoTest {
     private BvoOrderService bvoOrderService;
 
     @Test
-    public void testGetSaoVosByDsrId(){
+    public void testGetSaoVosByDsrId() {
         List<SaoSalesOrderVO> saoSalesOrderVOS = bvoOrderService.getSaoVosByDsrId(1);
-        for(SaoSalesOrderVO saoSalesOrderVO : saoSalesOrderVOS){
+        for (SaoSalesOrderVO saoSalesOrderVO : saoSalesOrderVOS) {
             System.out.println(saoSalesOrderVO.toString());
         }
     }
 
     @Test
-    public void testGetSalBySaoId(){
-        int[] saoIds = {100,101,102,103,104,105,106};
+    public void testGetSalBySaoId() {
+        int[] saoIds = {100, 101, 102, 103, 104, 105, 106};
         List<SalSalesOrderLineItem> salSalesOrderLineItems = bvoOrderService.getSalBySaoId(saoIds);
-        for(SalSalesOrderLineItem salSalesOrderLineItem : salSalesOrderLineItems){
-            System.out.println(salSalesOrderLineItem.toString());;
+        for (SalSalesOrderLineItem salSalesOrderLineItem : salSalesOrderLineItems) {
+            System.out.println(salSalesOrderLineItem.toString());
+            ;
         }
     }
 
     @Test
-    public void testGetProBySalId(){
+    public void testGetProBySalId() {
         List<ProProduct> proProducts = new ArrayList<>();
-        for(int i = 100; i < 107; i++){
+        for (int i = 100; i < 107; i++) {
             ProProduct proProduct = bvoOrderService.getProBySalId(i);
             proProducts.add(proProduct);
         }
-        for(ProProduct proProduct : proProducts){
+        for (ProProduct proProduct : proProducts) {
             System.out.println(proProduct.toString());
         }
     }
 
     @Test
-    public void testGetFeeByProvinceCode(){
-        String[] states = {"110000","120000","130000","210000","220000","230000",
-        "310000","320000","330000","410000","420000"};
-        for(String string : states){
+    public void testGetFeeByProvinceCode() {
+        String[] states = {"110000", "120000", "130000", "210000", "220000", "230000",
+                "310000", "320000", "330000", "410000", "420000"};
+        for (String string : states) {
             System.out.println(bvoOrderService.getFeeByProvinceCode(string));
         }
     }

@@ -7,11 +7,14 @@ import com.ecommerce.service.OrderService;
 import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import com.ecommerce.vo.ShippingVO;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.List;
 
@@ -36,6 +39,7 @@ public class MvoTest {
         for(SaoSalesOrderVO saoSalesOrderVO : saoSalesOrderVOS){
             System.out.println(saoSalesOrderVO.toString());
         }
+        assertEquals(1,2);
     }
 
     @Test
