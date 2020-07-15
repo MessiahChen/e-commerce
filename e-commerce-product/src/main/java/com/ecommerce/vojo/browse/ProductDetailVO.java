@@ -12,5 +12,6 @@ public class ProductDetailVO {
     private String viceCatName;
     private String minRetailPrice;
     private String retailPrice;
+    private Boolean ifInWishlist;
     private List<String> images;
 }

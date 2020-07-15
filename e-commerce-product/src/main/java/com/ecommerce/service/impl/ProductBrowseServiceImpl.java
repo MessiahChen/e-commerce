@@ -1,13 +1,11 @@
 package com.ecommerce.service.impl;
 
-import com.ecommerce.dao.CatCategoryMapper;
-import com.ecommerce.dao.ImgImageMapper;
-import com.ecommerce.dao.PrcProductCategoryMapper;
-import com.ecommerce.dao.ProProductMapper;
+import com.ecommerce.dao.*;
 import com.ecommerce.dto.product.browse.ProductBrowseDTO;
 import com.ecommerce.dto.product.browse.ProductDetailDTO;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.ProductBrowseService;
+import com.ecommerce.vojo.browse.OperateWishlistVO;
 import com.ecommerce.vojo.browse.ProductBrowseWithCatVO;
 import com.ecommerce.vojo.browse.ProductDetailVO;
 
@@ -15,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +30,9 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
 
     @Autowired
     private CatCategoryMapper catCategoryMapper;
+
+    @Autowired
+    private WitWishlistMapper witWishlistMapper;
 
     @Override
     public List<ProductBrowseWithCatVO> getAllProductWithStatD() {
@@ -56,8 +58,9 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
     }
 
     @Override
-    public ProductDetailVO getProductInfoDetailById(Integer proId) {
+    public ProductDetailVO getProductInfoDetailById(Integer dsrId, Integer proId) {
         ProductDetailDTO productDetailDTO = proProductMapper.selectProDetailById(proId);
+
         ProductDetailVO result = new ProductDetailVO();
         result.setProId(proId);
         result.setTitle(productDetailDTO.getTitle());
@@ -77,7 +80,58 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
             images.add(imgImage.getUri());
         });
 
+        WitWishlistExample example = new WitWishlistExample();
+        WitWishlistExample.Criteria criteria_wit = example.createCriteria();
+        criteria_wit.andDsrIdEqualTo(dsrId);
+        criteria_wit.andProIdEqualTo(proId);
+        List<WitWishlist> witWishlists = witWishlistMapper.selectByExample(example);
+
+        if (witWishlists == null || witWishlists.isEmpty() || witWishlists.get(0).getStsCd().equals("0")) {
+            result.setIfInWishlist(false);
+        } else if (witWishlists.get(0).getStsCd().equals("1")) {
+            result.setIfInWishlist(true);
+        }
+
         result.setImages(images);
         return result;
+    }
+
+    @Override
+    public boolean addToWishlist(OperateWishlistVO vo) {
+        WitWishlistExample example = new WitWishlistExample();
+        WitWishlistExample.Criteria criteria = example.createCriteria();
+        criteria.andDsrIdEqualTo(vo.getDsrId());
+        criteria.andProIdEqualTo(vo.getProId());
+
+        WitWishlist witWishlist = new WitWishlist();
+        witWishlist.setStsCd("1");
+
+        long ifExit = witWishlistMapper.countByExample(example);
+        if (ifExit == 1) {
+            witWishlist.setLastUpdateBy(vo.getUserId());
+            witWishlist.setLastUpdateDate(new Date());
+            return witWishlistMapper.updateByExampleSelective(witWishlist, example) == 1;
+        } else {
+            witWishlist.setDsrId(vo.getDsrId());
+            witWishlist.setProId(vo.getProId());
+            witWishlist.setCreatedBy(vo.getUserId());
+            witWishlist.setCreationDate(new Date());
+            return witWishlistMapper.insertSelective(witWishlist) == 1;
+        }
+    }
+
+    @Override
+    public boolean deleteFromWishlist(OperateWishlistVO vo) {
+        WitWishlistExample example = new WitWishlistExample();
+        WitWishlistExample.Criteria criteria = example.createCriteria();
+        criteria.andDsrIdEqualTo(vo.getDsrId());
+        criteria.andProIdEqualTo(vo.getProId());
+
+        WitWishlist witWishlist = new WitWishlist();
+        witWishlist.setLastUpdateBy(vo.getUserId());
+        witWishlist.setLastUpdateDate(new Date());
+        witWishlist.setStsCd("0");
+
+        return witWishlistMapper.updateByExampleSelective(witWishlist, example) == 1;
     }
 }
