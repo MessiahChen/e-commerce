@@ -2,11 +2,9 @@ package com.ecommerce.service.impl;
 
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.dao.PckPackageInfoMapper;
+import com.ecommerce.dao.PdnProductDescriptionMapper;
 import com.ecommerce.dao.ProProductMapper;
-import com.ecommerce.pojo.PckPackageInfo;
-import com.ecommerce.pojo.PckPackageInfoExample;
-import com.ecommerce.pojo.ProProduct;
-import com.ecommerce.pojo.ProProductExample;
+import com.ecommerce.pojo.*;
 import com.ecommerce.service.ProductEntryService;
 import com.ecommerce.vojo.entry.*;
 import com.github.pagehelper.Page;
@@ -27,6 +25,9 @@ public class ProductEntryServiceImpl implements ProductEntryService {
 
     @Autowired
     private PckPackageInfoMapper pckPackageInfoMapper;
+
+    @Autowired
+    private PdnProductDescriptionMapper pdnProductDescriptionMapper;
 
     @Override
     public CommonPage<ProductEntryVO> getAllProduct(GetAllProductVO vo) {
@@ -75,6 +76,7 @@ public class ProductEntryServiceImpl implements ProductEntryService {
 
     @Override
     public boolean addProductInfo(ProductAddVO vo) {
+        System.out.println(vo.toString());
         ProProduct proProduct = new ProProduct();
         proProduct.setManId(vo.getManId());
         proProduct.setTitle(vo.getTitle());
@@ -98,6 +100,28 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         pckPackageInfo.setCreatedBy(vo.getUserId());
         pckPackageInfo.setCreationDate(new Date());
         pckPackageInfoMapper.insertSelective(pckPackageInfo);
+
+        PdnProductDescription amazonDes = new PdnProductDescription();
+        amazonDes.setProId(proProduct.getProId());
+        amazonDes.setTypeCd("RICH_TEXT");
+        amazonDes.setCreatedBy(vo.getUserId());
+        amazonDes.setCreationDate(new Date());
+        amazonDes.setStsCd("1");
+        amazonDes.setPlatformType("1");
+        amazonDes.setDescrition(vo.getAmazonDescription());
+        pdnProductDescriptionMapper.insertSelective(amazonDes);
+
+        PdnProductDescription ebayDes = new PdnProductDescription();
+        ebayDes.setProId(proProduct.getProId());
+        ebayDes.setTypeCd("SIMPLE_TEXT");
+        ebayDes.setCreatedBy(vo.getUserId());
+        ebayDes.setCreationDate(new Date());
+        ebayDes.setStsCd("1");
+        ebayDes.setPlatformType("2");
+        ebayDes.setDescrition(vo.getEBayDescription());
+        pdnProductDescriptionMapper.insertSelective(ebayDes);
+
+
         return true;
     }
 
@@ -123,6 +147,20 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         productAddVO.setHeight(pckPackageInfo.getHeight().toString());
         productAddVO.setLength(pckPackageInfo.getLength().toString());
         productAddVO.setWeight(pckPackageInfo.getWeight().toString());
+
+        PdnProductDescriptionExample pdnProductDescriptionExample = new PdnProductDescriptionExample();
+        PdnProductDescriptionExample.Criteria criteria = pdnProductDescriptionExample.createCriteria();
+        criteria.andProIdEqualTo(proId);
+
+        List<PdnProductDescription> pdnProductDescriptions = pdnProductDescriptionMapper.selectByExampleWithBLOBs(pdnProductDescriptionExample);
+        for (PdnProductDescription pdn : pdnProductDescriptions) {
+            System.out.println(pdn.toString());
+            if (pdn.getPlatformType().equals("1")) {
+                productAddVO.setAmazonDescription(pdn.getDescrition());
+            } else {
+                productAddVO.setEBayDescription(pdn.getDescrition());
+            }
+        }
 
         return productAddVO;
     }
@@ -157,6 +195,27 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         pckPackageInfo.setLastUpdateBy(vo.getUserId());
         pckPackageInfo.setLastUpdeteDate(new Date());
         pckPackageInfoMapper.updateByExampleSelective(pckPackageInfo, pckPackageInfoExample);
+
+        // 更新描述信息
+        PdnProductDescription pdnProductDescription = new PdnProductDescription();
+        pdnProductDescription.setTypeCd("RICH_TEXT");
+        pdnProductDescription.setLastUpdateBy(vo.getUserId());
+        pdnProductDescription.setLastUpdateDate(new Date());
+
+        PdnProductDescriptionExample amazonExample = new PdnProductDescriptionExample();
+        PdnProductDescriptionExample.Criteria criteria_amazon = amazonExample.createCriteria();
+        criteria_amazon.andProIdEqualTo(vo.getProId());
+        criteria_amazon.andPlatformTypeEqualTo("1");
+        pdnProductDescription.setDescrition(vo.getAmazonDescription());
+        pdnProductDescriptionMapper.updateByExampleSelective(pdnProductDescription, amazonExample);
+
+        PdnProductDescriptionExample eBayExample = new PdnProductDescriptionExample();
+        PdnProductDescriptionExample.Criteria criteria_eBay = eBayExample.createCriteria();
+        criteria_eBay.andProIdEqualTo(vo.getProId());
+        criteria_eBay.andPlatformTypeEqualTo("2");
+        pdnProductDescription.setDescrition(vo.getEBayDescription());
+        pdnProductDescriptionMapper.updateByExampleSelective(pdnProductDescription, eBayExample);
+
         return true;
     }
 

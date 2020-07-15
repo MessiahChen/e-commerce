@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class PdnProductDescritionExample {
+public class PdnProductDescriptionExample {
     protected String orderByClause;
 
     protected boolean distinct;
 
     protected List<Criteria> oredCriteria;
 
-    public PdnProductDescritionExample() {
+    public PdnProductDescriptionExample() {
         oredCriteria = new ArrayList<>();
     }
 
@@ -752,6 +752,76 @@ public class PdnProductDescritionExample {
 
         public Criteria andStsCdNotBetween(String value1, String value2) {
             addCriterion("sts_cd not between", value1, value2, "stsCd");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeIsNull() {
+            addCriterion("platform_type is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeIsNotNull() {
+            addCriterion("platform_type is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeEqualTo(String value) {
+            addCriterion("platform_type =", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotEqualTo(String value) {
+            addCriterion("platform_type <>", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeGreaterThan(String value) {
+            addCriterion("platform_type >", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeGreaterThanOrEqualTo(String value) {
+            addCriterion("platform_type >=", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeLessThan(String value) {
+            addCriterion("platform_type <", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeLessThanOrEqualTo(String value) {
+            addCriterion("platform_type <=", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeLike(String value) {
+            addCriterion("platform_type like", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotLike(String value) {
+            addCriterion("platform_type not like", value, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeIn(List<String> values) {
+            addCriterion("platform_type in", values, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotIn(List<String> values) {
+            addCriterion("platform_type not in", values, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeBetween(String value1, String value2) {
+            addCriterion("platform_type between", value1, value2, "platformType");
+            return (Criteria) this;
+        }
+
+        public Criteria andPlatformTypeNotBetween(String value1, String value2) {
+            addCriterion("platform_type not between", value1, value2, "platformType");
             return (Criteria) this;
         }
     }

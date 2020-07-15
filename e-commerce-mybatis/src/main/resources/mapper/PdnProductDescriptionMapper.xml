@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ecommerce.dao.PdnProductDescritionMapper">
-  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.PdnProductDescrition">
+<mapper namespace="com.ecommerce.dao.PdnProductDescriptionMapper">
+  <resultMap id="BaseResultMap" type="com.ecommerce.pojo.PdnProductDescription">
     <id column="pdn_id" jdbcType="INTEGER" property="pdnId" />
     <result column="pro_id" jdbcType="INTEGER" property="proId" />
     <result column="type_cd" jdbcType="VARCHAR" property="typeCd" />
@@ -12,8 +12,9 @@
     <result column="call_cnt" jdbcType="INTEGER" property="callCnt" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="sts_cd" jdbcType="CHAR" property="stsCd" />
+    <result column="platform_type" jdbcType="CHAR" property="platformType" />
   </resultMap>
-  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ecommerce.pojo.PdnProductDescrition">
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.ecommerce.pojo.PdnProductDescription">
     <result column="descrition" jdbcType="LONGVARCHAR" property="descrition" />
   </resultMap>
   <sql id="Example_Where_Clause">
@@ -76,12 +77,12 @@
   </sql>
   <sql id="Base_Column_List">
     pdn_id, pro_id, type_cd, created_by, creation_date, last_update_by, last_update_date, 
-    call_cnt, remark, sts_cd
+    call_cnt, remark, sts_cd, platform_type
   </sql>
   <sql id="Blob_Column_List">
     descrition
   </sql>
-  <select id="selectByExampleWithBLOBs" parameterType="com.ecommerce.pojo.PdnProductDescritionExample" resultMap="ResultMapWithBLOBs">
+  <select id="selectByExampleWithBLOBs" parameterType="com.ecommerce.pojo.PdnProductDescriptionExample" resultMap="ResultMapWithBLOBs">
     select
     <if test="distinct">
       distinct
@@ -89,7 +90,7 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from pdn_product_descrition
+    from pdn_product_description
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -97,13 +98,13 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByExample" parameterType="com.ecommerce.pojo.PdnProductDescritionExample" resultMap="BaseResultMap">
+  <select id="selectByExample" parameterType="com.ecommerce.pojo.PdnProductDescriptionExample" resultMap="BaseResultMap">
     select
     <if test="distinct">
       distinct
     </if>
     <include refid="Base_Column_List" />
-    from pdn_product_descrition
+    from pdn_product_description
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
@@ -116,35 +117,38 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from pdn_product_descrition
+    from pdn_product_description
     where pdn_id = #{pdnId,jdbcType=INTEGER}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
-    delete from pdn_product_descrition
+    delete from pdn_product_description
     where pdn_id = #{pdnId,jdbcType=INTEGER}
   </delete>
-  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.PdnProductDescritionExample">
-    delete from pdn_product_descrition
+  <delete id="deleteByExample" parameterType="com.ecommerce.pojo.PdnProductDescriptionExample">
+    delete from pdn_product_description
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.ecommerce.pojo.PdnProductDescrition">
-    insert into pdn_product_descrition (pdn_id, pro_id, type_cd, 
-      created_by, creation_date, last_update_by, 
-      last_update_date, call_cnt, remark, 
-      sts_cd, descrition)
-    values (#{pdnId,jdbcType=INTEGER}, #{proId,jdbcType=INTEGER}, #{typeCd,jdbcType=VARCHAR}, 
-      #{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, 
-      #{lastUpdateDate,jdbcType=TIMESTAMP}, #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, 
-      #{stsCd,jdbcType=CHAR}, #{descrition,jdbcType=LONGVARCHAR})
+  <insert id="insert" parameterType="com.ecommerce.pojo.PdnProductDescription">
+    <selectKey keyProperty="pdnId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pdn_product_description (pro_id, type_cd, created_by, 
+      creation_date, last_update_by, last_update_date, 
+      call_cnt, remark, sts_cd, 
+      platform_type, descrition)
+    values (#{proId,jdbcType=INTEGER}, #{typeCd,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP}, 
+      #{callCnt,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}, #{stsCd,jdbcType=CHAR}, 
+      #{platformType,jdbcType=CHAR}, #{descrition,jdbcType=LONGVARCHAR})
   </insert>
-  <insert id="insertSelective" parameterType="com.ecommerce.pojo.PdnProductDescrition">
-    insert into pdn_product_descrition
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.PdnProductDescription">
+    <selectKey keyProperty="pdnId" order="AFTER" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into pdn_product_description
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="pdnId != null">
-        pdn_id,
-      </if>
       <if test="proId != null">
         pro_id,
       </if>
@@ -172,14 +176,14 @@
       <if test="stsCd != null">
         sts_cd,
       </if>
+      <if test="platformType != null">
+        platform_type,
+      </if>
       <if test="descrition != null">
         descrition,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="pdnId != null">
-        #{pdnId,jdbcType=INTEGER},
-      </if>
       <if test="proId != null">
         #{proId,jdbcType=INTEGER},
       </if>
@@ -207,19 +211,22 @@
       <if test="stsCd != null">
         #{stsCd,jdbcType=CHAR},
       </if>
+      <if test="platformType != null">
+        #{platformType,jdbcType=CHAR},
+      </if>
       <if test="descrition != null">
         #{descrition,jdbcType=LONGVARCHAR},
       </if>
     </trim>
   </insert>
-  <select id="countByExample" parameterType="com.ecommerce.pojo.PdnProductDescritionExample" resultType="java.lang.Long">
-    select count(*) from pdn_product_descrition
+  <select id="countByExample" parameterType="com.ecommerce.pojo.PdnProductDescriptionExample" resultType="java.lang.Long">
+    select count(*) from pdn_product_description
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
   </select>
   <update id="updateByExampleSelective" parameterType="map">
-    update pdn_product_descrition
+    update pdn_product_description
     <set>
       <if test="record.pdnId != null">
         pdn_id = #{record.pdnId,jdbcType=INTEGER},
@@ -251,6 +258,9 @@
       <if test="record.stsCd != null">
         sts_cd = #{record.stsCd,jdbcType=CHAR},
       </if>
+      <if test="record.platformType != null">
+        platform_type = #{record.platformType,jdbcType=CHAR},
+      </if>
       <if test="record.descrition != null">
         descrition = #{record.descrition,jdbcType=LONGVARCHAR},
       </if>
@@ -260,7 +270,7 @@
     </if>
   </update>
   <update id="updateByExampleWithBLOBs" parameterType="map">
-    update pdn_product_descrition
+    update pdn_product_description
     set pdn_id = #{record.pdnId,jdbcType=INTEGER},
       pro_id = #{record.proId,jdbcType=INTEGER},
       type_cd = #{record.typeCd,jdbcType=VARCHAR},
@@ -271,13 +281,14 @@
       call_cnt = #{record.callCnt,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
       sts_cd = #{record.stsCd,jdbcType=CHAR},
+      platform_type = #{record.platformType,jdbcType=CHAR},
       descrition = #{record.descrition,jdbcType=LONGVARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
   <update id="updateByExample" parameterType="map">
-    update pdn_product_descrition
+    update pdn_product_description
     set pdn_id = #{record.pdnId,jdbcType=INTEGER},
       pro_id = #{record.proId,jdbcType=INTEGER},
       type_cd = #{record.typeCd,jdbcType=VARCHAR},
@@ -287,13 +298,14 @@
       last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP},
       call_cnt = #{record.callCnt,jdbcType=INTEGER},
       remark = #{record.remark,jdbcType=VARCHAR},
-      sts_cd = #{record.stsCd,jdbcType=CHAR}
+      sts_cd = #{record.stsCd,jdbcType=CHAR},
+      platform_type = #{record.platformType,jdbcType=CHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
   </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.PdnProductDescrition">
-    update pdn_product_descrition
+  <update id="updateByPrimaryKeySelective" parameterType="com.ecommerce.pojo.PdnProductDescription">
+    update pdn_product_description
     <set>
       <if test="proId != null">
         pro_id = #{proId,jdbcType=INTEGER},
@@ -322,14 +334,17 @@
       <if test="stsCd != null">
         sts_cd = #{stsCd,jdbcType=CHAR},
       </if>
+      <if test="platformType != null">
+        platform_type = #{platformType,jdbcType=CHAR},
+      </if>
       <if test="descrition != null">
         descrition = #{descrition,jdbcType=LONGVARCHAR},
       </if>
     </set>
     where pdn_id = #{pdnId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ecommerce.pojo.PdnProductDescrition">
-    update pdn_product_descrition
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.ecommerce.pojo.PdnProductDescription">
+    update pdn_product_description
     set pro_id = #{proId,jdbcType=INTEGER},
       type_cd = #{typeCd,jdbcType=VARCHAR},
       created_by = #{createdBy,jdbcType=VARCHAR},
@@ -339,11 +354,12 @@
       call_cnt = #{callCnt,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
       sts_cd = #{stsCd,jdbcType=CHAR},
+      platform_type = #{platformType,jdbcType=CHAR},
       descrition = #{descrition,jdbcType=LONGVARCHAR}
     where pdn_id = #{pdnId,jdbcType=INTEGER}
   </update>
-  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.PdnProductDescrition">
-    update pdn_product_descrition
+  <update id="updateByPrimaryKey" parameterType="com.ecommerce.pojo.PdnProductDescription">
+    update pdn_product_description
     set pro_id = #{proId,jdbcType=INTEGER},
       type_cd = #{typeCd,jdbcType=VARCHAR},
       created_by = #{createdBy,jdbcType=VARCHAR},
@@ -352,7 +368,8 @@
       last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
       call_cnt = #{callCnt,jdbcType=INTEGER},
       remark = #{remark,jdbcType=VARCHAR},
-      sts_cd = #{stsCd,jdbcType=CHAR}
+      sts_cd = #{stsCd,jdbcType=CHAR},
+      platform_type = #{platformType,jdbcType=CHAR}
     where pdn_id = #{pdnId,jdbcType=INTEGER}
   </update>
 </mapper>

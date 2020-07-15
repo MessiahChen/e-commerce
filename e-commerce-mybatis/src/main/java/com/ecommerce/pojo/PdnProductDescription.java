@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.Date;
 
-public class PdnProductDescrition implements Serializable {
+public class PdnProductDescription implements Serializable {
     /**
      * 主键
      *
@@ -54,36 +54,44 @@ public class PdnProductDescrition implements Serializable {
     private String lastUpdateBy;
 
     /**
-     *  修改时间
+     * 修改时间
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 修改时间")
+    @ApiModelProperty(value = "修改时间")
     private Date lastUpdateDate;
 
     /**
-     *  乐观锁
+     * 乐观锁
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 乐观锁")
+    @ApiModelProperty(value = "乐观锁")
     private Integer callCnt;
 
     /**
-     *  备注
+     * 备注
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 备注")
+    @ApiModelProperty(value = "备注")
     private String remark;
 
     /**
-     *  状态
+     * 状态
      *
      * @mbg.generated
      */
-    @ApiModelProperty(value = " 状态")
+    @ApiModelProperty(value = "状态")
     private String stsCd;
+
+    /**
+     * 平台类型，ebay：2，Amazon：1
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "平台类型，ebay：2，Amazon：1")
+    private String platformType;
 
     /**
      * 商品描述（富文本、纯文本、卖点）
@@ -175,6 +183,14 @@ public class PdnProductDescrition implements Serializable {
         this.stsCd = stsCd;
     }
 
+    public String getPlatformType() {
+        return platformType;
+    }
+
+    public void setPlatformType(String platformType) {
+        this.platformType = platformType;
+    }
+
     public String getDescrition() {
         return descrition;
     }
@@ -199,6 +215,7 @@ public class PdnProductDescrition implements Serializable {
         sb.append(", callCnt=").append(callCnt);
         sb.append(", remark=").append(remark);
         sb.append(", stsCd=").append(stsCd);
+        sb.append(", platformType=").append(platformType);
         sb.append(", descrition=").append(descrition);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");

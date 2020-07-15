@@ -211,4 +211,20 @@ public class ProductAddVO {
      */
     @ApiModelProperty(value = "保修期（单位有年、月、日）")
     private String warrantyDay;
+
+    /**
+     * 保修期（单位有年、月、日）
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "eBay描述")
+    private String eBayDescription;
+
+    /**
+     * 保修期（单位有年、月、日）
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "Amazon描述")
+    private String amazonDescription;
 }
