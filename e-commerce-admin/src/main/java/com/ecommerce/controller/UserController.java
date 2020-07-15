@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin
 @Controller
 @Api(tags = "UserController", description = "后台用户管理")
 @RequestMapping("/user")
