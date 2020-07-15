@@ -764,6 +764,126 @@ public class SysUserExample {
             addCriterion("status not between", value1, value2, "status");
             return (Criteria) this;
         }
+
+        public Criteria andManIdIsNull() {
+            addCriterion("man_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdIsNotNull() {
+            addCriterion("man_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdEqualTo(Integer value) {
+            addCriterion("man_id =", value, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdNotEqualTo(Integer value) {
+            addCriterion("man_id <>", value, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdGreaterThan(Integer value) {
+            addCriterion("man_id >", value, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("man_id >=", value, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdLessThan(Integer value) {
+            addCriterion("man_id <", value, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdLessThanOrEqualTo(Integer value) {
+            addCriterion("man_id <=", value, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdIn(List<Integer> values) {
+            addCriterion("man_id in", values, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdNotIn(List<Integer> values) {
+            addCriterion("man_id not in", values, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdBetween(Integer value1, Integer value2) {
+            addCriterion("man_id between", value1, value2, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("man_id not between", value1, value2, "manId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdIsNull() {
+            addCriterion("man_buyer_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdIsNotNull() {
+            addCriterion("man_buyer_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdEqualTo(Integer value) {
+            addCriterion("man_buyer_id =", value, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdNotEqualTo(Integer value) {
+            addCriterion("man_buyer_id <>", value, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdGreaterThan(Integer value) {
+            addCriterion("man_buyer_id >", value, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdGreaterThanOrEqualTo(Integer value) {
+            addCriterion("man_buyer_id >=", value, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdLessThan(Integer value) {
+            addCriterion("man_buyer_id <", value, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdLessThanOrEqualTo(Integer value) {
+            addCriterion("man_buyer_id <=", value, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdIn(List<Integer> values) {
+            addCriterion("man_buyer_id in", values, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdNotIn(List<Integer> values) {
+            addCriterion("man_buyer_id not in", values, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdBetween(Integer value1, Integer value2) {
+            addCriterion("man_buyer_id between", value1, value2, "manBuyerId");
+            return (Criteria) this;
+        }
+
+        public Criteria andManBuyerIdNotBetween(Integer value1, Integer value2) {
+            addCriterion("man_buyer_id not between", value1, value2, "manBuyerId");
+            return (Criteria) this;
+        }
     }
 
     public static class Criteria extends GeneratedCriteria {

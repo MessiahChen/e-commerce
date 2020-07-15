@@ -79,6 +79,22 @@ public class SysUser implements Serializable {
     @ApiModelProperty(value = "帐号启用状态：0->禁用；1->启用")
     private Integer status;
 
+    /**
+     * 公司id
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "公司id")
+    private Integer manId;
+
+    /**
+     * 借卖方id
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "借卖方id")
+    private Integer manBuyerId;
+
     private static final long serialVersionUID = 1L;
 
     public Long getId() {
@@ -161,6 +177,22 @@ public class SysUser implements Serializable {
         this.status = status;
     }
 
+    public Integer getManId() {
+        return manId;
+    }
+
+    public void setManId(Integer manId) {
+        this.manId = manId;
+    }
+
+    public Integer getManBuyerId() {
+        return manBuyerId;
+    }
+
+    public void setManBuyerId(Integer manBuyerId) {
+        this.manBuyerId = manBuyerId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -177,6 +209,8 @@ public class SysUser implements Serializable {
         sb.append(", createTime=").append(createTime);
         sb.append(", loginTime=").append(loginTime);
         sb.append(", status=").append(status);
+        sb.append(", manId=").append(manId);
+        sb.append(", manBuyerId=").append(manBuyerId);
         sb.append(", serialVersionUID=").append(serialVersionUID);
         sb.append("]");
         return sb.toString();
