@@ -10,5 +10,21 @@ import java.util.List;
 public class ProductWishlistWithCatVO {
     private String catName;
 
+    public String getCatName() {
+        return catName;
+    }
+
+    public void setCatName(String catName) {
+        this.catName = catName;
+    }
+
+    public List<ProductCatsVO> getProducts() {
+        return products;
+    }
+
+    public void setProducts(List<ProductCatsVO> products) {
+        this.products = products;
+    }
+
     private List<ProductCatsVO> products;
 }

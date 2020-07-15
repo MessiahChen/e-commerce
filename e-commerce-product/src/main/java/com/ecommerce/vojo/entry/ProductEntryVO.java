@@ -11,6 +11,7 @@ import java.util.Date;
 @Getter
 public class ProductEntryVO {
 
+
     @ApiModelProperty(value = "主键id")
     private Integer proId;
 
@@ -83,5 +84,16 @@ public class ProductEntryVO {
      */
     @ApiModelProperty(value = "库存数量")
     private String warNum;
+
+    @Override
+    public String toString() {
+        return "ProductEntryVO{" +
+                "proId=" + proId +
+                ", skuCd='" + skuCd + '\'' +
+                ", title='" + title + '\'' +
+                ", retailPrice='" + retailPrice + '\'' +
+                ", warNum='" + warNum + '\'' +
+                '}';
+    }
 }
 

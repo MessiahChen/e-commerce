@@ -20,6 +20,30 @@ public class ProductCategoryUpdateVO {
     @ApiModelProperty(value = "创建人id")
     private String userId;
 
+    public Integer getProId() {
+        return proId;
+    }
+
+    public void setProId(Integer proId) {
+        this.proId = proId;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public List<Integer> getCategory() {
+        return category;
+    }
+
+    public void setCategory(List<Integer> category) {
+        this.category = category;
+    }
+
     @ApiModelProperty(value = "分类ID")
     private List<Integer> category;
 }

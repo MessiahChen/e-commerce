@@ -17,6 +17,22 @@ public class ImageAddVO {
     @ApiModelProperty(value = "主键id")
     private Integer proId;
 
+    public Integer getProId() {
+        return proId;
+    }
+
+    public void setProId(Integer proId) {
+        this.proId = proId;
+    }
+
+    public List<MultipartFile> getImages() {
+        return images;
+    }
+
+    public void setImages(List<MultipartFile> images) {
+        this.images = images;
+    }
+
     @ApiModelProperty(value = "所有图片")
     private List<MultipartFile> images;
 
