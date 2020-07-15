@@ -1,9 +1,12 @@
 package com.ecommerce.service;
 
 import com.ecommerce.pojo.SysResource;
+import com.ecommerce.pojo.SysRole;
 import com.ecommerce.pojo.SysUser;
 import com.ecommerce.vojo.RegisterVO;
+import com.ecommerce.vojo.UpdatePasswordVO;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,53 +39,37 @@ public interface UserService {
      * 根据用户id获取用户
      */
     SysUser getItem(Long id);
-//
-//    /**
-//     * 根据用户名或昵称分页查询用户
-//     */
-//    List<UmsAdmin> list(String keyword, Integer pageSize, Integer pageNum);
-//
-//    /**
-//     * 修改指定用户信息
-//     */
-//    int update(Long id, UmsAdmin admin);
-//
-//    /**
-//     * 删除指定用户
-//     */
-//    int delete(Long id);
-//
-//    /**
-//     * 修改用户角色关系
-//     */
-//    @Transactional
-//    int updateRole(Long adminId, List<Long> roleIds);
-//
-//    /**
-//     * 获取用户对于角色
-//     */
-//    List<UmsRole> getRoleList(Long adminId);
 
     /**
-     * 获取指定用户的可访问资源
+     * 更新用户的身份
      */
-    List<SysResource> getResourceList(Long adminId);
-//
-//    /**
-//     * 修改用户的+-权限
-//     */
-//    @Transactional
-//    int updatePermission(Long adminId, List<Long> permissionIds);
-//
-//    /**
-//     * 获取用户所有权限（包括角色权限和+-权限）
-//     */
-//    List<UmsPermission> getPermissionList(Long adminId);
-//
-//    /**
-//     * 修改密码
-//     */
-//    int updatePassword(UpdateAdminPasswordParam updatePasswordParam);
+    public int updateRole(Long adminId, List<Long> roleIds);
+
+    /**
+     * 获取所有角色
+     */
+    List<SysRole> getRoleList();
+
+    /**
+     * 获取可访问资源列表
+     */
+    List<SysResource> getResourceList();
+
+    /**
+     * 修改用户权限
+     */
+    @Transactional
+    int updatePermission(Long adminId, List<Long> permissionIds);
+
+    /**
+     * 获取角色所有权限
+     */
+    List<Long> getPermissionList(Long roleId);
+
+    /**
+     * 修改密码
+     */
+    int updatePassword(UpdatePasswordVO updatePasswordVO);
 
     /**
      * 获取用户信息
