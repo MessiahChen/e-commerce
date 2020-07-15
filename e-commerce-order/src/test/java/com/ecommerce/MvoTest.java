@@ -7,6 +7,7 @@ import com.ecommerce.service.OrderService;
 import com.ecommerce.vo.IntegerVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import com.ecommerce.vo.ShippingVO;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,7 +61,7 @@ public class MvoTest {
             shippingVO.setSaoId(i);
             trackNo += i;
             shippingVO.setTrackNo(trackNo);
-            orderService.updateOrder(shippingVO);
+            Assert.assertEquals(true,orderService.updateOrder(shippingVO));
         }
     }
 
@@ -69,7 +70,7 @@ public class MvoTest {
         for(int i = 100; i < 103; i++){
             IntegerVO integerVO = new IntegerVO();
             integerVO.setI(i);
-            orderService.cancelOrder(integerVO);
+            Assert.assertEquals(true,orderService.cancelOrder(integerVO));
         }
     }
 }

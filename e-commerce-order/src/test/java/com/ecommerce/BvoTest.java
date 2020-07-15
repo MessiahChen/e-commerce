@@ -4,6 +4,7 @@ import com.ecommerce.pojo.ProProduct;
 import com.ecommerce.pojo.SalSalesOrderLineItem;
 import com.ecommerce.service.BvoOrderService;
 import com.ecommerce.vo.SaoSalesOrderVO;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,5 +65,12 @@ public class BvoTest {
         for(String string : states){
             System.out.println(bvoOrderService.getFeeByProvinceCode(string));
         }
+    }
+
+    @Test
+    public void testUpdateOrderBySaoId(){
+        int[] saoIds = {100,101,102,103,104,105,106};
+        int result = bvoOrderService.updateOrderBySaoId(saoIds);
+        Assert.assertEquals(7,result);
     }
 }
