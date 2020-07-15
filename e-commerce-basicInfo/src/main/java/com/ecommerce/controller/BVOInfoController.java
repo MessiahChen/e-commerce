@@ -50,7 +50,7 @@ public class BVOInfoController extends BaseController {
     }
 
     @ApiOperation("更新BVO信息")
-    @PutMapping("/updateBVOInfo")
+    @PatchMapping("/updateBVOInfo")
     public CommonResult updateBVOInfo(@Validated({UpdateGroup.class}) @RequestBody BVOInfoUpdateVO bvoInfoUpdateVO,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {

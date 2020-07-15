@@ -43,4 +43,12 @@ public class CompanyEntryVO {
      */
     @ApiModelProperty(value = "证书地址")
     private String gmcReportUrl;
+
+    /**
+     * 品牌商公司介绍
+     *
+     * @mbg.generated
+     */
+    @ApiModelProperty(value = "品牌商公司介绍")
+    private String description;
 }

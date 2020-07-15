@@ -7,5 +7,4 @@ import lombok.Setter;
 @Setter
 public class GetCompanyVO {
     private Integer manId;
-    private Integer pageNum;
 }

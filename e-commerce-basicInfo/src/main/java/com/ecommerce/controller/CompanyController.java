@@ -50,7 +50,7 @@ public class CompanyController extends BaseController {
     }
 
     @ApiOperation("更新公司信息")
-    @PutMapping("/updateMan")
+    @PatchMapping("/updateMan")
     public CommonResult updateCompany(@Validated({UpdateGroup.class}) @RequestBody CompanyInfoUpdateVO companyInfoUpdateVO,
                                       BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
