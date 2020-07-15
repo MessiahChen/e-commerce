@@ -64,7 +64,7 @@ public class MvoTest {
             shippingVO.setSaoId(i);
             trackNo += i;
             shippingVO.setTrackNo(trackNo);
-            orderService.updateOrder(shippingVO);
+            Assert.assertEquals(true,orderService.updateOrder(shippingVO));
         }
     }
 
@@ -73,7 +73,7 @@ public class MvoTest {
         for(int i = 100; i < 103; i++){
             IntegerVO integerVO = new IntegerVO();
             integerVO.setI(i);
-            orderService.cancelOrder(integerVO);
+            Assert.assertEquals(true,orderService.cancelOrder(integerVO));
         }
     }
 }
