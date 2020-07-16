@@ -1,12 +1,15 @@
 package com.ecommerce.service;
 
+import com.ecommerce.common.base.CommonPage;
+import com.ecommerce.pojo.SysMenu;
 import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysRole;
 import com.ecommerce.pojo.SysUser;
+import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.RegisterVO;
+import com.ecommerce.vojo.SearchUserVO;
 import com.ecommerce.vojo.UpdatePasswordVO;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -36,6 +39,16 @@ public interface UserService {
     String refreshToken(String oldToken);
 
     /**
+     * 获取所有用户
+     */
+    CommonPage<SysUser> getAllUser(PageVO pageVO);
+
+    /**
+     * 模糊匹配用户
+     */
+    CommonPage<SysUser> searchUser(SearchUserVO searchUserVO);
+
+    /**
      * 根据用户id获取用户
      */
     SysUser getItem(Long id);
@@ -51,20 +64,34 @@ public interface UserService {
     List<SysRole> getRoleList();
 
     /**
-     * 获取可访问资源列表
+     * 获取可访问接口资源列表
      */
     List<SysResource> getResourceList();
 
     /**
-     * 修改用户权限
+     * 获取可访问菜单资源列表
      */
-    @Transactional
-    int updatePermission(Long adminId, List<Long> permissionIds);
+    List<SysMenu> getMenuList();
 
     /**
-     * 获取角色所有权限
+     * 修改用户接口权限
      */
-    List<Long> getPermissionList(Long roleId);
+    int updateResource(Long adminId, List<Long> permissionIds);
+
+    /**
+     * 修改用户菜单权限
+     */
+    int updateMenu(Long roleId, List<Long> menuIds);
+
+    /**
+     * 获取角色所有接口权限
+     */
+    List<Long> getPermissionResourceList(Long roleId);
+
+    /**
+     * 获取角色所有菜单权限
+     */
+    List<Long> getPermissionMenuList(Long roleId);
 
     /**
      * 修改密码

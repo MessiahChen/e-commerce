@@ -27,110 +27,6 @@ public class ProductAddVO {
     @ApiModelProperty(value = "标题")
     private String title;
 
-    public String getUserId() {
-        return userId;
-    }
-
-    public void setUserId(String userId) {
-        this.userId = userId;
-    }
-
-    public Integer getManId() {
-        return manId;
-    }
-
-    public void setManId(Integer manId) {
-        this.manId = manId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
-    }
-
-    public String getHeight() {
-        return height;
-    }
-
-    public void setHeight(String height) {
-        this.height = height;
-    }
-
-    public String getLength() {
-        return length;
-    }
-
-    public void setLength(String length) {
-        this.length = length;
-    }
-
-    public String getWeight() {
-        return weight;
-    }
-
-    public void setWeight(String weight) {
-        this.weight = weight;
-    }
-
-    public String getSkuCd() {
-        return skuCd;
-    }
-
-    public void setSkuCd(String skuCd) {
-        this.skuCd = skuCd;
-    }
-
-    public String getUpc() {
-        return upc;
-    }
-
-    public void setUpc(String upc) {
-        this.upc = upc;
-    }
-
-    public String getEan() {
-        return ean;
-    }
-
-    public void setEan(String ean) {
-        this.ean = ean;
-    }
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getRetailPrice() {
-        return retailPrice;
-    }
-
-    public void setRetailPrice(String retailPrice) {
-        this.retailPrice = retailPrice;
-    }
-
-    public String getWarrantyDay() {
-        return warrantyDay;
-    }
-
-    public void setWarrantyDay(String warrantyDay) {
-        this.warrantyDay = warrantyDay;
-    }
-
     /**
      * 宽 - cm
      *
@@ -218,7 +114,7 @@ public class ProductAddVO {
      * @mbg.generated
      */
     @ApiModelProperty(value = "eBay描述")
-    private String eBayDescription;
+    private String ebayDescription;
 
     /**
      * 保修期（单位有年、月、日）

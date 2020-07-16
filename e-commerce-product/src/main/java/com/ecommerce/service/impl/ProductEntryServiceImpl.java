@@ -88,6 +88,7 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         proProduct.setWarrantyDay(vo.getWarrantyDay());
         proProduct.setCreatedBy(vo.getUserId());
         proProduct.setCreationDate(new Date());
+        proProduct.setStsCd("a");
         proProductMapper.insertSelective(proProduct);
 
         // 更新重量等信息
@@ -118,7 +119,7 @@ public class ProductEntryServiceImpl implements ProductEntryService {
         ebayDes.setCreationDate(new Date());
         ebayDes.setStsCd("1");
         ebayDes.setPlatformType("2");
-        ebayDes.setDescrition(vo.getEBayDescription());
+        ebayDes.setDescrition(vo.getEbayDescription());
         pdnProductDescriptionMapper.insertSelective(ebayDes);
 
 
@@ -158,7 +159,7 @@ public class ProductEntryServiceImpl implements ProductEntryService {
             if (pdn.getPlatformType().equals("1")) {
                 productAddVO.setAmazonDescription(pdn.getDescrition());
             } else {
-                productAddVO.setEBayDescription(pdn.getDescrition());
+                productAddVO.setEbayDescription(pdn.getDescrition());
             }
         }
 

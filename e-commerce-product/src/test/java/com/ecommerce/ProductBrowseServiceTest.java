@@ -63,6 +63,7 @@ public class ProductBrowseServiceTest {
 ////        catName='化妆品', products=[ProductBrowseDTO(proId=13, image=https://e-commerce-oss.oss-cn-beijing.aliyuncs.com/images/1593771713868.png, title=马洪升专用测试用例化妆品, minRetailPrice=null, retailPrice=123.00)]
 //    }
 
+<<<<<<< HEAD
 //    @Test
 //    public void testGetProductInfoDetailById(){
 //        int proId = 13;
@@ -79,4 +80,23 @@ public class ProductBrowseServiceTest {
 //        productDetailVOTest.setViceCatName("粉底");
 //        Assert.assertEquals(productDetailVOTest,productDetailVO);
 //    }
+=======
+    @Test
+    public void testGetProductInfoDetailById() {
+        int dsrId = 1;
+        int proId = 13;
+        ProductDetailVO productDetailVO = productBrowseService.getProductInfoDetailById(dsrId, proId);
+        ProductDetailVO productDetailVOTest = new ProductDetailVO();
+        List<String> images = new ArrayList<>();
+        images.add("https://e-commerce-oss.oss-cn-beijing.aliyuncs.com/images/1593771713868.png");
+        productDetailVOTest.setImages(images);
+        productDetailVOTest.setMainCatName("化妆品");
+        productDetailVOTest.setMinRetailPrice(null);
+        productDetailVOTest.setProId(13);
+        productDetailVOTest.setRetailPrice("123.00");
+        productDetailVOTest.setTitle("马洪升专用测试用例化妆品");
+        productDetailVOTest.setViceCatName("粉底");
+        Assert.assertEquals(productDetailVOTest, productDetailVO);
+    }
+>>>>>>> 4cc6bb9ce2d4dc566ae61d459f3958fe6f7f34d0
 }

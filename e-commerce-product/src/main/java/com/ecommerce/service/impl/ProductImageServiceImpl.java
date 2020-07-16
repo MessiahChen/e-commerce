@@ -5,6 +5,7 @@ import com.ecommerce.dao.CatCategoryMapper;
 import com.ecommerce.dao.ImgImageMapper;
 import com.ecommerce.dao.PrcProductCategoryMapper;
 import com.ecommerce.dao.ProProductMapper;
+import com.ecommerce.dto.product.OssCallbackResult;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.ProductImageService;
 import com.ecommerce.vojo.image.*;
@@ -66,6 +67,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             ImgImageExample imgImageExample = new ImgImageExample();
             ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
             criteria_img.andEntityIdEqualTo(String.valueOf(product.getProId()));
+            criteria_img.andSeqNoEqualTo(1);
             List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
             if (!imgImages.isEmpty())
                 productImageVO.setImageUri(imgImages.get(0).getUri());
@@ -122,7 +124,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     public boolean addProductCategory(ProductCategoryAddVO vo) {
         int mainCatId = vo.getCategory().get(0);
         int viceCatId = vo.getCategory().get(1);
-
+        // 首先插入分类
         CatCategory mainCatCategory = catCategoryMapper.selectByPrimaryKey(mainCatId);
         CatCategory viceCatCategory = catCategoryMapper.selectByPrimaryKey(viceCatId);
 
@@ -146,7 +148,29 @@ public class ProductImageServiceImpl implements ProductImageService {
         prcProductCategory.setCategoryName(viceCatCategory.getCatName());
         prcProductCategoryMapper.insertSelective(prcProductCategory);
 
+        // 之后更新商品表
         proProductMapper.updateByPrimaryKeySelective(proProduct);
+
+        // 最后插入图片
+        int seqNo = 1;
+        for (OssCallbackResult image : vo.getImages()) {
+            ImgImage imgImage = new ImgImage();
+            String[] imageName = image.getFilename().split("/");
+            String name = imageName[imageName.length - 1];
+            imgImage.setName(name);
+            imgImage.setWidth(Integer.parseInt(image.getWidth()));
+            imgImage.setHeight(Integer.parseInt(image.getHeight()));
+            imgImage.setUri(image.getFilename());
+//            imgImage.setTypeCd();
+            imgImage.setEntityId(String.valueOf(vo.getProId()));
+            imgImage.setEntityCd("PM");
+            imgImage.setSeqNo(seqNo);
+            imgImage.setCreatedBy(vo.getUserId());
+            imgImage.setCreationDate(new Date());
+            imgImage.setStsCd("1");
+            imgImageMapper.insertSelective(imgImage);
+            seqNo++;
+        }
         return true;
     }
 

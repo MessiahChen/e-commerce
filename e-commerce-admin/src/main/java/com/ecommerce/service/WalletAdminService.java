@@ -1,9 +1,9 @@
 package com.ecommerce.service;
 
 import com.ecommerce.common.base.CommonPage;
+import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.WalletAdminVO;
 import com.ecommerce.vojo.WalletAuditVO;
-import com.ecommerce.vojo.WalletPageVO;
 
 /**
  * 管理员-钱包流水服务接口
@@ -14,7 +14,7 @@ public interface WalletAdminService {
     /**
      * 获取所有待审核账单
      */
-    CommonPage<WalletAdminVO> getAllFlow(WalletPageVO walletPageVO);
+    CommonPage<WalletAdminVO> getAllFlow(PageVO walletPageVO);
 
     /**
      * 审核

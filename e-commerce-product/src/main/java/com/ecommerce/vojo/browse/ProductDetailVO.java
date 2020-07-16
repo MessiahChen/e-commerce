@@ -12,6 +12,7 @@ public class ProductDetailVO {
     private String viceCatName;
     private String minRetailPrice;
     private String retailPrice;
+<<<<<<< HEAD
 
 
     public Integer getProId() {
@@ -85,5 +86,11 @@ public class ProductDetailVO {
 
     private Boolean ifInWishlist;
 
+=======
+    private Boolean ifInWishlist;
+>>>>>>> 4cc6bb9ce2d4dc566ae61d459f3958fe6f7f34d0
     private List<String> images;
+
+    private String ebayDescription;
+    private String amazonDescription;
 }

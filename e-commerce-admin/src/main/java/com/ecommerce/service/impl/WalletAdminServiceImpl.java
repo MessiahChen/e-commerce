@@ -7,9 +7,9 @@ import com.ecommerce.pojo.WaaWalletAccount;
 import com.ecommerce.pojo.WtrWalletTransactionRecord;
 import com.ecommerce.pojo.WtrWalletTransactionRecordExample;
 import com.ecommerce.service.WalletAdminService;
+import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.WalletAdminVO;
 import com.ecommerce.vojo.WalletAuditVO;
-import com.ecommerce.vojo.WalletPageVO;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.springframework.stereotype.Service;
@@ -33,7 +33,7 @@ public class WalletAdminServiceImpl implements WalletAdminService {
     WtrWalletTransactionRecordMapper wtrWalletTransactionRecordMapper;
 
     @Override
-    public CommonPage<WalletAdminVO> getAllFlow(WalletPageVO vo) {
+    public CommonPage<WalletAdminVO> getAllFlow(PageVO vo) {
         Page<WtrWalletTransactionRecord> flowPage = PageHelper.startPage(vo.getPageNum(), vo.getPageSize()).doSelectPage(() -> {
             WtrWalletTransactionRecordExample example = new WtrWalletTransactionRecordExample();
             example.createCriteria().andStatusEqualTo((byte) 2);
@@ -60,7 +60,9 @@ public class WalletAdminServiceImpl implements WalletAdminService {
         example.createCriteria().andTransactionNumberEqualTo(walletAuditVO.getTransactionNumber());
         List<WtrWalletTransactionRecord> records = wtrWalletTransactionRecordMapper.selectByExample(example);
         WtrWalletTransactionRecord record = records.get(0);
-        if (record == null) return false;
+        if (record == null) {
+            return false;
+        }
 
         WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(record.getBuyerId());
 
@@ -72,17 +74,20 @@ public class WalletAdminServiceImpl implements WalletAdminService {
                     account.setDepositingMoney(account.getDepositingMoney().subtract(record.getTransactionMoney()));
                     account.setAvailableMoney(account.getAvailableMoney().add(record.getTransactionMoney()));
                     account.setLastUpdateTime(new Date());
+                    break;
                 }
                 //提现
                 case (byte) 2:{
                     account.setWithdrawingMoney(account.getWithdrawingMoney().subtract(record.getTransactionMoney()));
                     account.setAvailableMoney(account.getAvailableMoney().subtract(record.getTransactionMoney()));
                     account.setLastUpdateTime(new Date());
+                    break;
                 }
                 //退款
                 case (byte) 4:{
                     account.setAvailableMoney(account.getAvailableMoney().add(record.getTransactionMoney()));
                     account.setLastUpdateTime(new Date());
+                    break;
                 }
                 default:{}
             }

@@ -39,7 +39,7 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
 
     private List<CdmInfoVO> convert(Page<CdmCodeMaster> flowPage){
         List<CdmInfoVO> infos = new ArrayList<>();
-        for (CdmCodeMaster cdmCodeMaster:flowPage.getResult()) {
+        flowPage.getResult().forEach(cdmCodeMaster -> {
             CdmInfoVO cdmInfoVO = new CdmInfoVO();
             cdmInfoVO.setCdmId(cdmCodeMaster.getCdmId());
             cdmInfoVO.setCdmCd(cdmCodeMaster.getCodeType());
@@ -47,7 +47,7 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
             cdmInfoVO.setCdmType(cdmCodeMaster.getCodeType());
             cdmInfoVO.setDescription(cdmCodeMaster.getDescription());
             infos.add(cdmInfoVO);
-        }
+        });
         return infos;
     }
 
