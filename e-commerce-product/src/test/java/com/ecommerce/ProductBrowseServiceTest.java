@@ -64,9 +64,10 @@ public class ProductBrowseServiceTest {
 //    }
 
     @Test
-    public void testGetProductInfoDetailById(){
+    public void testGetProductInfoDetailById() {
+        int dsrId = 1;
         int proId = 13;
-        ProductDetailVO productDetailVO = productBrowseService.getProductInfoDetailById(proId);
+        ProductDetailVO productDetailVO = productBrowseService.getProductInfoDetailById(dsrId, proId);
         ProductDetailVO productDetailVOTest = new ProductDetailVO();
         List<String> images = new ArrayList<>();
         images.add("https://e-commerce-oss.oss-cn-beijing.aliyuncs.com/images/1593771713868.png");
@@ -77,6 +78,6 @@ public class ProductBrowseServiceTest {
         productDetailVOTest.setRetailPrice("123.00");
         productDetailVOTest.setTitle("马洪升专用测试用例化妆品");
         productDetailVOTest.setViceCatName("粉底");
-        Assert.assertEquals(productDetailVOTest,productDetailVO);
+        Assert.assertEquals(productDetailVOTest, productDetailVO);
     }
 }

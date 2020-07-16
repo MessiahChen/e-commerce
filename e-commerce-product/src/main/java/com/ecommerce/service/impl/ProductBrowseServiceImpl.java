@@ -34,6 +34,9 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
     @Autowired
     private WitWishlistMapper witWishlistMapper;
 
+    @Autowired
+    private PdnProductDescriptionMapper pdnProductDescriptionMapper;
+
     @Override
     public List<ProductBrowseWithCatVO> getAllProductWithStatD() {
         List<ProductBrowseWithCatVO> result = new ArrayList<>();
@@ -79,7 +82,9 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
         imgImages.forEach(imgImage -> {
             images.add(imgImage.getUri());
         });
+        result.setImages(images);
 
+        // 愿望清单状态
         WitWishlistExample example = new WitWishlistExample();
         WitWishlistExample.Criteria criteria_wit = example.createCriteria();
         criteria_wit.andDsrIdEqualTo(dsrId);
@@ -92,7 +97,21 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
             result.setIfInWishlist(true);
         }
 
-        result.setImages(images);
+        // ebay与amazon描述
+        PdnProductDescriptionExample pdnProductDescriptionExample = new PdnProductDescriptionExample();
+        PdnProductDescriptionExample.Criteria criteria_pdn = pdnProductDescriptionExample.createCriteria();
+        criteria_pdn.andProIdEqualTo(proId);
+
+        List<PdnProductDescription> pdnProductDescriptions = pdnProductDescriptionMapper.selectByExampleWithBLOBs(pdnProductDescriptionExample);
+        if (!pdnProductDescriptions.isEmpty()) {
+            for (PdnProductDescription pdn : pdnProductDescriptions) {
+                if (pdn.getPlatformType().equals("1")) {
+                    result.setAmazonDescription(pdn.getDescrition());
+                } else {
+                    result.setEbayDescription(pdn.getDescrition());
+                }
+            }
+        }
         return result;
     }
 
