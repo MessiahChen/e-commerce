@@ -33,8 +33,8 @@ public class CompanyServiceImpl implements CompanyService {
         companyEntryVO.setNameEn(manManufacturer.getNameEn());
         companyEntryVO.setDescription(manManufacturer.getDescription());
 
-        System.out.println(manManufacturer.getNameCn());
-        System.out.println(manManufacturer.getDescription());
+//        System.out.println(manManufacturer.getNameCn());
+//        System.out.println(manManufacturer.getDescription());
 
         return companyEntryVO;
     }

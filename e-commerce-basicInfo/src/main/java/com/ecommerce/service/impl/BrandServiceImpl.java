@@ -27,13 +27,15 @@ public class BrandServiceImpl implements BrandService {
                 getAllBrandVO.getPageSize()).doSelectPage(() -> {
             BrdBrandExample brdBrandExample = new BrdBrandExample();
             BrdBrandExample.Criteria criteria = brdBrandExample.createCriteria();
-            criteria.andBrdIdEqualTo(getAllBrandVO.getBrdId());
+            criteria.andManIdEqualTo(getAllBrandVO.getManId());
             brdBrandMapper.selectByExample(brdBrandExample);
         });
 
         List<BrandEntryVO> result = new ArrayList<>();
         for (BrdBrand brand : brandPage.getResult()) {
             BrandEntryVO brandEntryVO = new BrandEntryVO();
+            brandEntryVO.setBrdId(brand.getBrdId());
+            brandEntryVO.setManId(brand.getManId());
             brandEntryVO.setNameEn(brand.getNameEn());
             brandEntryVO.setRemark(brand.getRemark());
             result.add(brandEntryVO);

@@ -8,10 +8,13 @@ import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.BrandService;
+import com.ecommerce.service.CompanyService;
 import com.ecommerce.vojo.brand.BrandAddVO;
 import com.ecommerce.vojo.brand.BrandEntryVO;
 import com.ecommerce.vojo.brand.BrandUpdateVO;
 import com.ecommerce.vojo.brand.GetAllBrandVO;
+import com.ecommerce.vojo.company.CompanyEntryVO;
+import com.ecommerce.vojo.company.GetCompanyVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +30,15 @@ public class BrandController extends BaseController {
 
     @Autowired
     private BrandService brandService;
+    @Autowired
+    CompanyService companyService;
 
+    @ApiOperation("找到公司信息")
+    @PostMapping("/getCompany")
+    public CommonResult<CompanyEntryVO> getCompany(@RequestBody GetCompanyVO getCompanyVO) {
+        CompanyEntryVO result = companyService.getCompany(getCompanyVO);
+        return CommonResult.success(result, "Match Successfully");
+    }
 
     @ApiOperation("找到此公司所有品牌")
     @PostMapping("/getBrands")

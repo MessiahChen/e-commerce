@@ -1,12 +1,21 @@
 package com.ecommerce.vojo.brand;
 
+import com.ecommerce.common.validationGroup.InsertGroup;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
+
 @Setter
 @Getter
 public class BrandEntryVO {
+
+    @ApiModelProperty(value = " 主键")
+    private Integer brdId;
+
+    @ApiModelProperty(value = "公司信息，外键关联man表主键")
+    private Integer manId;
 
     /**
      * 公司英文名
