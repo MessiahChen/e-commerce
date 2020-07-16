@@ -100,6 +100,8 @@ public class WalletFlowController extends BaseController {
         }
     }
 
+    //TODO 两个接口调用同一个方法 需要订单模块接受参数
+
     @ApiOperation("申请退款")
     @PatchMapping("/refund")
     public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {

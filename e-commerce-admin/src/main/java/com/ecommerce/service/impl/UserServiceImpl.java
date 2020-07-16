@@ -2,13 +2,15 @@ package com.ecommerce.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
+import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.security.util.JwtTokenUtil;
 import com.ecommerce.service.UserService;
 import com.ecommerce.utils.AdminUserDetails;
-import com.ecommerce.vojo.RegisterVO;
-import com.ecommerce.vojo.UpdatePasswordVO;
+import com.ecommerce.vojo.*;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -28,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -48,6 +51,14 @@ public class UserServiceImpl implements UserService {
     private SysRoleMapper sysRoleMapper;
     @Resource
     private SysRoleResourceRelationMapper sysRoleResourceRelationMapper;
+    @Resource
+    private SysMenuMapper sysMenuMapper;
+    @Resource
+    private SysRoleMenuRelationMapper sysRoleMenuRelationMapper;
+    @Resource
+    private DsrDropshipperMapper dsrDropshipperMapper;
+    @Resource
+    private ManManufacturerMapper manManufacturerMapper;
 
     @Override
     public SysUser getUserByName(String username) {
@@ -76,13 +87,26 @@ public class UserServiceImpl implements UserService {
         //将密码进行加密操作
         String encodePassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodePassword);
+
+        if (registerVO.getRoleId() == 2) {
+            ManManufacturer manManufacturer = new ManManufacturer();
+            manManufacturer.setCreationDate(new Date());
+            manManufacturer.setNameCn(registerVO.getNickName());
+            manManufacturer.setDescription(registerVO.getNote());
+            user.setManId(manManufacturerMapper.insertSelective(manManufacturer));
+        } else if (registerVO.getRoleId() == 1) {
+            DsrDropshipper dsrDropshipper = new DsrDropshipper();
+            dsrDropshipper.setRegisterDate(new Date());
+            dsrDropshipper.setName(registerVO.getNickName());
+            dsrDropshipper.setEmail(registerVO.getEmail());
+            user.setManBuyerId(dsrDropshipperMapper.insertSelective(dsrDropshipper));
+        }
         int userId = sysUserMapper.insertSelective(user);
         //插入角色权限
         SysUserRoleRelation sysUserRoleRelation = new SysUserRoleRelation();
         sysUserRoleRelation.setAdminId((long) userId);
         sysUserRoleRelation.setRoleId((long) registerVO.getRoleId());
         sysUserRoleRelationMapper.insertSelective(sysUserRoleRelation);
-        //TODO 插入对应角色表 并返回给user表其ID
         return user;
     }
 
@@ -93,13 +117,13 @@ public class UserServiceImpl implements UserService {
         try {
             //通过自定义方法装载UserDetails类
             UserDetails userDetails = loadUserByUsername(username);
-            if(!passwordEncoder.matches(password,userDetails.getPassword())){
+            if (!passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("密码不正确");
             }
             UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
-//            updateLoginTimeByUsername(username);
+            updateLoginTimeByUsername(username);
             insertLoginLog(username);
         } catch (AuthenticationException e) {
             log.warn("登录异常:{}", e.getMessage());
@@ -108,7 +132,19 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * 更新登录时间
+     *
+     * @param username 用户名
+     */
+    private void updateLoginTimeByUsername(String username){
+        SysUser user = getUserByName(username);
+        user.setLoginTime(new Date());
+        sysUserMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
      * 添加登录记录
+     *
      * @param username 用户名
      */
     private void insertLoginLog(String username) {
@@ -125,6 +161,25 @@ public class UserServiceImpl implements UserService {
     @Override
     public String refreshToken(String oldToken) {
         return jwtTokenUtil.refreshHeadToken(oldToken);
+    }
+
+    @Override
+    public CommonPage<SysUser> getAllUser(PageVO pageVO) {
+        Page<SysUser> flowPage = PageHelper.startPage(pageVO.getPageNum(), pageVO.getPageSize()).doSelectPage(() -> {
+            SysUserExample example = new SysUserExample();
+            sysUserMapper.selectByExample(example);
+        });
+        return CommonPage.restPage(new ArrayList<>(flowPage.getResult()),flowPage);
+    }
+
+    @Override
+    public CommonPage<SysUser> searchUser(SearchUserVO searchUserVO) {
+        Page<SysUser> flowPage = PageHelper.startPage(searchUserVO.getPageNum(), searchUserVO.getPageSize()).doSelectPage(() -> {
+            SysUserExample example = new SysUserExample();
+            example.createCriteria().andUsernameLike("%" + searchUserVO.getUsername() + "%");
+            sysUserMapper.selectByExample(example);
+        });
+        return CommonPage.restPage(new ArrayList<>(flowPage.getResult()),flowPage);
     }
 
     @Override
@@ -147,7 +202,6 @@ public class UserServiceImpl implements UserService {
                 roleRelation.setRoleId(roleId);
                 sysUserRoleRelationMapper.insertSelective(roleRelation);
             });
-
         }
         return count;
     }
@@ -165,49 +219,79 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int updatePermission(Long roleId, List<Long> resourceIds) {
-        //删除原所有权限关系
+    public List<SysMenu> getMenuList() {
+        SysMenuExample example = new SysMenuExample();
+        return sysMenuMapper.selectByExample(example);
+    }
+
+    @Override
+    public int updateResource(Long roleId, List<Long> resourceIds) {
+        int count = resourceIds == null ? 0 : resourceIds.size();
+        //删除原所有接口权限关系
         SysRoleResourceRelationExample example = new SysRoleResourceRelationExample();
         example.createCriteria().andRoleIdEqualTo(roleId);
         sysRoleResourceRelationMapper.deleteByExample(example);
 
-        int count = 0;
-        for (Long resourceId:resourceIds) {
-            SysRoleResourceRelation sysRoleResourceRelation = new SysRoleResourceRelation();
-            sysRoleResourceRelation.setRoleId(roleId);
-            sysRoleResourceRelation.setResourceId(resourceId);
-            count += sysRoleResourceRelationMapper.insertSelective(sysRoleResourceRelation);
+        if (!CollectionUtils.isEmpty(resourceIds)){
+            resourceIds.forEach(resourceId -> {
+                SysRoleResourceRelation sysRoleResourceRelation = new SysRoleResourceRelation();
+                sysRoleResourceRelation.setRoleId(roleId);
+                sysRoleResourceRelation.setResourceId(resourceId);
+                sysRoleResourceRelationMapper.insertSelective(sysRoleResourceRelation);
+            });
         }
         return count;
     }
 
     @Override
-    public List<Long> getPermissionList(Long roleId) {
+    public int updateMenu(Long roleId, List<Long> menuIds) {
+        int count = menuIds == null ? 0 : menuIds.size();
+        //删除原所有菜单权限关系
+        SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        sysRoleMenuRelationMapper.deleteByExample(example);
+        if (!CollectionUtils.isEmpty(menuIds)){
+            menuIds.forEach(menuId -> {
+                SysRoleMenuRelation sysRoleMenuRelation = new SysRoleMenuRelation();
+                sysRoleMenuRelation.setMenuId(menuId);
+                sysRoleMenuRelation.setRoleId(roleId);
+                sysRoleMenuRelationMapper.insertSelective(sysRoleMenuRelation);
+            });
+        }
+        return count;
+    }
+
+    @Override
+    public List<Long> getPermissionResourceList(Long roleId) {
         SysRoleResourceRelationExample example = new SysRoleResourceRelationExample();
         example.createCriteria().andRoleIdEqualTo(roleId);
-        List<SysRoleResourceRelation> relations =  sysRoleResourceRelationMapper.selectByExample(example);
-        List<Long> resources = new ArrayList<>();
-        for (SysRoleResourceRelation relation:relations) {
-            resources.add(relation.getResourceId());
-        }
-        return resources;
+        List<SysRoleResourceRelation> relations = sysRoleResourceRelationMapper.selectByExample(example);
+        return relations.stream().map(SysRoleResourceRelation::getResourceId).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<Long> getPermissionMenuList(Long roleId) {
+        SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        List<SysRoleMenuRelation> relations = sysRoleMenuRelationMapper.selectByExample(example);
+        return relations.stream().map(SysRoleMenuRelation::getMenuId).collect(Collectors.toList());
     }
 
     @Override
     public int updatePassword(UpdatePasswordVO updatePasswordVO) {
-        if(StrUtil.isEmpty(updatePasswordVO.getUsername())
-                ||StrUtil.isEmpty(updatePasswordVO.getOldPassword())
-                ||StrUtil.isEmpty(updatePasswordVO.getNewPassword())){
+        if (StrUtil.isEmpty(updatePasswordVO.getUsername())
+                || StrUtil.isEmpty(updatePasswordVO.getOldPassword())
+                || StrUtil.isEmpty(updatePasswordVO.getNewPassword())) {
             return -1;
         }
         SysUserExample example = new SysUserExample();
         example.createCriteria().andUsernameEqualTo(updatePasswordVO.getUsername());
         List<SysUser> sysUsers = sysUserMapper.selectByExample(example);
-        if(CollUtil.isEmpty(sysUsers)){
+        if (CollUtil.isEmpty(sysUsers)) {
             return -2;
         }
         SysUser sysUser = sysUsers.get(0);
-        if(!passwordEncoder.matches(updatePasswordVO.getOldPassword(),sysUser.getPassword())){
+        if (!passwordEncoder.matches(updatePasswordVO.getOldPassword(), sysUser.getPassword())) {
             return -3;
         }
         sysUser.setPassword(passwordEncoder.encode(updatePasswordVO.getNewPassword()));
@@ -216,14 +300,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username){
+    public UserDetails loadUserByUsername(String username) {
         //获取用户信息
         SysUser sysUser = getUserByName(username);
         if (sysUser != null) {
             SysResourceExample example = new SysResourceExample();
-            example.createCriteria().andIdIn(getPermissionList(sysUser.getId()));
+            example.createCriteria().andIdIn(getPermissionResourceList(sysUser.getId()));
             List<SysResource> resourceList = sysResourceMapper.selectByExample(example);
-            return new AdminUserDetails(sysUser,resourceList);
+            return new AdminUserDetails(sysUser, resourceList);
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }

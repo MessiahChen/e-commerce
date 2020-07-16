@@ -5,12 +5,11 @@ import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
-import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
 import com.ecommerce.service.WalletAdminService;
+import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.WalletAdminVO;
 import com.ecommerce.vojo.WalletAuditVO;
-import com.ecommerce.vojo.WalletPageVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.validation.BindingResult;
@@ -35,8 +34,8 @@ public class WalletAdminController extends BaseController {
 
     @ApiOperation("管理员获取所有待审核wallet流水")
     @PostMapping("/getAllFlow")
-    public CommonResult<CommonPage<WalletAdminVO>> getAllFlow(@Validated({SelectGroup.class}) @RequestBody WalletPageVO walletPageVO, BindingResult bindingResult) throws BusinessException {
-        CommonPage<WalletAdminVO> commonPage = walletAdminService.getAllFlow(walletPageVO);
+    public CommonResult<CommonPage<WalletAdminVO>> getAllFlow(@RequestBody PageVO pageVO){
+        CommonPage<WalletAdminVO> commonPage = walletAdminService.getAllFlow(pageVO);
         if (!commonPage.getList().isEmpty()) {
             return CommonResult.success(commonPage, "get all flows successful");
         } else {
