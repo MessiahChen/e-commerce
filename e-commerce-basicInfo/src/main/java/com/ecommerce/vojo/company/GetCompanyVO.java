@@ -7,4 +7,12 @@ import lombok.Setter;
 @Setter
 public class GetCompanyVO {
     private Integer manId;
+
+    public Integer getManId() {
+        return manId;
+    }
+
+    public void setManId(Integer manId) {
+        this.manId = manId;
+    }
 }

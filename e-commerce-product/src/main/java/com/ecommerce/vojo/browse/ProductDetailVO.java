@@ -12,7 +12,7 @@ public class ProductDetailVO {
     private String viceCatName;
     private String minRetailPrice;
     private String retailPrice;
-<<<<<<< HEAD
+
 
     public Integer getProId() {
         return proId;
@@ -83,8 +83,7 @@ public class ProductDetailVO {
         this.images = images;
     }
 
-=======
     private Boolean ifInWishlist;
->>>>>>> 2dd896ee47eea9d2af9e4aa71ca2b2cdbb1e57e1
+
     private List<String> images;
 }

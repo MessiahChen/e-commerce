@@ -7,6 +7,16 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ProductImageVO {
+    @Override
+    public String toString() {
+        return "ProductImageVO{" +
+                "proId=" + proId +
+                ", title='" + title + '\'' +
+                ", categoryName='" + categoryName + '\'' +
+                ", imageUri='" + imageUri + '\'' +
+                ", status='" + status + '\'' +
+                '}';
+    }
 
     public Integer getProId() {
         return proId;

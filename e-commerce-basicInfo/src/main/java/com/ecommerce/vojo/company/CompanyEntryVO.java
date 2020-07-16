@@ -9,6 +9,66 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Getter
 public class CompanyEntryVO {
+    @Override
+    public String toString() {
+        return "CompanyEntryVO{" +
+                "manId=" + manId +
+                ", nameEn='" + nameEn + '\'' +
+                ", nameCn='" + nameCn + '\'' +
+                ", gmcReportType='" + gmcReportType + '\'' +
+                ", gmcReportUrl='" + gmcReportUrl + '\'' +
+                ", description='" + description + '\'' +
+                '}';
+    }
+
+    public Integer getManId() {
+        return manId;
+    }
+
+    public void setManId(Integer manId) {
+        this.manId = manId;
+    }
+
+    public String getNameEn() {
+        return nameEn;
+    }
+
+    public void setNameEn(String nameEn) {
+        this.nameEn = nameEn;
+    }
+
+    public String getNameCn() {
+        return nameCn;
+    }
+
+    public void setNameCn(String nameCn) {
+        this.nameCn = nameCn;
+    }
+
+    public String getGmcReportType() {
+        return gmcReportType;
+    }
+
+    public void setGmcReportType(String gmcReportType) {
+        this.gmcReportType = gmcReportType;
+    }
+
+    public String getGmcReportUrl() {
+        return gmcReportUrl;
+    }
+
+    public void setGmcReportUrl(String gmcReportUrl) {
+        this.gmcReportUrl = gmcReportUrl;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     @ApiModelProperty(value = "主键，制造商ID")
     private Integer manId;
 
