@@ -2,10 +2,10 @@ package com.ecommerce;
 
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.service.WalletAdminService;
+import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.WalletAdminVO;
 import com.ecommerce.vojo.WalletAuditVO;
-import com.ecommerce.vojo.WalletFlowVO;
-import com.ecommerce.vojo.WalletPageVO;
+
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +21,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @Author: 邱晓淋
  * @CreateDate: 2020/7/16 17:33
  */
-@SpringBootTest(classes = {WalletApplication.class})
+@SpringBootTest(classes = {AdminApplication.class})
 @RunWith(SpringRunner.class)
 public class WalletAdminServiceTest {
     @Autowired
@@ -29,7 +29,7 @@ public class WalletAdminServiceTest {
 
     @Test
     public void testGetAllFlow(){
-        WalletPageVO walletPageVO = new WalletPageVO();
+        PageVO walletPageVO = new PageVO();
         walletPageVO.setPageNum(1);
         walletPageVO.setPageSize(1);
         CommonPage<WalletAdminVO> walletAdminVOCommonPage = walletAdminService.getAllFlow(walletPageVO);
