@@ -1,4 +1,3 @@
-<<<<<<< HEAD:e-commerce-admin/src/test/java/com/ecommerce/WalletAdminServiceTest.java
 package com.ecommerce;
 
 import com.ecommerce.common.base.CommonPage;
@@ -48,7 +47,6 @@ public class WalletAdminServiceTest {
         Assert.assertEquals(true,flag);
     }
 }
-=======
 //package com.ecommerce;
 //
 //import com.ecommerce.common.base.CommonPage;
@@ -98,4 +96,3 @@ public class WalletAdminServiceTest {
 //        Assert.assertEquals(true,flag);
 //    }
 //}
->>>>>>> a0a1f55a7d4b4611e0a8bd76859dee09b27a4dd7:e-commerce-wallet/src/test/java/com/ecommerce/WalletAdminServiceTest.java
