@@ -35,7 +35,6 @@
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

@@ -70,4 +70,9 @@ public class WalletController extends BaseController {
         }
     }
 
+    @GetMapping("/test")
+    public String test(){
+        return "success";
+    }
+
 }
