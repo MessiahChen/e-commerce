@@ -6,8 +6,10 @@ import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.security.util.JwtTokenUtil;
+import com.ecommerce.service.RedisService;
 import com.ecommerce.service.UserService;
 import com.ecommerce.utils.AdminUserDetails;
+import com.ecommerce.utils.CacheException;
 import com.ecommerce.vojo.*;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
@@ -59,14 +61,25 @@ public class UserServiceImpl implements UserService {
     private DsrDropshipperMapper dsrDropshipperMapper;
     @Resource
     private ManManufacturerMapper manManufacturerMapper;
+    @Resource
+    private RedisService redisService;
 
+    private static final Long CASHE_TIME = 1800L;
+
+    @CacheException
     @Override
     public SysUser getUserByName(String username) {
+        SysUser user = (SysUser) redisService.get(username);
+        if (user != null) {
+            return user;
+        }
         SysUserExample example = new SysUserExample();
         example.createCriteria().andUsernameEqualTo(username);
         List<SysUser> users = sysUserMapper.selectByExample(example);
         if (users != null && users.size() > 0) {
-            return users.get(0);
+            user = users.get(0);
+            redisService.set(username, user, CASHE_TIME);
+            return user;
         }
         return null;
     }
@@ -212,16 +225,30 @@ public class UserServiceImpl implements UserService {
         return sysRoleMapper.selectByExample(example);
     }
 
+    @CacheException
     @Override
     public List<SysResource> getResourceList() {
+        List<SysResource> resources = (List<SysResource>) redisService.get("resources");
+        if (resources != null) {
+            return resources;
+        }
         SysResourceExample example = new SysResourceExample();
-        return sysResourceMapper.selectByExample(example);
+        resources = sysResourceMapper.selectByExample(example);
+        redisService.set("resources", resources, CASHE_TIME);
+        return resources;
     }
 
+    @CacheException
     @Override
     public List<SysMenu> getMenuList() {
+        List<SysMenu> menus = (List<SysMenu>) redisService.get("menus");
+        if (menus != null) {
+            return menus;
+        }
         SysMenuExample example = new SysMenuExample();
-        return sysMenuMapper.selectByExample(example);
+        menus = sysMenuMapper.selectByExample(example);
+        redisService.set("menus", menus, CASHE_TIME);
+        return menus;
     }
 
     @Override
@@ -261,14 +288,22 @@ public class UserServiceImpl implements UserService {
         return count;
     }
 
+    @CacheException
     @Override
     public List<Long> getPermissionResourceList(Long roleId) {
+        List<Long> resourceList = (List<Long>) redisService.get(roleId + "resourceList");
+        if (resourceList != null) {
+            return resourceList;
+        }
         SysRoleResourceRelationExample example = new SysRoleResourceRelationExample();
         example.createCriteria().andRoleIdEqualTo(roleId);
         List<SysRoleResourceRelation> relations = sysRoleResourceRelationMapper.selectByExample(example);
-        return relations.stream().map(SysRoleResourceRelation::getResourceId).collect(Collectors.toList());
+        List<Long> list = relations.stream().map(SysRoleResourceRelation::getResourceId).collect(Collectors.toList());
+        redisService.set(roleId + "resourceList", list, CASHE_TIME);
+        return list;
     }
 
+    @CacheException
     @Override
     public List<String> getPermissionMenuList(Long userId) {
         SysUserRoleRelationExample sysUserRoleRelationExample = new SysUserRoleRelationExample();
@@ -276,6 +311,11 @@ public class UserServiceImpl implements UserService {
         List<SysUserRoleRelation> sysUserRoleRelations = sysUserRoleRelationMapper.selectByExample(sysUserRoleRelationExample);
         if (sysUserRoleRelations == null || sysUserRoleRelations.isEmpty())
             throw new UsernameNotFoundException("该用户未关联任何角色");
+
+        List<String> menuList = (List<String>) redisService.get(userId + "menuList");
+        if (menuList != null) {
+            return menuList;
+        }
 
         SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
         example.createCriteria().andRoleIdEqualTo(sysUserRoleRelations.get(0).getRoleId());
@@ -285,7 +325,10 @@ public class UserServiceImpl implements UserService {
         SysMenuExample sysMenuExample = new SysMenuExample();
         sysMenuExample.createCriteria().andIdIn(menuIds);
         List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
-        return sysMenus.stream().map(SysMenu::getName).collect(Collectors.toList());
+        List<String> menus = sysMenus.stream().map(SysMenu::getName).collect(Collectors.toList());
+
+        redisService.set(userId + "menuList", menus, CASHE_TIME);
+        return menus;
     }
 
     @Override
