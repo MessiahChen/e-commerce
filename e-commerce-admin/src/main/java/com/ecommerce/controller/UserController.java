@@ -64,8 +64,8 @@ public class UserController extends BaseController {
     @ApiOperation(value = "获取当前登录用户信息")
     @GetMapping(value = "/currentInfo")
     @ResponseBody
-    public CommonResult<Map<String, Object>> getAdminInfo(@RequestParam("id") Long id) {
-        SysUser sysUser = userService.getItem(id);
+    public CommonResult<Map<String, Object>> getAdminInfo(@RequestParam("userName") String userName) {
+        SysUser sysUser = userService.getUserByName(userName);
         Map<String, Object> data = new HashMap<>();
         data.put("username", sysUser.getUsername());
 //        data.put("roles", new String[]{"TEST"});

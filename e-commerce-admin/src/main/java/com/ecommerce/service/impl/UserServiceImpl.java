@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param username 用户名
      */
-    private void updateLoginTimeByUsername(String username){
+    private void updateLoginTimeByUsername(String username) {
         SysUser user = getUserByName(username);
         user.setLoginTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(user);
@@ -169,7 +169,7 @@ public class UserServiceImpl implements UserService {
             SysUserExample example = new SysUserExample();
             sysUserMapper.selectByExample(example);
         });
-        return CommonPage.restPage(new ArrayList<>(flowPage.getResult()),flowPage);
+        return CommonPage.restPage(new ArrayList<>(flowPage.getResult()), flowPage);
     }
 
     @Override
@@ -179,7 +179,7 @@ public class UserServiceImpl implements UserService {
             example.createCriteria().andUsernameLike("%" + searchUserVO.getUsername() + "%");
             sysUserMapper.selectByExample(example);
         });
-        return CommonPage.restPage(new ArrayList<>(flowPage.getResult()),flowPage);
+        return CommonPage.restPage(new ArrayList<>(flowPage.getResult()), flowPage);
     }
 
     @Override
@@ -232,7 +232,7 @@ public class UserServiceImpl implements UserService {
         example.createCriteria().andRoleIdEqualTo(roleId);
         sysRoleResourceRelationMapper.deleteByExample(example);
 
-        if (!CollectionUtils.isEmpty(resourceIds)){
+        if (!CollectionUtils.isEmpty(resourceIds)) {
             resourceIds.forEach(resourceId -> {
                 SysRoleResourceRelation sysRoleResourceRelation = new SysRoleResourceRelation();
                 sysRoleResourceRelation.setRoleId(roleId);
@@ -250,7 +250,7 @@ public class UserServiceImpl implements UserService {
         SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
         example.createCriteria().andRoleIdEqualTo(roleId);
         sysRoleMenuRelationMapper.deleteByExample(example);
-        if (!CollectionUtils.isEmpty(menuIds)){
+        if (!CollectionUtils.isEmpty(menuIds)) {
             menuIds.forEach(menuId -> {
                 SysRoleMenuRelation sysRoleMenuRelation = new SysRoleMenuRelation();
                 sysRoleMenuRelation.setMenuId(menuId);
@@ -270,11 +270,22 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Long> getPermissionMenuList(Long roleId) {
+    public List<String> getPermissionMenuList(Long userId) {
+        SysUserRoleRelationExample sysUserRoleRelationExample = new SysUserRoleRelationExample();
+        sysUserRoleRelationExample.createCriteria().andAdminIdEqualTo(userId);
+        List<SysUserRoleRelation> sysUserRoleRelations = sysUserRoleRelationMapper.selectByExample(sysUserRoleRelationExample);
+        if (sysUserRoleRelations == null || sysUserRoleRelations.isEmpty())
+            throw new UsernameNotFoundException("该用户未关联任何角色");
+
         SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
-        example.createCriteria().andRoleIdEqualTo(roleId);
+        example.createCriteria().andRoleIdEqualTo(sysUserRoleRelations.get(0).getRoleId());
         List<SysRoleMenuRelation> relations = sysRoleMenuRelationMapper.selectByExample(example);
-        return relations.stream().map(SysRoleMenuRelation::getMenuId).collect(Collectors.toList());
+        List<Long> menuIds = relations.stream().map(SysRoleMenuRelation::getMenuId).collect(Collectors.toList());
+
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria().andIdIn(menuIds);
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        return sysMenus.stream().map(SysMenu::getName).collect(Collectors.toList());
     }
 
     @Override
@@ -304,8 +315,15 @@ public class UserServiceImpl implements UserService {
         //获取用户信息
         SysUser sysUser = getUserByName(username);
         if (sysUser != null) {
+            SysUserRoleRelationExample sysUserRoleRelationExample = new SysUserRoleRelationExample();
+            sysUserRoleRelationExample.createCriteria().andAdminIdEqualTo(sysUser.getId());
+            List<SysUserRoleRelation> sysUserRoleRelations = sysUserRoleRelationMapper.selectByExample(sysUserRoleRelationExample);
+            if (sysUserRoleRelations == null || sysUserRoleRelations.isEmpty())
+                throw new UsernameNotFoundException("该用户未关联任何角色");
+
             SysResourceExample example = new SysResourceExample();
-            example.createCriteria().andIdIn(getPermissionResourceList(sysUser.getId()));
+            List<Long> permissionResourceList = getPermissionResourceList(sysUserRoleRelations.get(0).getRoleId());
+            example.createCriteria().andIdIn(permissionResourceList);
             List<SysResource> resourceList = sysResourceMapper.selectByExample(example);
             return new AdminUserDetails(sysUser, resourceList);
         }

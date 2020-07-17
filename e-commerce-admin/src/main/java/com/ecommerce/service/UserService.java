@@ -91,7 +91,7 @@ public interface UserService {
     /**
      * 获取角色所有菜单权限
      */
-    List<Long> getPermissionMenuList(Long roleId);
+    List<String> getPermissionMenuList(Long userId);
 
     /**
      * 修改密码

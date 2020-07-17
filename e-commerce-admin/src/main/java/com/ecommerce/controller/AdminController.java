@@ -135,7 +135,7 @@ public class AdminController {
     @ApiOperation("获取角色菜单权限")
     @GetMapping(value = "/getMenu")
     @ResponseBody
-    public CommonResult<List<Long>> getPermissionMenuList(@RequestParam("roleId") Long roleId) {
+    public CommonResult<List<String>> getPermissionMenuList(@RequestParam("roleId") Long roleId) {
         return CommonResult.success(userService.getPermissionMenuList(roleId), "获取角色菜单权限成功！");
     }
 }
