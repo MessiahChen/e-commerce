@@ -6,6 +6,7 @@ import com.ecommerce.pojo.SysMenu;
 import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysRole;
 import com.ecommerce.pojo.SysUser;
+import com.ecommerce.security.component.DynamicSecurityMetadataSource;
 import com.ecommerce.security.component.DynamicSecurityService;
 import com.ecommerce.service.UserService;
 import com.ecommerce.vojo.PageVO;
@@ -31,7 +32,7 @@ public class AdminController {
     @Resource
     private UserService userService;
     @Resource
-    private DynamicSecurityService dynamicSecurityService;
+    private DynamicSecurityMetadataSource dynamicSecurityMetadataSource;
 
     @ApiOperation("获取所有用户")
     @PostMapping("/getAllUser")
@@ -99,10 +100,12 @@ public class AdminController {
     }
 
     @ApiOperation("更新角色接口权限")
-    @PostMapping(value = "/updateResource")
+    @PatchMapping(value = "/updateResource")
     @ResponseBody
     public CommonResult<Integer> updateResource(@RequestParam("roleId") Long roleId,
                                                 @RequestParam("permissionIds") List<Long> permissionIds) {
+        //更改映射规则时需要清除缓存
+        dynamicSecurityMetadataSource.clearDataSource();
         int count = userService.updateResource(roleId, permissionIds);
         if (count > 0) {
             return CommonResult.success(count, "更新角色接口权限成功！");
@@ -111,7 +114,7 @@ public class AdminController {
     }
 
     @ApiOperation("更新角色菜单权限")
-    @PostMapping(value = "/updateMenu")
+    @PatchMapping(value = "/updateMenu")
     @ResponseBody
     public CommonResult<Integer> updateMenu(@RequestParam("roleId") Long roleId,
                                             @RequestParam("permissionIds") List<Long> permissionIds) {

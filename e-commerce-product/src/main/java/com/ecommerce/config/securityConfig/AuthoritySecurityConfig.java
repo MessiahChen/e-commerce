@@ -1,11 +1,10 @@
-package com.ecommerce.config;
+package com.ecommerce.config.securityConfig;
 
 import com.ecommerce.dao.SysResourceMapper;
 import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysResourceExample;
 import com.ecommerce.security.component.DynamicSecurityService;
 import com.ecommerce.security.config.SecurityConfig;
-import com.ecommerce.service.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.ConfigAttribute;
@@ -21,7 +20,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled=true)
-public class AdminSecurityConfig extends SecurityConfig {
+public class AuthoritySecurityConfig extends SecurityConfig {
 
     @Resource
     private UserService userService;
