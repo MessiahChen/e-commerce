@@ -64,13 +64,13 @@ public class UserController extends BaseController {
     @ApiOperation(value = "获取当前登录用户信息")
     @GetMapping(value = "/currentInfo")
     @ResponseBody
-    public CommonResult<Map<String, Object>> getAdminInfo(@RequestParam("username") String username) {
-        SysUser sysUser = userService.getUserByName(username);
+    public CommonResult<Map<String, Object>> getAdminInfo(@RequestParam("id") Long id) {
+        SysUser sysUser = userService.getItem(id);
         Map<String, Object> data = new HashMap<>();
         data.put("username", sysUser.getUsername());
-        data.put("roles", new String[]{"TEST"});
+//        data.put("roles", new String[]{"TEST"});
         data.put("menus", userService.getPermissionMenuList(sysUser.getId()));
-        data.put("resources", userService.getPermissionResourceList(sysUser.getId()));
+//        data.put("resources", userService.getPermissionResourceList(sysUser.getId()));
         return CommonResult.success(data,"获取当前用户信息成功！");
     }
 
