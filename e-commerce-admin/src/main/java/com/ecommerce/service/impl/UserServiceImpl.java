@@ -350,10 +350,10 @@ public class UserServiceImpl implements UserService {
         if (sysUserRoleRelations == null || sysUserRoleRelations.isEmpty())
             throw new UsernameNotFoundException("该用户未关联任何角色");
 
-        List<String> menuList = (List<String>) redisService.get(userId + "menuList");
-        if (menuList != null) {
-            return menuList;
-        }
+//        List<String> menuList = (List<String>) redisService.get(userId + "menuList");
+//        if (menuList != null) {
+//            return menuList;
+//        }
 
         SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
         example.createCriteria().andRoleIdEqualTo(sysUserRoleRelations.get(0).getRoleId());
