@@ -5,10 +5,7 @@ import com.ecommerce.pojo.SysMenu;
 import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysRole;
 import com.ecommerce.pojo.SysUser;
-import com.ecommerce.vojo.PageVO;
-import com.ecommerce.vojo.RegisterVO;
-import com.ecommerce.vojo.SearchUserVO;
-import com.ecommerce.vojo.UpdatePasswordVO;
+import com.ecommerce.vojo.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
@@ -71,7 +68,7 @@ public interface UserService {
     /**
      * 获取可访问菜单资源列表
      */
-    List<SysMenu> getMenuList();
+    List<MenuVO> getMenuList();
 
     /**
      * 修改用户接口权限

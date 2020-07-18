@@ -240,15 +240,53 @@ public class UserServiceImpl implements UserService {
 
     @CacheException
     @Override
-    public List<SysMenu> getMenuList() {
-        List<SysMenu> menus = (List<SysMenu>) redisService.get("menus");
-        if (menus != null) {
-            return menus;
-        }
+    public List<MenuVO> getMenuList() {
+//        List<MenuVO> menus = (List<MenuVO>) redisService.get("menus");
+//        if (menus != null) {
+//            return menus;
+//        }
         SysMenuExample example = new SysMenuExample();
-        menus = sysMenuMapper.selectByExample(example);
-        redisService.set("menus", menus, CASHE_TIME);
-        return menus;
+        List<SysMenu> menusFromDB = sysMenuMapper.selectByExample(example);
+
+        List<MenuVO> result = new ArrayList<>();
+        for (SysMenu menu : menusFromDB) {
+            if (menu.getParentId() == 0) {
+                MenuVO parent = new MenuVO();
+                parent.setId(menu.getId());
+                parent.setParentId(menu.getParentId());
+                parent.setCreateTime(menu.getCreateTime());
+                parent.setTitle(menu.getTitle());
+                parent.setLevel(menu.getLevel());
+                parent.setSort(menu.getSort());
+                parent.setName(menu.getName());
+                parent.setIcon(menu.getIcon());
+                parent.setHidden(menu.getHidden());
+                result.add(parent);
+            }
+        }
+
+        for (SysMenu menu : menusFromDB) {
+            if (menu.getParentId() != 0) {
+                MenuVO child = new MenuVO();
+                child.setId(menu.getId());
+                child.setParentId(menu.getParentId());
+                child.setCreateTime(menu.getCreateTime());
+                child.setTitle(menu.getTitle());
+                child.setLevel(menu.getLevel());
+                child.setSort(menu.getSort());
+                child.setName(menu.getName());
+                child.setIcon(menu.getIcon());
+                child.setHidden(menu.getHidden());
+                for (MenuVO parent : result) {
+                    if (parent.getId().equals(child.getParentId())){
+                        parent.getChildren().add(child);
+                    }
+                }
+            }
+        }
+
+        redisService.set("menus", result, CASHE_TIME);
+        return result;
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysRole;
 import com.ecommerce.pojo.SysUser;
 import com.ecommerce.service.UserService;
+import com.ecommerce.vojo.MenuVO;
 import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.RegisterVO;
 import com.ecommerce.vojo.SearchUserVO;
@@ -108,7 +109,7 @@ public class UserServiceTest {
 
     @Test
     public void testGetMenuList(){
-        List<SysMenu> sysMenus = userService.getMenuList();
+        List<MenuVO> sysMenus = userService.getMenuList();
         Assert.assertEquals(true,sysMenus.get(0).getName().equals("qiuxiaolin"));
     }
 

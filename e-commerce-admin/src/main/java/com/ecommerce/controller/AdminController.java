@@ -9,6 +9,7 @@ import com.ecommerce.pojo.SysUser;
 import com.ecommerce.security.component.DynamicSecurityMetadataSource;
 import com.ecommerce.security.component.DynamicSecurityService;
 import com.ecommerce.service.UserService;
+import com.ecommerce.vojo.MenuVO;
 import com.ecommerce.vojo.PageVO;
 import com.ecommerce.vojo.SearchUserVO;
 import io.swagger.annotations.Api;
@@ -94,8 +95,8 @@ public class AdminController {
     @ApiOperation("获取菜单列表")
     @GetMapping(value = "/menus")
     @ResponseBody
-    public CommonResult<List<SysMenu>> getMenuList() {
-        List<SysMenu> menuList = userService.getMenuList();
+    public CommonResult<List<MenuVO>> getMenuList() {
+        List<MenuVO> menuList = userService.getMenuList();
         return CommonResult.success(menuList, "获取菜单列表成功！");
     }
 
