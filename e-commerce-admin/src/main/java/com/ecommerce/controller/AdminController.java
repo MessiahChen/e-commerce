@@ -69,6 +69,7 @@ public class AdminController {
     @ResponseBody
     public CommonResult<Integer> updateRole(@RequestParam("adminId") Long adminId,
                                             @RequestParam("roleIds") List<Long> roleIds) {
+        dynamicSecurityMetadataSource.clearDataSource();
         int count = userService.updateRole(adminId, roleIds);
         if (count >= 0) {
             return CommonResult.success(count, "分配角色成功！");

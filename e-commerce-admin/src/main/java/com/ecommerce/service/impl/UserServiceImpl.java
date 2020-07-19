@@ -115,6 +115,7 @@ public class UserServiceImpl implements UserService {
             user.setManBuyerId(dsrDropshipperMapper.insertSelective(dsrDropshipper));
         }
         int userId = sysUserMapper.insertSelective(user);
+        redisService.set(user.getUsername(),user,CASHE_TIME);
         //插入角色权限
         SysUserRoleRelation sysUserRoleRelation = new SysUserRoleRelation();
         sysUserRoleRelation.setAdminId((long) userId);
@@ -153,6 +154,7 @@ public class UserServiceImpl implements UserService {
         SysUser user = getUserByName(username);
         user.setLoginTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(user);
+        redisService.set(username,user,CASHE_TIME);
     }
 
     /**
@@ -197,7 +199,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public SysUser getItem(Long id) {
-        return sysUserMapper.selectByPrimaryKey(id);
+        SysUser user = sysUserMapper.selectByPrimaryKey(id);
+        redisService.set(user.getUsername(),user,CASHE_TIME);
+        return user;
     }
 
     @Override
@@ -216,6 +220,7 @@ public class UserServiceImpl implements UserService {
                 sysUserRoleRelationMapper.insertSelective(roleRelation);
             });
         }
+        redisService.del(adminId+"menuList",adminId+"resourceList");
         return count;
     }
 
@@ -241,10 +246,10 @@ public class UserServiceImpl implements UserService {
     @CacheException
     @Override
     public List<MenuVO> getMenuList() {
-//        List<MenuVO> menus = (List<MenuVO>) redisService.get("menus");
-//        if (menus != null) {
-//            return menus;
-//        }
+        List<MenuVO> menus = (List<MenuVO>) redisService.get("menus");
+        if (menus != null) {
+            return menus;
+        }
         SysMenuExample example = new SysMenuExample();
         List<SysMenu> menusFromDB = sysMenuMapper.selectByExample(example);
 
@@ -388,6 +393,7 @@ public class UserServiceImpl implements UserService {
         }
         sysUser.setPassword(passwordEncoder.encode(updatePasswordVO.getNewPassword()));
         sysUserMapper.updateByPrimaryKey(sysUser);
+        redisService.set(sysUser.getUsername(),sysUser,CASHE_TIME);
         return 1;
     }
 

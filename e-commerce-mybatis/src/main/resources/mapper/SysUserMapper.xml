@@ -119,7 +119,7 @@
       #{status,jdbcType=INTEGER}, #{manId,jdbcType=INTEGER}, #{manBuyerId,jdbcType=INTEGER}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.ecommerce.pojo.SysUser" useGeneratedKeys="true" keyProperty="id">
+  <insert id="insertSelective" parameterType="com.ecommerce.pojo.SysUser" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
     insert into sys_user
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">
