@@ -4,6 +4,7 @@ import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.pojo.SysUser;
+import com.ecommerce.security.component.DynamicSecurityMetadataSource;
 import com.ecommerce.service.UserService;
 import com.ecommerce.vojo.LoginVO;
 import com.ecommerce.vojo.RegisterVO;
@@ -30,6 +31,8 @@ public class LogController extends BaseController {
     private String tokenHead;
     @Resource
     private UserService userService;
+    @Resource
+    private DynamicSecurityMetadataSource dynamicSecurityMetadataSource;
 
     @ApiOperation(value = "用户注册")
     @PutMapping(value = "/register")
@@ -42,6 +45,7 @@ public class LogController extends BaseController {
         if (umsAdmin == null) {
             CommonResult.failed();
         }
+        dynamicSecurityMetadataSource.clearDataSource();
         return CommonResult.success(umsAdmin,"注册成功！");
     }
 
