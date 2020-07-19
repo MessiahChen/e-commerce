@@ -161,7 +161,7 @@ public class BvoOrderServiceImpl implements BvoOrderService {
                 }else {
                     tempVO = new SaoSalesOrderVO(proTemp.getTitle(),salTemp.getPrice(),
                             salTemp.getQty(),proTemp.getSkuCd(),salTemp.getCreationDate(), saoSalesOrder.getOrderNo(),
-                            saoSalesOrder.getOrderSts() ,saoSalesOrder.getSaoId(), salTemp.getTrackingNo());
+                            saoSalesOrder.getOrderSts() ,saoSalesOrder.getSaoId(), salTemp.getTrackingNo(),proTemp.getProId());
                     saoSalesOrderVOs.add(tempVO);
                 }
             }

@@ -153,7 +153,7 @@ public class OrderServiceImpl implements OrderService {
                 //把所有的信息封装到VO中，再把VO添加进返回列表里
                 tempVO = new SaoSalesOrderVO(pro.getTitle(),sal.getPrice(),
                     sal.getQty(),pro.getSkuCd(),sal.getCreationDate(), temp.getOrderNo(), temp.getOrderSts() ,temp.getSaoId(),
-                        sal.getTrackingNo());
+                        sal.getTrackingNo(),pro.getProId());
                 saoSalesOrderVOs.add(tempVO);
             }
         }

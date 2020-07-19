@@ -1,6 +1,8 @@
 package com.ecommerce.vo;
 
 import com.ecommerce.common.validationGroup.SelectGroup;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -14,6 +16,7 @@ import java.util.Date;
  * @Author: 邱晓淋
  * @CreateDate: 2020/7/3 15:30
  */
+
 public class SaoSalesOrderVO {
 
 
@@ -76,6 +79,15 @@ public class SaoSalesOrderVO {
     private String type;
     private int saoId;
     private String trackingNo;
+    private int proId;
+
+    public int getProId() {
+        return proId;
+    }
+
+    public void setProId(int proId) {
+        this.proId = proId;
+    }
 
     public String getTrackingNo() {
         return trackingNo;
@@ -95,7 +107,7 @@ public class SaoSalesOrderVO {
         this.type = type;
     }
 
-    public SaoSalesOrderVO(String productTitle, BigDecimal productPrice, int productNum, String productSku, Date productCreateTime, String productOrderNum, String type, int saoId, String trackingNo) {
+    public SaoSalesOrderVO(String productTitle, BigDecimal productPrice, int productNum, String productSku, Date productCreateTime, String productOrderNum, String type, int saoId, String trackingNo, int proId) {
         this.productTitle = productTitle;
         this.productPrice = productPrice;
         this.productNum = productNum;
@@ -105,6 +117,7 @@ public class SaoSalesOrderVO {
         this.type = type;
         this.saoId = saoId;
         this.trackingNo = trackingNo;
+        this.proId = proId;
     }
 
     public int getSaoId() {
