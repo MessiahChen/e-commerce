@@ -39,7 +39,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         //允许跨域请求的OPTIONS请求
         registry.antMatchers(HttpMethod.OPTIONS)
                 .permitAll()
-                .antMatchers("/log/register","/log/login")
+                .antMatchers("/log/register","/log/login","/aliyun/oss/callback")
                 .permitAll();
         // 任何请求需要身份认证
         registry.and()
