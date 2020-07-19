@@ -39,7 +39,7 @@ aliyun:
     policy:
       expire: 300 # 签名有效期(S)
     maxSize: 5 # 上传文件大小(M)
-    callback: http://7ga1cuat.xiaomy.net/aliyun/oss/callback # 文件上传成功后的回调地址
+    callback: http://cpud72t9.xiaomy.net/aliyun/oss/callback # 文件上传成功后的回调地址
     dir:
       prefix: images/ # 上传文件夹路径前缀
 
@@ -59,6 +59,7 @@ secure:
       - /actuator/**
       - /sso/**
       - /home/**
+      - /aliyun/oss/callback
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头

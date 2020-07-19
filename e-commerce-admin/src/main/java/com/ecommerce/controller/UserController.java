@@ -68,6 +68,8 @@ public class UserController extends BaseController {
         SysUser sysUser = userService.getUserByName(userName);
         Map<String, Object> data = new HashMap<>();
         data.put("username", sysUser.getUsername());
+        data.put("dsrId", sysUser.getManBuyerId());
+        data.put("manId", sysUser.getManId());
 //        data.put("roles", new String[]{"TEST"});
         data.put("menus", userService.getPermissionMenuList(sysUser.getId()));
 //        data.put("resources", userService.getPermissionResourceList(sysUser.getId()));

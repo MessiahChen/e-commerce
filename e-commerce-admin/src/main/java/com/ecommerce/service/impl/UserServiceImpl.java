@@ -69,10 +69,11 @@ public class UserServiceImpl implements UserService {
     @CacheException
     @Override
     public SysUser getUserByName(String username) {
-        SysUser user = (SysUser) redisService.get(username);
-        if (user != null) {
-            return user;
-        }
+        SysUser user;
+//        user = (SysUser) redisService.get(username);
+//        if (user != null) {
+//            return user;
+//        }
         SysUserExample example = new SysUserExample();
         example.createCriteria().andUsernameEqualTo(username);
         List<SysUser> users = sysUserMapper.selectByExample(example);
