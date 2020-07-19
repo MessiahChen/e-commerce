@@ -10,6 +10,7 @@ import com.ecommerce.vojo.WalletAccountVO;
 import com.ecommerce.vojo.WalletBalanceVO;
 import com.ecommerce.vojo.WalletPasswordVO;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -61,17 +62,15 @@ public class WalletServiceImpl implements WalletService {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
         example.createCriteria().andAccountNameEqualTo(accountName);
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
-        if (accounts == null) throw BusinessException.USERNAME_NOT_EXISTS;
+        if (accounts == null || accounts.isEmpty()) {
+            throw BusinessException.USERNAME_NOT_EXISTS;
+        }
         List<WalletBalanceVO> balanceVOS = new ArrayList<>();
         for (WaaWalletAccount account:accounts) {
 
 //            redisService.set(accountName+"Balance",account.getAvailableMoney());
             WalletBalanceVO balanceVO = new WalletBalanceVO();
-            balanceVO.setCurrency(account.getCurrency());
-            balanceVO.setBuyerId(account.getBuyerId());
-            balanceVO.setAvailableMoney(account.getAvailableMoney());
-            balanceVO.setDepositingMoney(account.getDepositingMoney());
-            balanceVO.setWithdrawingMoney(account.getWithdrawingMoney());
+            BeanUtils.copyProperties(account,balanceVO);
             balanceVOS.add(balanceVO);
         }
         return balanceVOS;
