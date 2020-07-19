@@ -2,8 +2,10 @@ package com.ecommerce.controller;
 
 import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
+import com.ecommerce.pojo.SysRoleMenuRelation;
 import com.ecommerce.pojo.SysUser;
 import com.ecommerce.service.UserService;
+import com.ecommerce.vojo.MenuVO;
 import com.ecommerce.vojo.UpdatePasswordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,6 +17,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @CrossOrigin
 @Controller
@@ -71,7 +74,7 @@ public class UserController extends BaseController {
         data.put("dsrId", sysUser.getManBuyerId());
         data.put("manId", sysUser.getManId());
 //        data.put("roles", new String[]{"TEST"});
-        data.put("menus", userService.getPermissionMenuList(sysUser.getId()));
+        data.put("menus", userService.getPermissionMenuList(sysUser.getId()).stream().map(MenuVO::getName).collect(Collectors.toList()));
 //        data.put("resources", userService.getPermissionResourceList(sysUser.getId()));
         return CommonResult.success(data,"获取当前用户信息成功！");
     }

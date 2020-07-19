@@ -23,14 +23,16 @@ public interface UserService {
 
     /**
      * 登录功能
+     *
      * @param username 用户名
      * @param password 密码
      * @return 生成的JWT的token
      */
-    String login(String username,String password);
+    String login(String username, String password);
 
     /**
      * 刷新token的功能
+     *
      * @param oldToken 旧的token
      */
     String refreshToken(String oldToken);
@@ -71,6 +73,22 @@ public interface UserService {
     List<MenuVO> getMenuList();
 
     /**
+     * 添加一个新的菜单
+     *
+     * @param addMenuVO
+     * @return
+     */
+    boolean addMenu(AddMenuVO addMenuVO);
+
+    /**
+     * 删除一个菜单
+     *
+     * @param menuId
+     * @return
+     */
+    boolean deleteMenu(Long menuId);
+
+    /**
      * 修改用户接口权限
      */
     int updateResource(Long adminId, List<Long> permissionIds);
@@ -88,7 +106,7 @@ public interface UserService {
     /**
      * 获取角色所有菜单权限
      */
-    List<String> getPermissionMenuList(Long userId);
+    List<MenuVO> getPermissionMenuList(Long userId);
 
     /**
      * 修改密码
@@ -99,4 +117,26 @@ public interface UserService {
      * 获取用户信息
      */
     UserDetails loadUserByUsername(String username);
+
+    List<MenuVO> getRoleMenu(Long roleId);
+
+    /**
+     * 添加新角色
+     *
+     * @param addRoleVO
+     * @return
+     */
+    boolean addNewRole(AddRoleVO addRoleVO);
+
+    /**
+     * 删除角色
+     *
+     * @param roleId
+     * @return
+     */
+    boolean deleteRole(Long roleId);
+
+    List<Long> getMenuWhenUpdateRole(Long roleId);
+
+    boolean updateRole(UpdateRoleVO updateRoleVO);
 }
