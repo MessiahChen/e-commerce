@@ -34,7 +34,6 @@ public class WalletServiceImpl implements WalletService {
 
     @Override
     public Boolean addWallet(WalletAccountVO walletAccountVO) {
-        Date date = new Date();
         WaaWalletAccountExample example = new WaaWalletAccountExample();
         example.createCriteria().andAccountNameEqualTo(walletAccountVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
@@ -44,24 +43,20 @@ public class WalletServiceImpl implements WalletService {
 
         WaaWalletAccount walletAccount = new WaaWalletAccount();
         walletAccount.setAccountName(walletAccountVO.getAccountName());
-//        walletAccount.setAccountType(walletAccountVO.getAccountType());
-//        walletAccount.setAutoPayStatus(walletAccountVO.getAutoPayStatus());
-//        walletAccount.setCreateBy(walletAccountVO.getCreateBy());
         //SHA加密
         walletAccount.setPassword(DigestUtils.sha1Hex(walletAccountVO.getPassword()));
-        walletAccount.setEmail(walletAccountVO.getEmail());
         walletAccount.setStatus((byte) 7);
 
         walletAccount.setAvailableMoney(BigDecimal.ZERO);
         walletAccount.setDepositingMoney(BigDecimal.ZERO);
         walletAccount.setWithdrawingMoney(BigDecimal.ZERO);
-
-        walletAccount.setCreateTime(date);
+        walletAccount.setCreateTime(new Date());
 
         return waaWalletAccountMapper.insertSelective(walletAccount) == 1;
     }
 
 
+    @Override
     public List<WalletBalanceVO> getWalletInfo(String accountName) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
         example.createCriteria().andAccountNameEqualTo(accountName);
