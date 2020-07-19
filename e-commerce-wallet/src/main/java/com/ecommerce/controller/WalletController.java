@@ -52,7 +52,7 @@ public class WalletController extends BaseController {
         if (balanceVOs != null) {
             return CommonResult.success(balanceVOs,"get wallet info successful");
         } else {
-            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+            return CommonResult.failed("未注册需要注册才能访问钱包！");
         }
     }
 
