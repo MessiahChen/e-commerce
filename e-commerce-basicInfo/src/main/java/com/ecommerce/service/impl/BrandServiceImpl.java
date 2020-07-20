@@ -37,7 +37,14 @@ public class BrandServiceImpl implements BrandService {
             brandEntryVO.setBrdId(brand.getBrdId());
             brandEntryVO.setManId(brand.getManId());
             brandEntryVO.setNameEn(brand.getNameEn());
+            brandEntryVO.setNameCn(brand.getNameCn());
             brandEntryVO.setRemark(brand.getRemark());
+            brandEntryVO.setCallCnt(brand.getCallCnt());
+            brandEntryVO.setCreatedBy(brand.getCreatedBy());
+            brandEntryVO.setCreationDate(brand.getCreationDate());
+            brandEntryVO.setLastUpdateBy(brand.getLastUpdateBy());
+            brandEntryVO.setLastUpdateDate(brand.getLastUpdateDate());
+            brandEntryVO.setStsCd(brand.getStsCd());
             result.add(brandEntryVO);
         }
         return CommonPage.restPage(result, brandPage);
