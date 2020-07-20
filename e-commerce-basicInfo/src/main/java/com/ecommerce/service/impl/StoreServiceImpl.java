@@ -29,17 +29,18 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public CommonPage<StoreEntryVO> getStore(GetStoreVO getStoreVO){
-        Page<StrStore> storePage = PageHelper.startPage(getStoreVO.getPageNum(), getStoreVO.getPageSize()).doSelectPage(() -> {
+        Page<StrStore> storePage = PageHelper.startPage(getStoreVO.getPageNum(),
+                getStoreVO.getPageSize()).doSelectPage(() -> {
             StrStoreExample strStoreExample = new StrStoreExample();
             StrStoreExample.Criteria criteria = strStoreExample.createCriteria();
-            criteria.andStrIdEqualTo(getStoreVO.getStrId());
+            criteria.andDsrIdEqualTo(getStoreVO.getDsrId());
             strStoreMapper.selectByExample(strStoreExample);
         });
 
         List<StoreEntryVO> result = new ArrayList<>();
         for (StrStore store : storePage.getResult()) {
             StoreEntryVO storeEntryVO = new StoreEntryVO();
-            storeEntryVO.setDsrId(store.getDsrId());
+            storeEntryVO.setStrId(store.getStrId());
             storeEntryVO.setDsrId(store.getDsrId());
             storeEntryVO.setPlatformType(store.getPlatformType());
             storeEntryVO.setStoreName(store.getStoreName());

@@ -1,11 +1,16 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
+import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.pojo.StrStore;
 import com.ecommerce.service.StoreService;
+import com.ecommerce.vojo.brand.BrandEntryVO;
 import com.ecommerce.vojo.store.EbaVO;
+import com.ecommerce.vojo.store.GetStoreVO;
 import com.ecommerce.vojo.store.StoreAddVO;
+import com.ecommerce.vojo.store.StoreEntryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,18 +27,18 @@ public class StoreController {
     private StoreService storeService;
 
     @ApiOperation("通过dsrId获得str对象列表")
-    @GetMapping("/getStrsByDsrId")
-    public CommonResult<List<StrStore>> getStrsByDsrId(@RequestParam int dsrId) {
-        List<StrStore> strStores = storeService.getStrsByDsrId(dsrId);
-        if (strStores.size() == 0 || strStores == null) {
-            throw BusinessException.SELECT_FAIL;
+    @PostMapping("/getStores")
+    public CommonResult<CommonPage<StoreEntryVO>> getStores(@RequestBody GetStoreVO getStoreVO) {
+        CommonPage<StoreEntryVO> result = storeService.getStore(getStoreVO);
+        if (!result.getList().isEmpty()) {
+            return CommonResult.success(result, "Match Successfully");
         } else {
-            return CommonResult.success(strStores, "返回数据成功");
+            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
         }
     }
 
     @ApiOperation("插入网店信息")
-    @PostMapping("/insertStr")
+    @PutMapping("/insertStr")
     public CommonResult<Boolean> insertStr(@RequestBody StoreAddVO storeAddVO) {
         if (storeService.insertStrStore(storeAddVO)) {
             return CommonResult.success(true, "插入成功");
@@ -43,7 +48,7 @@ public class StoreController {
     }
 
     @ApiOperation("插入网店授权记录信息")
-    @PostMapping("/insertEba")
+    @PutMapping("/insertEba")
     public CommonResult<Boolean> insertEba(@RequestBody EbaVO ebaVO) {
         boolean result = storeService.insertEba(ebaVO);
         if (result) {
