@@ -48,7 +48,7 @@ public class PreLogFilter extends ZuulFilter {
         String host = request.getRemoteHost();
         String method = request.getMethod();
         String uri = request.getRequestURI();
-        LOGGER.info("Remote host:{},method:{},uri:{}", host, method, uri);
+        LOGGER.info("远程宿主机:{},方法接口:{},路径:{}", host, method, uri);
         return null;
     }
 }
