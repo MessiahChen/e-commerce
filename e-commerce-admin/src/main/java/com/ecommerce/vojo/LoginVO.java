@@ -10,4 +10,10 @@ public class LoginVO {
 
     @ApiModelProperty(value = "密码")
     private String password;
+
+    @ApiModelProperty(value = "验证码")
+    private String code;
+
+    @ApiModelProperty(value = "验证码随机Token")
+    private String tokenId;
 }

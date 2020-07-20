@@ -50,6 +50,7 @@ secure:
       - /actuator/**
       - /sso/**
       - /home/**
+      - /log/generateValidateCode
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
