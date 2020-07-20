@@ -60,6 +60,7 @@ secure:
       - /sso/**
       - /home/**
       - /aliyun/oss/callback
+      - /upload/uploadImage
 
 jwt:
   tokenHeader: Authorization #JWT存储的请求头
