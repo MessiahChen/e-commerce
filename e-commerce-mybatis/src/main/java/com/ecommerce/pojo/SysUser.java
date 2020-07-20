@@ -71,8 +71,6 @@ public class SysUser implements Serializable {
     @ApiModelProperty(value = "最后登录时间")
     private Date loginTime;
 
-
-
     /**
      * 帐号启用状态：0->禁用；1->启用
      *

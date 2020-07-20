@@ -116,7 +116,7 @@ public class UserServiceImpl implements UserService {
             user.setManBuyerId(dsrDropshipperMapper.insertSelective(dsrDropshipper));
         }
         int userId = sysUserMapper.insertSelective(user);
-        redisService.set(user.getUsername(),user,CASHE_TIME);
+        redisService.set(user.getUsername(), user, CASHE_TIME);
         //插入角色权限
         SysUserRoleRelation sysUserRoleRelation = new SysUserRoleRelation();
         sysUserRoleRelation.setAdminId((long) userId);
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
         SysUser user = getUserByName(username);
         user.setLoginTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(user);
-        redisService.set(username,user,CASHE_TIME);
+        redisService.set(username, user, CASHE_TIME);
     }
 
     /**
@@ -201,7 +201,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public SysUser getItem(Long id) {
         SysUser user = sysUserMapper.selectByPrimaryKey(id);
-        redisService.set(user.getUsername(),user,CASHE_TIME);
+        redisService.set(user.getUsername(), user, CASHE_TIME);
         return user;
     }
 
@@ -221,7 +221,7 @@ public class UserServiceImpl implements UserService {
                 sysUserRoleRelationMapper.insertSelective(roleRelation);
             });
         }
-        redisService.del(adminId+"menuList",adminId+"resourceList");
+        redisService.del(adminId + "menuList", adminId + "resourceList");
         return count;
     }
 
@@ -247,10 +247,10 @@ public class UserServiceImpl implements UserService {
     @CacheException
     @Override
     public List<MenuVO> getMenuList() {
-        List<MenuVO> menus = (List<MenuVO>) redisService.get("menus");
-        if (menus != null) {
-            return menus;
-        }
+//        List<MenuVO> menus = (List<MenuVO>) redisService.get("menus");
+//        if (menus != null) {
+//            return menus;
+//        }
         SysMenuExample example = new SysMenuExample();
         List<SysMenu> menusFromDB = sysMenuMapper.selectByExample(example);
 
@@ -284,7 +284,7 @@ public class UserServiceImpl implements UserService {
                 child.setIcon(menu.getIcon());
                 child.setHidden(menu.getHidden());
                 for (MenuVO parent : result) {
-                    if (parent.getId().equals(child.getParentId())){
+                    if (parent.getId().equals(child.getParentId())) {
                         parent.getChildren().add(child);
                     }
                 }
@@ -293,6 +293,20 @@ public class UserServiceImpl implements UserService {
 
         redisService.set("menus", result, CASHE_TIME);
         return result;
+    }
+
+    @Override
+    public boolean addMenu(AddMenuVO addMenuVO) {
+        SysMenu sysMenu = new SysMenu();
+        BeanUtils.copyProperties(addMenuVO, sysMenu);
+        sysMenu.setCreateTime(new Date());
+        System.out.println(sysMenu.toString());
+        return sysMenuMapper.insertSelective(sysMenu) == 1;
+    }
+
+    @Override
+    public boolean deleteMenu(Long menuId) {
+        return sysMenuMapper.deleteByPrimaryKey(menuId) == 1;
     }
 
     @Override
@@ -349,14 +363,14 @@ public class UserServiceImpl implements UserService {
 
     @CacheException
     @Override
-    public List<String> getPermissionMenuList(Long userId) {
+    public List<MenuVO> getPermissionMenuList(Long userId) {
         SysUserRoleRelationExample sysUserRoleRelationExample = new SysUserRoleRelationExample();
         sysUserRoleRelationExample.createCriteria().andAdminIdEqualTo(userId);
         List<SysUserRoleRelation> sysUserRoleRelations = sysUserRoleRelationMapper.selectByExample(sysUserRoleRelationExample);
         if (sysUserRoleRelations == null || sysUserRoleRelations.isEmpty())
             throw new UsernameNotFoundException("该用户未关联任何角色");
 
-//        List<String> menuList = (List<String>) redisService.get(userId + "menuList");
+//        List<MenuVO> menuList = (List<MenuVO>) redisService.get(userId + "menuList");
 //        if (menuList != null) {
 //            return menuList;
 //        }
@@ -369,7 +383,12 @@ public class UserServiceImpl implements UserService {
         SysMenuExample sysMenuExample = new SysMenuExample();
         sysMenuExample.createCriteria().andIdIn(menuIds);
         List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
-        List<String> menus = sysMenus.stream().map(SysMenu::getName).collect(Collectors.toList());
+        List<MenuVO> menus = new ArrayList<>();
+        for (SysMenu menu : sysMenus) {
+            MenuVO menuVO = new MenuVO();
+            BeanUtils.copyProperties(menu, menuVO);
+            menus.add(menuVO);
+        }
 
         redisService.set(userId + "menuList", menus, CASHE_TIME);
         return menus;
@@ -394,7 +413,7 @@ public class UserServiceImpl implements UserService {
         }
         sysUser.setPassword(passwordEncoder.encode(updatePasswordVO.getNewPassword()));
         sysUserMapper.updateByPrimaryKey(sysUser);
-        redisService.set(sysUser.getUsername(),sysUser,CASHE_TIME);
+        redisService.set(sysUser.getUsername(), sysUser, CASHE_TIME);
         return 1;
     }
 
@@ -417,4 +436,97 @@ public class UserServiceImpl implements UserService {
         }
         throw new UsernameNotFoundException("用户名或密码错误");
     }
+
+    @CacheException
+    @Override
+    public List<MenuVO> getRoleMenu(Long roleId) {
+
+//        List<MenuVO> menuList = (List<MenuVO>) redisService.get(roleId + "menuList");
+//        if (menuList != null) {
+//            return menuList;
+//        }
+        SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        List<SysRoleMenuRelation> relations = sysRoleMenuRelationMapper.selectByExample(example);
+        List<Long> menuIds = relations.stream().map(SysRoleMenuRelation::getMenuId).collect(Collectors.toList());
+
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria().andIdIn(menuIds);
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        List<MenuVO> menus = new ArrayList<>();
+        for (SysMenu menu : sysMenus) {
+            MenuVO menuVO = new MenuVO();
+            BeanUtils.copyProperties(menu, menuVO);
+            menus.add(menuVO);
+        }
+
+        redisService.set(roleId + "menuList", menus, CASHE_TIME);
+        return menus;
+    }
+
+    @Override
+    public boolean addNewRole(AddRoleVO addRoleVO) {
+        SysRole sysRole = new SysRole();
+        sysRole.setDescription(addRoleVO.getDescription());
+        sysRole.setName(addRoleVO.getRoleName());
+        sysRole.setAdminCount(0);
+        sysRole.setCreateTime(new Date());
+        sysRoleMapper.insertSelective(sysRole);
+
+        for (long menuId : addRoleVO.getMenus()) {
+            SysRoleMenuRelation sysRoleMenuRelation = new SysRoleMenuRelation();
+            sysRoleMenuRelation.setRoleId(sysRole.getId());
+            sysRoleMenuRelation.setMenuId(menuId);
+            sysRoleMenuRelationMapper.insertSelective(sysRoleMenuRelation);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean deleteRole(Long roleId) {
+        int result = sysRoleMapper.deleteByPrimaryKey(roleId);
+        SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+
+        sysRoleMenuRelationMapper.deleteByExample(example);
+
+        return result == 1;
+    }
+
+    @Override
+    public List<Long> getMenuWhenUpdateRole(Long roleId) {
+        SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(roleId);
+        List<SysRoleMenuRelation> relations = sysRoleMenuRelationMapper.selectByExample(example);
+        List<Long> menuIds = relations.stream().map(SysRoleMenuRelation::getMenuId).collect(Collectors.toList());
+
+        SysMenuExample sysMenuExample = new SysMenuExample();
+        sysMenuExample.createCriteria().andIdIn(menuIds);
+        List<SysMenu> sysMenus = sysMenuMapper.selectByExample(sysMenuExample);
+        return sysMenus.stream().map(SysMenu::getId).collect(Collectors.toList());
+    }
+
+    @Override
+    public boolean updateRole(UpdateRoleVO updateRoleVO) {
+        SysRole sysRole = new SysRole();
+        sysRole.setId(updateRoleVO.getRoleId());
+        sysRole.setDescription(updateRoleVO.getDescription());
+        sysRole.setName(updateRoleVO.getRoleName());
+        sysRole.setCreateTime(new Date());
+        sysRoleMapper.updateByPrimaryKeySelective(sysRole);
+
+        SysRoleMenuRelationExample example = new SysRoleMenuRelationExample();
+        example.createCriteria().andRoleIdEqualTo(updateRoleVO.getRoleId());
+        sysRoleMenuRelationMapper.deleteByExample(example);
+
+        for (long menuId : updateRoleVO.getMenus()) {
+            SysRoleMenuRelation sysRoleMenuRelation = new SysRoleMenuRelation();
+            sysRoleMenuRelation.setRoleId(updateRoleVO.getRoleId());
+            sysRoleMenuRelation.setMenuId(menuId);
+            sysRoleMenuRelationMapper.insertSelective(sysRoleMenuRelation);
+        }
+        return true;
+    }
+
+
 }
