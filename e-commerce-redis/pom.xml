@@ -12,6 +12,7 @@
     <artifactId>e-commerce-redis</artifactId>
     <version>1.0-SNAPSHOT</version>
     <name>e-commerce-redis</name>
+    <packaging>jar</packaging>
 
     <dependencies>
         <!--redis依赖配置-->

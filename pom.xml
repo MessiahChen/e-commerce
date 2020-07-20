@@ -58,8 +58,6 @@
         <lombok.version>1.18.12</lombok.version>
         <security.version>2.2.6.RELEASE</security.version>
         <configuration.version>2.2.6.RELEASE</configuration.version>
-        <!--        <mall-mbg.version>1.0-SNAPSHOT</mall-mbg.version>-->
-        <!--        <mall-security.version>1.0-SNAPSHOT</mall-security.version>-->
     </properties>
 
     <dependencies>
@@ -81,13 +79,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-        </dependency>
-
-        <!--junit测试-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-test</artifactId>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 
@@ -122,12 +113,6 @@
                 <artifactId>e-commerce-security</artifactId>
                 <version>${e-commerce.security.version}</version>
             </dependency>
-            <!--            &lt;!&ndash;mall安全模块&ndash;&gt;-->
-            <!--            <dependency>-->
-            <!--                <groupId>com.macro.mall</groupId>-->
-            <!--                <artifactId>mall-security</artifactId>-->
-            <!--                <version>${mall-security.version}</version>-->
-            <!--            </dependency>-->
             <!--MyBatis分页插件starter-->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
@@ -211,18 +196,6 @@
                 <artifactId>logstash-logback-encoder</artifactId>
                 <version>${logstash-logback.version}</version>
             </dependency>
-            <!--            &lt;!&ndash;集成SpringBoot Admin监控&ndash;&gt;-->
-            <!--            <dependency>-->
-            <!--                <groupId>de.codecentric</groupId>-->
-            <!--                <artifactId>spring-boot-admin-starter-server</artifactId>-->
-            <!--                <version>${admin-starter-server.version}</version>-->
-            <!--            </dependency>-->
-            <!--MinIO JAVA SDK-->
-            <!--            <dependency>-->
-            <!--                <groupId>io.minio</groupId>-->
-            <!--                <artifactId>minio</artifactId>-->
-            <!--                <version>${minio.version}</version>-->
-            <!--            </dependency>-->
             <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -243,4 +216,5 @@
 
         </dependencies>
     </dependencyManagement>
+
 </project>

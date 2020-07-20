@@ -19,11 +19,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public CompanyEntryVO getCompany(GetCompanyVO getCompanyVO) {
-        ManManufacturerExample manManufacturerExample = new ManManufacturerExample();
-        ManManufacturerExample.Criteria criteria = manManufacturerExample.createCriteria();
-        criteria.andManIdEqualTo(getCompanyVO.getManId());
-        ManManufacturer manManufacturer = manManufacturerMapper.
-                selectByExample(manManufacturerExample).get(0);
+        ManManufacturer manManufacturer = manManufacturerMapper.selectByPrimaryKey(getCompanyVO.getManId());
 
         CompanyEntryVO companyEntryVO = new CompanyEntryVO();
         companyEntryVO.setGmcReportType(manManufacturer.getGmcReportType());
