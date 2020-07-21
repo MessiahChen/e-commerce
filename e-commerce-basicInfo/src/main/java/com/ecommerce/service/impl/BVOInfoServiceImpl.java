@@ -11,6 +11,8 @@ import com.ecommerce.vojo.bvoinfo.GetBVOVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class BVOInfoServiceImpl implements BVOInfoService {
 
@@ -43,9 +45,9 @@ public class BVOInfoServiceImpl implements BVOInfoService {
         dsrDropshipper.setPhoneNumber(bvoInfoInitVO.getPhoneNumber());
         dsrDropshipper.setCallCnt(bvoInfoInitVO.getCallCnt());
         dsrDropshipper.setCreatedBy(bvoInfoInitVO.getCreatedBy());
-        dsrDropshipper.setCreationDate(bvoInfoInitVO.getCreationDate());
+        dsrDropshipper.setCreationDate(new Date());
         dsrDropshipper.setLastUpdateBy(bvoInfoInitVO.getLastUpdateBy());
-        dsrDropshipper.setLastUpdateDate(bvoInfoInitVO.getLastUpdateDate());
+        dsrDropshipper.setLastUpdateDate(new Date());
         dsrDropshipper.setRegisterDate(bvoInfoInitVO.getRegisterDate());
         dsrDropshipper.setRemark(bvoInfoInitVO.getRemark());
         dsrDropshipper.setStsCd(bvoInfoInitVO.getStsCd());
@@ -69,7 +71,7 @@ public class BVOInfoServiceImpl implements BVOInfoService {
         dsrDropshipper.setCreatedBy(bvoInfoUpdateVO.getCreatedBy());
         dsrDropshipper.setCreationDate(bvoInfoUpdateVO.getCreationDate());
         dsrDropshipper.setLastUpdateBy(bvoInfoUpdateVO.getLastUpdateBy());
-        dsrDropshipper.setLastUpdateDate(bvoInfoUpdateVO.getLastUpdateDate());
+        dsrDropshipper.setLastUpdateDate(new Date());
         dsrDropshipper.setRegisterDate(bvoInfoUpdateVO.getRegisterDate());
         dsrDropshipper.setRemark(bvoInfoUpdateVO.getRemark());
         dsrDropshipper.setStsCd(bvoInfoUpdateVO.getStsCd());

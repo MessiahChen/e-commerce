@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -92,10 +93,10 @@ public class StoreServiceImpl implements StoreService {
         StrStore strStore = new StrStore();
         strStore.setCallCnt(storeAddVO.getCallCnt());
         strStore.setCreatedBy(storeAddVO.getCreatedBy());
-        strStore.setCreationDate(storeAddVO.getCreationDate());
+        strStore.setCreationDate(new Date());
         strStore.setDsrId(storeAddVO.getDsrId());
         strStore.setLastUpdateBy(storeAddVO.getLastUpdateBy());
-        strStore.setLastUpdateDate(storeAddVO.getLastUpdateDate());
+        strStore.setLastUpdateDate(new Date());
         strStore.setPlatformType(storeAddVO.getPlatformType());
         strStore.setRemark(storeAddVO.getRemark());
         strStore.setStoreName(storeAddVO.getStoreName());

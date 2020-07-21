@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -56,9 +57,9 @@ public class BrandServiceImpl implements BrandService {
         brdBrand.setBrdId(brandAddVO.getBrdId());
         brdBrand.setCallCnt(brandAddVO.getCallCnt());
         brdBrand.setCreatedBy(brandAddVO.getCreatedBy());
-        brdBrand.setCreationDate(brandAddVO.getCreationDate());
+        brdBrand.setCreationDate(new Date());
         brdBrand.setLastUpdateBy(brandAddVO.getLastUpdateBy());
-        brdBrand.setLastUpdateDate(brandAddVO.getLastUpdateDate());
+        brdBrand.setLastUpdateDate(new Date());
         brdBrand.setManId(brandAddVO.getManId());
         brdBrand.setNameCn(brandAddVO.getNameCn());
         brdBrand.setNameEn(brandAddVO.getNameEn());
@@ -81,7 +82,7 @@ public class BrandServiceImpl implements BrandService {
         brdBrand.setCreatedBy(brandUpdateVO.getCreatedBy());
         brdBrand.setCreationDate(brandUpdateVO.getCreationDate());
         brdBrand.setLastUpdateBy(brandUpdateVO.getLastUpdateBy());
-        brdBrand.setLastUpdateDate(brandUpdateVO.getLastUpdateDate());
+        brdBrand.setLastUpdateDate(new Date());
         brdBrand.setManId(brandUpdateVO.getManId());
         brdBrand.setNameCn(brandUpdateVO.getNameCn());
         brdBrand.setNameEn(brandUpdateVO.getNameEn());

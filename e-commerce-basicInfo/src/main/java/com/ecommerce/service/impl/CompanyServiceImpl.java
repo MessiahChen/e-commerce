@@ -44,10 +44,10 @@ public class CompanyServiceImpl implements CompanyService {
         manManufacturer.setNameEn(companyInitVO.getNameEn());
         manManufacturer.setCallCnt(companyInitVO.getCallCnt());
         manManufacturer.setCreatedBy(companyInitVO.getCreatedBy());
-        manManufacturer.setCreationDate(companyInitVO.getCreationDate());
+        manManufacturer.setCreationDate(new Date());
         manManufacturer.setDescription(companyInitVO.getDescription());
         manManufacturer.setLastUpdateBy(companyInitVO.getLastUpdateBy());
-        manManufacturer.setLastUpdateDate(companyInitVO.getLastUpdateDate());
+        manManufacturer.setLastUpdateDate(new Date());
         manManufacturer.setRemark(companyInitVO.getRemark());
         manManufacturer.setStsCd(companyInitVO.getStsCd());
 
@@ -70,7 +70,7 @@ public class CompanyServiceImpl implements CompanyService {
         manManufacturer.setNameEn(companyInfoUpdateVO.getNameEn());
         manManufacturer.setCallCnt(companyInfoUpdateVO.getCallCnt());
         manManufacturer.setCreatedBy(companyInfoUpdateVO.getCreatedBy());
-        manManufacturer.setCreationDate(companyInfoUpdateVO.getCreationDate());
+        manManufacturer.setCreationDate(new Date());
         manManufacturer.setDescription(companyInfoUpdateVO.getDescription());
         manManufacturer.setLastUpdateBy(companyInfoUpdateVO.getLastUpdateBy());
         manManufacturer.setLastUpdateDate(new Date());
