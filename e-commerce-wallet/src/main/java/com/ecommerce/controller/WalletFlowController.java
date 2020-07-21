@@ -68,7 +68,7 @@ public class WalletFlowController extends BaseController {
         } else {
             Integer withdraw = walletFlowService.withdraw(info);
             if (withdraw == 1) {
-                return CommonResult.success("提现成功！");
+                return CommonResult.success("提现成功！等待管理员审核......");
             } else if (withdraw == -1){
                 return CommonResult.failed("账户不存在！");
             } else if (withdraw == -2){
@@ -97,7 +97,7 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/pay")
     public CommonResult pay(HttpServletRequest request,@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             Integer pay = walletFlowService.pay(info);
             if (pay == 1) {
@@ -140,7 +140,7 @@ public class WalletFlowController extends BaseController {
                         formEntity,
                         CommonResult.class);
                 if (entity.getStatusCode().is2xxSuccessful()) {
-                    return CommonResult.success("退款申请成功！");
+                    return CommonResult.success("退款申请成功！等待管理员审核......");
                 } else {
                     return CommonResult.failed("更新订单状态失败!");
                 }

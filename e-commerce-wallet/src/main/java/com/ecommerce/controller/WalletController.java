@@ -53,7 +53,7 @@ public class WalletController extends BaseController {
         } else {
             List<WalletBalanceVO> balanceVOs = walletService.getWalletInfo(info.getAccountName());
             if (balanceVOs != null) {
-                return CommonResult.success(balanceVOs,"get wallet info successful");
+                return CommonResult.success(balanceVOs,"获取钱包信息成功！");
             } else {
                 return CommonResult.failed("未注册需要注册才能访问钱包！");
             }

@@ -79,6 +79,7 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Boolean changePassword(WalletPasswordVO passwordVO) {
         WaaWalletAccount account = waaWalletAccountMapper.selectByPrimaryKey(waaWalletAccountMapper.getIdByName(passwordVO.getAccountName()));
+        if (account == null) {return false;}
         if (DigestUtils.sha1Hex(passwordVO.getOldPassword()).equals(account.getPassword())) {
             account.setPassword(DigestUtils.sha1Hex(passwordVO.getNewPassword()));
             waaWalletAccountMapper.updateByPrimaryKeySelective(account);
