@@ -3,6 +3,7 @@ package com.ecommerce;
 import com.ecommerce.pojo.ProProduct;
 import com.ecommerce.pojo.SalSalesOrderLineItem;
 import com.ecommerce.service.BvoOrderService;
+import com.ecommerce.vo.IntegerArrayVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import org.junit.Assert;
 import org.junit.Test;
@@ -72,8 +73,10 @@ public class BvoTest {
 
     @Test
     public void testUpdateOrderBySaoId(){
+        IntegerArrayVO integerArrayVO = new IntegerArrayVO();
         int[] saoIds = {100,101,102,103,104,105,106};
-        int result = bvoOrderService.updateOrderBySaoId(saoIds);
+        integerArrayVO.setInts(saoIds);
+        int result = bvoOrderService.updateOrderBySaoId(integerArrayVO);
         Assert.assertEquals(7,result);
     }
 }
