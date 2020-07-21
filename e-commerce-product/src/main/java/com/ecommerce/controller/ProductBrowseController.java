@@ -1,9 +1,13 @@
 package com.ecommerce.controller;
 
+import com.alibaba.druid.sql.visitor.functions.Bin;
 import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
+import com.ecommerce.common.exception.BusinessException;
+import com.ecommerce.common.validationGroup.DeleteGroup;
+import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.service.ProductBrowseService;
 import com.ecommerce.vojo.browse.OperateWishlistVO;
 import com.ecommerce.vojo.browse.ProductBrowseWithCatVO;
@@ -12,6 +16,8 @@ import com.ecommerce.vojo.entry.ProductEntryVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,19 +51,27 @@ public class ProductBrowseController extends BaseController {
 
     @ApiOperation("添加到心愿清单中")
     @PatchMapping("/addToWishlist")
-    public CommonResult addToWishlist(OperateWishlistVO operateWishlistVO) {
-        if (productBrowseService.addToWishlist(operateWishlistVO)) {
-            return CommonResult.success("添加成功");
+    public CommonResult addToWishlist(@Validated({InsertGroup.class}) OperateWishlistVO operateWishlistVO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), operateWishlistVO.toString());
         } else {
-            return CommonResult.success("添加失败");
+            if (productBrowseService.addToWishlist(operateWishlistVO)) {
+                return CommonResult.success("添加成功");
+            } else {
+                return CommonResult.success("添加失败");
+            }
         }
     }
 
     @ApiOperation("从心愿清单中删除")
     @PatchMapping("/deleteFromWishlist")
-    public CommonResult deleteFromWishlist(OperateWishlistVO operateWishlistVO) {
-        if (productBrowseService.deleteFromWishlist(operateWishlistVO))
-            return CommonResult.success("删除成功");
-        else return CommonResult.success("删除失败");
+    public CommonResult deleteFromWishlist(@Validated({DeleteGroup.class}) OperateWishlistVO operateWishlistVO, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw BusinessException.DELETE_FAIL.newInstance(this.getErrorResponse(bindingResult), operateWishlistVO.toString());
+        } else {
+            if (productBrowseService.deleteFromWishlist(operateWishlistVO))
+                return CommonResult.success("删除成功");
+            else return CommonResult.success("删除失败");
+        }
     }
 }
