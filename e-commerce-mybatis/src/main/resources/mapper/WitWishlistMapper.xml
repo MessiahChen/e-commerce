@@ -299,17 +299,18 @@
   <select id="getWishlistByIdAndCat" resultType="com.ecommerce.dto.product.wishlist.ProductWishlistDTO">
     SELECT pro.pro_id proId, wit.dsr_id dsrId, img.uri image,pro.title, pro.mininum_retail_price minRetailPrice, pro.retail_price retailPrice
     FROM wit_wishlist wit, pro_product pro, prc_product_category prc, img_image img
-    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND prc.category_id = #{catId, jdbcType=INTEGER} AND pro.pro_id = img.entity_id AND img.entity_cd = "PM";
+    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND prc.category_id = #{catId, jdbcType=INTEGER} AND pro.pro_id = img.entity_id AND img.sts_cd = "1" AND img.seq_no = 1 AND wit.sts_cd = 1;
   </select>
   <select id="getWishlistByIdNoCat" resultType="com.ecommerce.dto.product.wishlist.ProductWishlistDTO">
     SELECT pro.pro_id proId, wit.dsr_id dsrId, img.uri image,pro.title, pro.mininum_retail_price minRetailPrice, pro.retail_price retailPrice
     FROM wit_wishlist wit, pro_product pro, prc_product_category prc, img_image img
-    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND pro.pro_id = img.entity_id AND img.entity_cd = "PM";
+    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND pro.pro_id = img.entity_id AND img.sts_cd = "1" AND img.seq_no = 1 AND wit.sts_cd = 1;
   </select>
   <select id="getAllCatFromWishlist" resultType="com.ecommerce.dto.product.wishlist.ProductCatsDTO">
     SELECT prc.category_id catId, prc.category_name catName
     FROM wit_wishlist wit, pro_product pro, prc_product_category prc
-    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id GROUP BY category_id;
+    WHERE wit.dsr_id = #{dsrId, jdbcType=INTEGER} AND wit.pro_id = pro.pro_id AND pro.prc_id = prc.prc_id AND wit.sts_cd = 1
+    GROUP BY category_id;
   </select>
 
 </mapper>

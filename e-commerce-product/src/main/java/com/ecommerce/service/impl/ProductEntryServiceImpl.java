@@ -76,7 +76,6 @@ public class ProductEntryServiceImpl implements ProductEntryService {
 
     @Override
     public boolean addProductInfo(ProductAddVO vo) {
-        System.out.println(vo.toString());
         ProProduct proProduct = new ProProduct();
         proProduct.setManId(vo.getManId());
         proProduct.setTitle(vo.getTitle());
@@ -114,14 +113,13 @@ public class ProductEntryServiceImpl implements ProductEntryService {
 
         PdnProductDescription ebayDes = new PdnProductDescription();
         ebayDes.setProId(proProduct.getProId());
-        ebayDes.setTypeCd("SIMPLE_TEXT");
+        ebayDes.setTypeCd("RICH_TEXT");
         ebayDes.setCreatedBy(vo.getUserId());
         ebayDes.setCreationDate(new Date());
         ebayDes.setStsCd("1");
         ebayDes.setPlatformType("2");
         ebayDes.setDescrition(vo.getEbayDescription());
         pdnProductDescriptionMapper.insertSelective(ebayDes);
-
 
         return true;
     }

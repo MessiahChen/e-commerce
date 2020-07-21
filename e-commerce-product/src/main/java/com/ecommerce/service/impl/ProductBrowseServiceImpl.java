@@ -51,11 +51,14 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
 
         for (CatCategory cat : mainCatCategories) {
             ProductBrowseWithCatVO productBrowseWithCatVO = new ProductBrowseWithCatVO();
-            productBrowseWithCatVO.setCatName(cat.getCatName());
             List<ProductBrowseDTO> productBrowseDTOS = proProductMapper.selectProByPrcCat(cat.getCatId());
-            productBrowseWithCatVO.setProducts(productBrowseDTOS);
-
-            result.add(productBrowseWithCatVO);
+            if (productBrowseDTOS.isEmpty()) {
+                continue;
+            } else {
+                productBrowseWithCatVO.setCatName(cat.getCatName());
+                productBrowseWithCatVO.setProducts(productBrowseDTOS);
+                result.add(productBrowseWithCatVO);
+            }
         }
         return result;
     }
@@ -76,7 +79,7 @@ public class ProductBrowseServiceImpl implements ProductBrowseService {
         ImgImageExample imgImageExample = new ImgImageExample();
         ImgImageExample.Criteria criteria = imgImageExample.createCriteria();
         criteria.andEntityIdEqualTo(String.valueOf(proId));
-
+        criteria.andStsCdEqualTo("1");
         List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
         ArrayList<String> images = new ArrayList<>();
         imgImages.forEach(imgImage -> {

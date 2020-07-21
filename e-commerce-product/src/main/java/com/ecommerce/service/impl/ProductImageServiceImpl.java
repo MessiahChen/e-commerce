@@ -68,6 +68,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
             criteria_img.andEntityIdEqualTo(String.valueOf(product.getProId()));
             criteria_img.andSeqNoEqualTo(1);
+            criteria_img.andStsCdEqualTo("1");
             List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
             if (!imgImages.isEmpty())
                 productImageVO.setImageUri(imgImages.get(0).getUri());
@@ -83,6 +84,7 @@ public class ProductImageServiceImpl implements ProductImageService {
             ProProductExample proProductExample = new ProProductExample();
             ProProductExample.Criteria criteria = proProductExample.createCriteria();
             criteria.andTitleLike("%" + vo.getTitle() + "%");
+            criteria.andManIdEqualTo(vo.getManId());
             proProductMapper.selectByExample(proProductExample);
         });
 
@@ -111,6 +113,8 @@ public class ProductImageServiceImpl implements ProductImageService {
             ImgImageExample imgImageExample = new ImgImageExample();
             ImgImageExample.Criteria criteria_img = imgImageExample.createCriteria();
             criteria_img.andEntityIdEqualTo(String.valueOf(product.getProId()));
+            criteria_img.andSeqNoEqualTo(1);
+            criteria_img.andStsCdEqualTo("1");
             List<ImgImage> imgImages = imgImageMapper.selectByExample(imgImageExample);
             if (!imgImages.isEmpty())
                 productImageVO.setImageUri(imgImages.get(0).getUri());
@@ -239,11 +243,62 @@ public class ProductImageServiceImpl implements ProductImageService {
         prcProductCategoryMapper.insertSelective(prcProductCategory);
 
         proProductMapper.updateByPrimaryKeySelective(proProduct);
+
+        ImgImageExample imgImageExample = new ImgImageExample();
+        imgImageExample.createCriteria().andEntityIdEqualTo(String.valueOf(vo.getProId()));
+        long imgCount = imgImageMapper.countByExample(imgImageExample);
+        // 最后插入图片
+        int seqNo = 1;
+        for (int i = 0; i < vo.getImages().size(); i++) {
+            OssCallbackResult image = vo.getImages().get(i);
+
+            ImgImage imgImage = new ImgImage();
+            String[] imageName = image.getFilename().split("/");
+            String name = imageName[imageName.length - 1];
+            imgImage.setName(name);
+            imgImage.setWidth(Integer.parseInt(image.getWidth()));
+            imgImage.setHeight(Integer.parseInt(image.getHeight()));
+            imgImage.setUri(image.getFilename());
+            imgImage.setSeqNo(seqNo);
+            imgImage.setStsCd("1");
+            if (seqNo <= imgCount) { // 更新数据库中存在的图片
+                imgImage.setLastUpdateBy(vo.getUserId());
+                imgImage.setLastUpdateDate(new Date());
+                ImgImageExample example = new ImgImageExample();
+                ImgImageExample.Criteria criteria_img = example.createCriteria();
+                criteria_img.andEntityIdEqualTo(String.valueOf(vo.getProId()));
+                criteria_img.andSeqNoEqualTo(seqNo);
+                imgImageMapper.updateByExampleSelective(imgImage, example);
+            } else { // 向数据库中添加更多的图片
+                imgImage.setEntityId(String.valueOf(vo.getProId()));
+                imgImage.setEntityCd("PM");
+                imgImage.setCreatedBy(vo.getUserId());
+                imgImage.setCreationDate(new Date());
+                imgImageMapper.insertSelective(imgImage);
+            }
+            seqNo++;
+        }
+
+        // 设置多余图片的URL为失效状态
+        for (; seqNo <= imgCount; seqNo++) {
+            ImgImage imgImage = new ImgImage();
+            imgImage.setStsCd("0");
+
+            ImgImageExample example = new ImgImageExample();
+            ImgImageExample.Criteria criteria_img = example.createCriteria();
+            criteria_img.andEntityIdEqualTo(String.valueOf(vo.getProId()));
+            criteria_img.andSeqNoEqualTo(seqNo);
+            imgImageMapper.updateByExampleSelective(imgImage, example);
+        }
         return true;
     }
 
     @Override
     public boolean deleteProductImage(List<Integer> proIds) {
+        if (proIds.isEmpty()) {
+            return false;
+        }
+
         // 删除商品图片、分类
         List<String> stringProIds = new ArrayList<>();
         for (int pro_id : proIds) {
