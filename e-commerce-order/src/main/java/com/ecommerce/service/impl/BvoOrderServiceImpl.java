@@ -3,6 +3,7 @@ package com.ecommerce.service.impl;
 import com.ecommerce.dao.*;
 import com.ecommerce.pojo.*;
 import com.ecommerce.service.BvoOrderService;
+import com.ecommerce.vo.IntegerArrayVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -202,8 +203,9 @@ public class BvoOrderServiceImpl implements BvoOrderService {
     }
 
     @Override
-    public int updateOrderBySaoId(int[] saoIds){
+    public int updateOrderBySaoId(IntegerArrayVO integerArrayVO){
         int result = 0;
+        int[]  saoIds = integerArrayVO.getInts();
         for(int i = 0; i < saoIds.length; i++){
             int saoId = saoIds[i];
             SaoSalesOrder saoSalesOrder = saoSalesOrderMapper.selectByPrimaryKey(saoId);

@@ -1,6 +1,7 @@
 package com.ecommerce.service;
 
 import com.ecommerce.pojo.*;
+import com.ecommerce.vo.IntegerArrayVO;
 import com.ecommerce.vo.SaoSalesOrderVO;
 
 import java.util.List;
@@ -36,7 +37,7 @@ public interface BvoOrderService {
     double getFeeByProvinceCode(String state);
 
     //根据saoId更新订单状态
-    int updateOrderBySaoId(int[] saoIds);
+    int updateOrderBySaoId(IntegerArrayVO integerArrayVO);
 
 
 }
