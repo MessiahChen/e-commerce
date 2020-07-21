@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -15,7 +16,7 @@ public class WalletOrderVO {
     private String accountName;
 
     @ApiModelProperty("密码")
-//    @NotBlank(message = "password cannot be blank")
+    @NotBlank(message = "password cannot be blank")
     private String password;
 
     @ApiModelProperty(value = "流水金额：提现/充值/支付/退款")
@@ -23,5 +24,6 @@ public class WalletOrderVO {
     private BigDecimal flow;
 
     @ApiModelProperty(value = " 订单编号数组")
+    @NotEmpty(message = "oderNums can not be empty")
     private int[] orderNums;
 }

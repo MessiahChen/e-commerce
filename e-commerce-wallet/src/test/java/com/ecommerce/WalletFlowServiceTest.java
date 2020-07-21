@@ -12,6 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @ProjectName: e-commerce
@@ -35,8 +36,8 @@ public class WalletFlowServiceTest {
         walletFlowVO.setAccountName("qiuxiaolin");
         walletFlowVO.setPassword("123456");
         walletFlowVO.setFlow(BigDecimal.valueOf(100));
-        boolean result = walletFlowService.deposit(walletFlowVO);
-        assertEquals(true, result);
+        Integer result = walletFlowService.deposit(walletFlowVO);
+        assertTrue(result == 1);
     }
 
     //暂时测试未通过，应该是密码皮配不上
@@ -46,7 +47,7 @@ public class WalletFlowServiceTest {
         walletFlowVO.setAccountName("qiuxiaolin");
         walletFlowVO.setPassword("123456");
         walletFlowVO.setFlow(BigDecimal.valueOf(100));
-        boolean result = walletFlowService.withdraw(walletFlowVO);
-        assertEquals(true, result);
+        Integer result = walletFlowService.withdraw(walletFlowVO);
+        assertTrue(result == 1);
     }
 }

@@ -1,7 +1,9 @@
 package com.ecommerce.controller;
 
+import cn.hutool.json.JSONUtil;
 import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
+import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
 import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
@@ -12,14 +14,17 @@ import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletOrderVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.models.auth.In;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.http.*;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -32,13 +37,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/walletFlow")
 public class WalletFlowController extends BaseController {
-
-
     @Resource
     RestTemplate restTemplate;
-
-    @Value("${value.zuul-uri}")
-    private String zuulURI;
 
     @Resource
     WalletFlowService walletFlowService;
@@ -47,12 +47,15 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/deposit")
     public CommonResult deposit(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            if (walletFlowService.deposit(info)) {
-                return new CommonResult(20000, "deposit successful");
-            } else {
-                throw BusinessException.UPDATE_FAIL;
+            Integer deposit = walletFlowService.deposit(info);
+            if (deposit == 1) {
+                return CommonResult.success("充值成功！等待管理员审核......");
+            } else if (deposit == -2){
+                return CommonResult.failed("充值失败，支付密码错误！");
+            }else {
+                return CommonResult.failed("充值失败，账户不存在！");
             }
         }
     }
@@ -61,12 +64,17 @@ public class WalletFlowController extends BaseController {
     @PatchMapping("/withdraw")
     public CommonResult withdraw(@Validated({UpdateGroup.class}) @RequestBody WalletFlowVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            if (walletFlowService.withdraw(info)) {
-                return new CommonResult(20000, "withdraw successful");
-            } else {
-                throw BusinessException.UPDATE_FAIL;
+            Integer withdraw = walletFlowService.withdraw(info);
+            if (withdraw == 1) {
+                return CommonResult.success("提现成功！");
+            } else if (withdraw == -1){
+                return CommonResult.failed("账户不存在！");
+            } else if (withdraw == -2){
+                return CommonResult.failed("支付密码错误！");
+            }else {
+                return CommonResult.failed("账户余额不足！");
             }
         }
     }
@@ -75,48 +83,69 @@ public class WalletFlowController extends BaseController {
     @PostMapping("/check")
     public CommonResult<List<WalletFlowRecordVO>> check(@Validated({SelectGroup.class}) @RequestBody StringVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.SELECT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            return new CommonResult<>(20000, "check successful", walletFlowService.check(info.getAccountName()));
+            List<WalletFlowRecordVO> recordVOS = walletFlowService.check(info.getAccountName());
+            if (recordVOS == null) {
+                return CommonResult.failed("账户尚未创建，请创建新账户！");
+            }
+            return CommonResult.success(recordVOS,"获取账户流水记录成功！");
         }
     }
 
     @ApiOperation("支付")
     @PatchMapping("/pay")
-    public CommonResult pay(@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
+    public CommonResult pay(HttpServletRequest request,@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
             throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            if (walletFlowService.pay(info)) {
-                ResponseEntity<CommonResult> entity = restTemplate.postForEntity("http://localhost:9030/bvoOrder/update", info.getOrderNums() ,CommonResult.class);
-                if (entity.getStatusCode().is2xxSuccessful()){
-                    return new CommonResult(20000,"pay successful");
-                }else {
-                    return new CommonResult(500,"更新订单状态失败");
+            Integer pay = walletFlowService.pay(info);
+            if (pay == 1) {
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Authorization", "Bearer " + request.getHeader("Bearer"));
+                HttpEntity<int[]> formEntity = new HttpEntity<>(info.getOrderNums(), headers);
+                ResponseEntity<CommonResult> entity = restTemplate.exchange(
+                        "http://e-commerce-order/bvoOrder/update",
+                        HttpMethod.POST,
+                        formEntity,
+                        CommonResult.class);
+                if (entity.getStatusCode().is2xxSuccessful()) {
+                    return CommonResult.success("支付成功！");
+                } else {
+                    return CommonResult.failed("更新订单状态失败!");
                 }
+            } else if (pay == -1){
+                return CommonResult.failed("账户不存在!");
+            } else if (pay == -2){
+                return CommonResult.failed("账户余额不足！");
             } else {
-                throw BusinessException.UPDATE_FAIL;
+                return CommonResult.failed("支付密码错误！");
             }
         }
     }
 
-    //TODO 两个接口调用同一个方法 需要订单模块接受参数
-
     @ApiOperation("申请退款")
     @PatchMapping("/refund")
-    public CommonResult refund(@Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
+    public CommonResult refund(HttpServletRequest request, @Validated({UpdateGroup.class}) @RequestBody WalletOrderVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletFlowService.refund(info)) {
-                ResponseEntity<CommonResult> entity = restTemplate.postForEntity("http://localhost:9030/bvoOrder/update", info.getOrderNums() ,CommonResult.class);
-                if (entity.getStatusCode().is2xxSuccessful()){
-                    return new CommonResult(20000,"pay successful");
-                }else {
-                    return new CommonResult(500,"更新订单状态失败");
+                HttpHeaders headers = new HttpHeaders();
+                headers.add("Authorization", "Bearer " + request.getHeader("Bearer"));
+                HttpEntity<int[]> formEntity = new HttpEntity<>(info.getOrderNums(), headers);
+                ResponseEntity<CommonResult> entity = restTemplate.exchange(
+                        "http://e-commerce-order/bvoOrder/update",
+                        HttpMethod.POST,
+                        formEntity,
+                        CommonResult.class);
+                if (entity.getStatusCode().is2xxSuccessful()) {
+                    return CommonResult.success("退款申请成功！");
+                } else {
+                    return CommonResult.failed("更新订单状态失败!");
                 }
             } else {
-                throw BusinessException.UPDATE_FAIL;
+                return CommonResult.failed("申请退款失败！");
             }
         }
     }

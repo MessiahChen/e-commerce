@@ -11,7 +11,9 @@ import com.ecommerce.vojo.WalletFlowRecordVO;
 import com.ecommerce.vojo.WalletFlowVO;
 import com.ecommerce.vojo.WalletOrderVO;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -33,60 +35,76 @@ public class WalletFlowServiceImpl implements WalletFlowService {
     @Resource
     WtrWalletTransactionRecordMapper wtrWalletTransactionRecordMapper;
 
+    @Transactional
     @Override
-    public Boolean deposit(WalletFlowVO walletFlowVO) {
+    public Integer deposit(WalletFlowVO walletFlowVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
         example.createCriteria().andAccountNameEqualTo(walletFlowVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
+        if (accounts == null || accounts.isEmpty()) {
+            return -1;
+        }
+
         WaaWalletAccount account = accounts.get(0);
-        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword()))){
+        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword()))) {
             account.setDepositingMoney(walletFlowVO.getFlow());
             waaWalletAccountMapper.updateByPrimaryKeySelective(account);
-            generateTransaction(account.getBuyerId(),2,1,walletFlowVO.getFlow());
-            return true;
-        }else {
-            generateTransaction(account.getBuyerId(),1,1,walletFlowVO.getFlow());
-            return false;
+            generateTransaction(account.getBuyerId(), 2, 1, walletFlowVO.getFlow());
+            return 1;
+        } else {
+            generateTransaction(account.getBuyerId(), 1, 1, walletFlowVO.getFlow());
+            return -2;
         }
     }
 
+    @Transactional
     @Override
-    public Boolean withdraw(WalletFlowVO walletFlowVO) {
+    public Integer withdraw(WalletFlowVO walletFlowVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
         example.createCriteria().andAccountNameEqualTo(walletFlowVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
+        if (accounts == null || accounts.isEmpty()) {
+            return -1;
+        }
+
         WaaWalletAccount account = accounts.get(0);
-        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword())) && (account.getAvailableMoney().compareTo(walletFlowVO.getFlow()) > -1)){
-            account.setWithdrawingMoney(walletFlowVO.getFlow());
-            waaWalletAccountMapper.updateByPrimaryKeySelective(account);
-            generateTransaction(account.getBuyerId(),2,2,walletFlowVO.getFlow());
-            return true;
-        }else {
-            generateTransaction(account.getBuyerId(),2,2,walletFlowVO.getFlow());
-            return false;
+        if (account.getPassword().equals(DigestUtils.sha1Hex(walletFlowVO.getPassword()))) {
+            if (account.getAvailableMoney().compareTo(walletFlowVO.getFlow()) > -1) {
+                account.setWithdrawingMoney(walletFlowVO.getFlow());
+                waaWalletAccountMapper.updateByPrimaryKeySelective(account);
+                generateTransaction(account.getBuyerId(), 2, 2, walletFlowVO.getFlow());
+                return 1;
+            } else {
+                generateTransaction(account.getBuyerId(), 1, 2, walletFlowVO.getFlow());
+                return -3;
+            }
+        } else {
+            generateTransaction(account.getBuyerId(), 1, 2, walletFlowVO.getFlow());
+            return -2;
         }
     }
 
+    @Transactional
     @Override
     public List<WalletFlowRecordVO> check(String accountName) {
         int buyerId = waaWalletAccountMapper.getIdByName(accountName);
         WtrWalletTransactionRecordExample example = new WtrWalletTransactionRecordExample();
         example.createCriteria().andBuyerIdEqualTo(buyerId);
         List<WtrWalletTransactionRecord> records = wtrWalletTransactionRecordMapper.selectByExample(example);
-        List<WalletFlowRecordVO> recordVOS = new ArrayList<WalletFlowRecordVO>();
-        for (WtrWalletTransactionRecord record: records) {
-            WalletFlowRecordVO recordVO = new WalletFlowRecordVO();
-            recordVO.setBuyerId(record.getBuyerId());
-            recordVO.setTransactionNumber(record.getTransactionNumber());
-            recordVO.setTransactionMoney(record.getTransactionMoney());
-            recordVO.setStatus(record.getStatus());
-            recordVO.setCreateTime(record.getCreateTime());
-            recordVOS.add(recordVO);
+        if (records == null || records.isEmpty()) {
+            return null;
         }
+
+        List<WalletFlowRecordVO> recordVOS = new ArrayList<>();
+        records.forEach(record -> {
+            WalletFlowRecordVO recordVO = new WalletFlowRecordVO();
+            BeanUtils.copyProperties(record, recordVO);
+            recordVOS.add(recordVO);
+        });
         return recordVOS;
     }
 
-    public int generateTransaction(Integer buyerId, int status, int transactionType,BigDecimal transactionMoney){
+    private void generateTransaction(Integer buyerId, int status, int transactionType, BigDecimal transactionMoney) {
         //生成流水记录
         WtrWalletTransactionRecord recordVO = new WtrWalletTransactionRecord();
         recordVO.setCreateTime(new Date());
@@ -95,44 +113,57 @@ public class WalletFlowServiceImpl implements WalletFlowService {
         recordVO.setTransactionType((byte) transactionType);
         recordVO.setTransactionNumber(generateTransactionNumber());
         recordVO.setStatus((byte) status);
-        return wtrWalletTransactionRecordMapper.insertSelective(recordVO);
+        wtrWalletTransactionRecordMapper.insertSelective(recordVO);
     }
 
     //生成流水号
-    public static String generateTransactionNumber() {
+    private String generateTransactionNumber() {
         SimpleDateFormat sdfTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        return sdfTime.format(new Date()).replaceAll("[[\\s-:punct:]]", "") + (int)(Math.random()*999999);
+        return sdfTime.format(new Date()).replaceAll("[[\\s-:punct:]]", "") + (int) (Math.random() * 999999);
     }
 
+    @Transactional
     @Override
-    public Boolean pay(WalletOrderVO WalletOrderVO) {
+    public Integer pay(WalletOrderVO walletOrderVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
-        example.createCriteria().andAccountNameEqualTo(WalletOrderVO.getAccountName());
+        example.createCriteria().andAccountNameEqualTo(walletOrderVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
+        if (accounts == null || accounts.isEmpty()) {
+            return -1;
+        }
+
         WaaWalletAccount account = accounts.get(0);
+        if (account.getPassword().equals(DigestUtils.sha1Hex(walletOrderVO.getPassword()))) {
+            if (account.getAvailableMoney().compareTo(walletOrderVO.getFlow()) > -1){
+                account.setAvailableMoney(account.getAvailableMoney().subtract(walletOrderVO.getFlow()));
+                account.setLastUpdateTime(new Date());
 
-        if (account.getPassword().equals(DigestUtils.sha1Hex(WalletOrderVO.getPassword())) && (account.getAvailableMoney().compareTo(WalletOrderVO.getFlow()) > -1)) {
-            account.setAvailableMoney(account.getAvailableMoney().subtract(WalletOrderVO.getFlow()));
-            account.setLastUpdateTime(new Date());
-
-            waaWalletAccountMapper.updateByPrimaryKeySelective(account);
-            generateTransaction(account.getBuyerId(),2,3,WalletOrderVO.getFlow());
-            return true;
+                waaWalletAccountMapper.updateByPrimaryKeySelective(account);
+                generateTransaction(account.getBuyerId(), 2, 3, walletOrderVO.getFlow());
+                return 1;
+            }else {
+                generateTransaction(account.getBuyerId(), 1, 3, walletOrderVO.getFlow());
+                return -2;
+            }
         } else {
-            return false;
+            generateTransaction(account.getBuyerId(), 1, 3, walletOrderVO.getFlow());
+            return -3;
         }
     }
 
     @Override
-    public Boolean refund(WalletOrderVO WalletOrderVO) {
+    public Boolean refund(WalletOrderVO walletOrderVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
-        example.createCriteria().andAccountNameEqualTo(WalletOrderVO.getAccountName());
+        example.createCriteria().andAccountNameEqualTo(walletOrderVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
-        WaaWalletAccount account = accounts.get(0);
+        if (accounts == null || accounts.isEmpty()) {
+            return false;
+        }
 
-        account.setAvailableMoney(account.getAvailableMoney().add(WalletOrderVO.getFlow()));
+        WaaWalletAccount account = accounts.get(0);
+        account.setAvailableMoney(account.getAvailableMoney().add(walletOrderVO.getFlow()));
         account.setLastUpdateTime(new Date());
-        generateTransaction(account.getBuyerId(),2,4,WalletOrderVO.getFlow());
+        generateTransaction(account.getBuyerId(), 2, 4, walletOrderVO.getFlow());
         return true;
     }
 

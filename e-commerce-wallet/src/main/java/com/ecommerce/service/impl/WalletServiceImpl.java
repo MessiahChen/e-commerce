@@ -39,7 +39,7 @@ public class WalletServiceImpl implements WalletService {
         example.createCriteria().andAccountNameEqualTo(walletAccountVO.getAccountName());
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
         if (!accounts.isEmpty()){
-            throw BusinessException.USERNAME_DUPLICATE;
+            return false;
         }
 
         WaaWalletAccount walletAccount = new WaaWalletAccount();
@@ -63,7 +63,7 @@ public class WalletServiceImpl implements WalletService {
         example.createCriteria().andAccountNameEqualTo(accountName);
         List<WaaWalletAccount> accounts = waaWalletAccountMapper.selectByExample(example);
         if (accounts == null || accounts.isEmpty()) {
-            throw BusinessException.USERNAME_NOT_EXISTS;
+            return null;
         }
         List<WalletBalanceVO> balanceVOS = new ArrayList<>();
         for (WaaWalletAccount account:accounts) {

@@ -27,18 +27,6 @@ public class WalletBalanceVO {
     @ApiModelProperty(value = "提现中金额")
     private BigDecimal withdrawingMoney;
 
-//    @ApiModelProperty(value = "创建人")
-//    private String createBy;
-//
-//    @ApiModelProperty(value = "创建时间")
-//    private Date createTime;
-//
-//    @ApiModelProperty(value = "更新人")
-//    private String lastUpdateBy;
-//
-//    @ApiModelProperty(value = "最后更新时间")
-//    private Date lastUpdateTime;
-
     @ApiModelProperty(value = "账户币种：USD,RMB")
     private String currency;
 }

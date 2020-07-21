@@ -35,24 +35,28 @@ public class WalletController extends BaseController {
     @PutMapping("/register")
     public CommonResult<List<WalletBalanceVO>> register(@Validated({InsertGroup.class}) @RequestBody WalletAccountVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.INSERT_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.addWallet(info)) {
-                return new CommonResult<>(20000,"register new wallet account successful",walletService.getWalletInfo(info.getAccountName()));
+                return CommonResult.success(walletService.getWalletInfo(info.getAccountName()),"注册新账户成功");
             } else {
-                throw BusinessException.INSERT_FAIL;
+                return CommonResult.failed("用户名已存在！");
             }
         }
     }
 
     @ApiOperation("获取账户钱包信息")
     @PostMapping("/getInfo")
-    public CommonResult<List<WalletBalanceVO>> getInfo(@RequestBody StringVO info){
-        List<WalletBalanceVO> balanceVOs = walletService.getWalletInfo(info.getAccountName());
-        if (balanceVOs != null) {
-            return CommonResult.success(balanceVOs,"get wallet info successful");
+    public CommonResult<List<WalletBalanceVO>> getInfo(@Validated({SelectGroup.class}) @RequestBody StringVO info,BindingResult bindingResult){
+        if (bindingResult.hasErrors()) {
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
-            return CommonResult.failed("未注册需要注册才能访问钱包！");
+            List<WalletBalanceVO> balanceVOs = walletService.getWalletInfo(info.getAccountName());
+            if (balanceVOs != null) {
+                return CommonResult.success(balanceVOs,"get wallet info successful");
+            } else {
+                return CommonResult.failed("未注册需要注册才能访问钱包！");
+            }
         }
     }
 
@@ -60,19 +64,13 @@ public class WalletController extends BaseController {
     @PatchMapping("/changePassword")
     public CommonResult changePassword(@Validated({UpdateGroup.class}) @RequestBody WalletPasswordVO info, BindingResult bindingResult) throws BusinessException {
         if (bindingResult.hasErrors()) {
-            throw BusinessException.UPDATE_FAIL.newInstance(this.getErrorResponse(bindingResult), info.toString());
+            throw new BusinessException().newInstance(this.getErrorResponse(bindingResult), info.toString());
         } else {
             if (walletService.changePassword(info)) {
-                return new CommonResult(20000,"change password successful");
+                return CommonResult.success("修改支付密码成功！");
             } else {
-                throw BusinessException.UPDATE_FAIL;
+                return CommonResult.failed("原支付密码错误！");
             }
         }
     }
-
-    @GetMapping("/test")
-    public String test(){
-        return "success";
-    }
-
 }

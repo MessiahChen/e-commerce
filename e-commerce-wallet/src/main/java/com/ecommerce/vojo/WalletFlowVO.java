@@ -13,7 +13,7 @@ import java.math.BigDecimal;
  * 用于提现/充值/支付/退款的VO类
  */
 
-@Api("用于提现/充值的VO类")
+@Api("用于提现/充值/支付/退款的VO类")
 @Data
 
 public class WalletFlowVO {
@@ -23,7 +23,7 @@ public class WalletFlowVO {
     private String accountName;
 
     @ApiModelProperty("密码")
-//    @NotBlank(message = "password cannot be blank")
+    @NotBlank(message = "password cannot be blank")
     private String password;
 
     @ApiModelProperty(value = "流水金额：提现/充值/支付/退款")

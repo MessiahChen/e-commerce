@@ -15,13 +15,15 @@ public interface WalletFlowService {
 
     /**
      * 充值
+     * @return
      */
-    Boolean deposit(WalletFlowVO walletFlowVO);
+    Integer deposit(WalletFlowVO walletFlowVO);
 
     /**
      * 提现
+     * @return
      */
-    Boolean withdraw(WalletFlowVO walletFlowVO);
+    Integer withdraw(WalletFlowVO walletFlowVO);
 
     /**
      * 查看钱包流水
@@ -30,11 +32,13 @@ public interface WalletFlowService {
 
     /**
      * 支付
+     * @return
      */
-    Boolean pay(WalletOrderVO WalletOrderVO);
+    Integer pay(WalletOrderVO WalletOrderVO);
 
     /**
      * 申请退款
+     * @return
      */
     Boolean refund(WalletOrderVO WalletOrderVO);
 
