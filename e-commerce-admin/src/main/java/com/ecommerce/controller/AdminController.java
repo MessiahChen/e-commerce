@@ -1,7 +1,10 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
+import com.ecommerce.common.exception.BusinessException;
+import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.pojo.SysMenu;
 import com.ecommerce.pojo.SysResource;
 import com.ecommerce.pojo.SysRole;
@@ -12,7 +15,10 @@ import com.ecommerce.service.UserService;
 import com.ecommerce.vojo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -26,7 +32,7 @@ import java.util.List;
 @Controller
 @Api(value = "管理员功能模块", tags = "管理员控制类")
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController extends BaseController {
 
     @Resource
     private UserService userService;
@@ -35,7 +41,10 @@ public class AdminController {
 
     @ApiOperation("获取所有用户")
     @PostMapping("/getAllUser")
-    public CommonResult<CommonPage<SysUser>> getAllUser(@RequestBody PageVO pageVO) {
+    public CommonResult<CommonPage<SysUser>> getAllUser(@Validated({SelectGroup.class}) @RequestBody PageVO pageVO, BindingResult result) throws BusinessException{
+        if (result.hasErrors()) {
+            throw new BusinessException().newInstance(this.getErrorResponse(result), pageVO.toString());
+        }
         CommonPage<SysUser> commonPage = userService.getAllUser(pageVO);
         if (!commonPage.getList().isEmpty()) {
             return CommonResult.success(commonPage, "获取所有用户成功！");
@@ -46,7 +55,10 @@ public class AdminController {
 
     @ApiOperation(value = "根据用户名模糊匹配用户")
     @PostMapping(value = "/searchUser")
-    public CommonResult<CommonPage<SysUser>> searchUser(@RequestBody SearchUserVO searchUserVO) {
+    public CommonResult<CommonPage<SysUser>> searchUser(@Validated({SelectGroup.class}) @RequestBody SearchUserVO searchUserVO,BindingResult result)throws BusinessException {
+        if (result.hasErrors()) {
+            throw new BusinessException().newInstance(this.getErrorResponse(result), searchUserVO.toString());
+        }
         CommonPage<SysUser> commonPage = userService.searchUser(searchUserVO);
         if (!commonPage.getList().isEmpty()) {
             return CommonResult.success(commonPage, "模糊匹配用户列表成功！");

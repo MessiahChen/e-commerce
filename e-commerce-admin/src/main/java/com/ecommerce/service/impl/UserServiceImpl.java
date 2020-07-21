@@ -15,6 +15,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
@@ -255,39 +256,17 @@ public class UserServiceImpl implements UserService {
         List<SysMenu> menusFromDB = sysMenuMapper.selectByExample(example);
 
         List<MenuVO> result = new ArrayList<>();
-        for (SysMenu menu : menusFromDB) {
-            if (menu.getParentId() == 0) {
-                MenuVO parent = new MenuVO();
-                parent.setId(menu.getId());
-                parent.setParentId(menu.getParentId());
-                parent.setCreateTime(menu.getCreateTime());
-                parent.setTitle(menu.getTitle());
-                parent.setLevel(menu.getLevel());
-                parent.setSort(menu.getSort());
-                parent.setName(menu.getName());
-                parent.setIcon(menu.getIcon());
-                parent.setHidden(menu.getHidden());
-                result.add(parent);
-            }
-        }
+        menusFromDB.stream().filter(menu -> menu.getParentId() == 0).forEachOrdered(menu -> {
+            MenuVO parent = new MenuVO();
+            BeanUtils.copyProperties(menu, parent);
+            result.add(parent);
+        });
 
         for (SysMenu menu : menusFromDB) {
             if (menu.getParentId() != 0) {
                 MenuVO child = new MenuVO();
-                child.setId(menu.getId());
-                child.setParentId(menu.getParentId());
-                child.setCreateTime(menu.getCreateTime());
-                child.setTitle(menu.getTitle());
-                child.setLevel(menu.getLevel());
-                child.setSort(menu.getSort());
-                child.setName(menu.getName());
-                child.setIcon(menu.getIcon());
-                child.setHidden(menu.getHidden());
-                for (MenuVO parent : result) {
-                    if (parent.getId().equals(child.getParentId())) {
-                        parent.getChildren().add(child);
-                    }
-                }
+                BeanUtils.copyProperties(menu,child);
+                result.stream().filter(parent -> parent.getId().equals(child.getParentId())).forEachOrdered(parent -> parent.getChildren().add(child));
             }
         }
 

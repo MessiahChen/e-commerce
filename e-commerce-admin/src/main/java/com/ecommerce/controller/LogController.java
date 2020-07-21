@@ -6,6 +6,8 @@ import cn.hutool.core.lang.UUID;
 import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
+import com.ecommerce.common.validationGroup.InsertGroup;
+import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.pojo.SysUser;
 import com.ecommerce.security.component.DynamicSecurityMetadataSource;
 import com.ecommerce.service.RedisService;
@@ -18,6 +20,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -45,7 +48,7 @@ public class LogController extends BaseController {
     @ApiOperation(value = "用户注册")
     @PutMapping(value = "/register")
     @ResponseBody
-    public CommonResult<SysUser> register(@RequestBody RegisterVO registerVO, BindingResult result) {
+    public CommonResult<SysUser> register(@Validated({InsertGroup.class}) @RequestBody RegisterVO registerVO, BindingResult result) throws BusinessException{
         if (result.hasErrors()) {
             throw new BusinessException().newInstance(this.getErrorResponse(result), registerVO.toString());
         }
@@ -60,7 +63,7 @@ public class LogController extends BaseController {
     @ApiOperation(value = "登录以后返回token")
     @PostMapping(value = "/login")
     @ResponseBody
-    public CommonResult<Map<String, String>> login(@RequestBody LoginVO loginVO, BindingResult result) {
+    public CommonResult<Map<String, String>> login(@Validated({SelectGroup.class}) @RequestBody LoginVO loginVO, BindingResult result) throws BusinessException{
         if (result.hasErrors()) {
             throw new BusinessException().newInstance(this.getErrorResponse(result), loginVO.toString());
         }

@@ -13,8 +13,6 @@ import com.ecommerce.vojo.WalletOrderVO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
@@ -35,7 +33,6 @@ public class WalletFlowServiceImpl implements WalletFlowService {
     @Resource
     WtrWalletTransactionRecordMapper wtrWalletTransactionRecordMapper;
 
-    @Transactional
     @Override
     public Integer deposit(WalletFlowVO walletFlowVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
@@ -57,7 +54,6 @@ public class WalletFlowServiceImpl implements WalletFlowService {
         }
     }
 
-    @Transactional
     @Override
     public Integer withdraw(WalletFlowVO walletFlowVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();
@@ -84,7 +80,6 @@ public class WalletFlowServiceImpl implements WalletFlowService {
         }
     }
 
-    @Transactional
     @Override
     public List<WalletFlowRecordVO> check(String accountName) {
         int buyerId = waaWalletAccountMapper.getIdByName(accountName);
@@ -122,7 +117,6 @@ public class WalletFlowServiceImpl implements WalletFlowService {
         return sdfTime.format(new Date()).replaceAll("[[\\s-:punct:]]", "") + (int) (Math.random() * 999999);
     }
 
-    @Transactional
     @Override
     public Integer pay(WalletOrderVO walletOrderVO) {
         WaaWalletAccountExample example = new WaaWalletAccountExample();

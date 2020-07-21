@@ -3,6 +3,7 @@ package com.ecommerce.config.securityConfig;
 import com.ecommerce.dao.SysResourceMapper;
 import com.ecommerce.dao.SysRoleResourceRelationMapper;
 import com.ecommerce.dao.SysUserMapper;
+import com.ecommerce.dao.SysUserRoleRelationMapper;
 import com.ecommerce.pojo.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
     @Resource
     SysRoleResourceRelationMapper sysRoleResourceRelationMapper;
 
+    @Resource
+    SysUserRoleRelationMapper sysUserRoleRelationMapper;
+
 
     @Override
     public SysUser getUserByName(String username) {
@@ -43,8 +47,15 @@ public class UserServiceImpl implements UserService {
         //获取用户信息
         SysUser sysUser = getUserByName(username);
         if (sysUser != null) {
+            SysUserRoleRelationExample sysUserRoleRelationExample = new SysUserRoleRelationExample();
+            sysUserRoleRelationExample.createCriteria().andAdminIdEqualTo(sysUser.getId());
+            List<SysUserRoleRelation> sysUserRoleRelations = sysUserRoleRelationMapper.selectByExample(sysUserRoleRelationExample);
+            if (sysUserRoleRelations == null || sysUserRoleRelations.isEmpty())
+                throw new UsernameNotFoundException("该用户未关联任何角色");
+
             SysResourceExample example = new SysResourceExample();
-            example.createCriteria().andIdIn(getPermissionResourceList(sysUser.getId()));
+            List<Long> permissionResourceList = getPermissionResourceList(sysUserRoleRelations.get(0).getRoleId());
+            example.createCriteria().andIdIn(permissionResourceList);
             List<SysResource> resourceList = sysResourceMapper.selectByExample(example);
             return new AuthorityUserDetails(sysUser, resourceList);
         }

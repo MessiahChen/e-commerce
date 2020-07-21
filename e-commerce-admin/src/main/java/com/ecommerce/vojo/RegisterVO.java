@@ -5,6 +5,7 @@ import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 
 @Data
 public class RegisterVO {
@@ -24,5 +25,6 @@ public class RegisterVO {
     @ApiModelProperty(value = "备注")
     private String note;
     @ApiModelProperty(value = "用户类型，1-BVO，2-MVO，3-admin")
+    @NotNull(message = "请为用户定义角色")
     private int roleId;
 }

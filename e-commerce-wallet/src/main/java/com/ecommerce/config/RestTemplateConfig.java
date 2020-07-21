@@ -11,16 +11,17 @@ import org.springframework.web.client.RestTemplate;
 public class RestTemplateConfig {
     @Bean
     @LoadBalanced
-    public RestTemplate getRestTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
+    public RestTemplate getRestTemplate(ClientHttpRequestFactory clientHttpRequestFactory){
         return new RestTemplate(clientHttpRequestFactory);
+
     }
 
     @Bean
     public ClientHttpRequestFactory simpleClientHttpRequestFactory() {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         //设置连接超时
-        factory.setConnectTimeout(15000);
-        factory.setReadTimeout(5000);
+        factory.setConnectTimeout(30000);
+        factory.setReadTimeout(30000);
         return factory;
     }
 }
