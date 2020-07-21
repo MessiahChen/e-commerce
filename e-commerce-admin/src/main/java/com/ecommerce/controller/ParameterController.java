@@ -1,10 +1,12 @@
 package com.ecommerce.controller;
 
+import com.alibaba.druid.sql.visitor.functions.Bin;
 import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
+import com.ecommerce.common.validationGroup.DeleteGroup;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
@@ -33,14 +35,14 @@ public class ParameterController extends BaseController {
 
     @ApiOperation(value = "新增参数")
     @PutMapping(value = "/addParameter")
-    public CommonResult addParameter(@Validated({InsertGroup.class}) @RequestBody AddParameterVO addParameterVO, BindingResult result) {
+    public CommonResult addParameter(@Validated({InsertGroup.class}) @RequestBody AddParameterVO addParameterVO, BindingResult result) throws BusinessException{
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),addParameterVO.toString());
         }
         if (!parameterService.add(addParameterVO)) {
-            return CommonResult.failed();
+            return CommonResult.failed("新增参数失败！");
         }else {
-            return CommonResult.success("add new par successful");
+            return CommonResult.success("新增参数成功！");
         }
     }
 
@@ -52,42 +54,46 @@ public class ParameterController extends BaseController {
         }
         CommonPage<ParInfoVO> commonPage = parameterService.getAllParInfo(pageVO);
         if (!commonPage.getList().isEmpty()) {
-            return CommonResult.success(commonPage, "get all parameters successful");
+            return CommonResult.success(commonPage, "获取所有参数成功！");
         } else {
-            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+            return CommonResult.failed("后台暂无参数数据！");
         }
     }
 
     @ApiOperation(value = "模糊匹配参数")
     @PostMapping(value = "/searchPar")
-    public CommonResult<CommonPage<ParInfoVO>> searchPar(@Validated({SelectGroup.class}) @RequestBody SearchParVO searchParVO, BindingResult result) {
+    public CommonResult<CommonPage<ParInfoVO>> searchPar(@Validated({SelectGroup.class}) @RequestBody SearchParVO searchParVO, BindingResult result) throws BusinessException{
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),searchParVO.toString());
         }
         CommonPage<ParInfoVO> commonPage = parameterService.searchPar(searchParVO);
         if (!commonPage.getList().isEmpty()) {
-            return CommonResult.success(commonPage, "get similar parameters successful");
+            return CommonResult.success(commonPage, "模糊匹配参数成功！");
         } else {
-            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+            return CommonResult.failed("模糊匹配参数失败！");
         }
     }
 
     @ApiOperation(value = "修改前获取原参数记录")
     @GetMapping(value = "/getParWhenUpdate")
     public CommonResult<ParInfoVO> getParWhenUpdate(@RequestParam("parId") Integer parId) {
-        return CommonResult.success(parameterService.getParWhenUpdate(parId),"get par successful");
+        ParInfoVO parInfoVO = parameterService.getParWhenUpdate(parId);
+        if (parInfoVO == null){
+            return CommonResult.failed("参数获取失败！");
+        }
+        return CommonResult.success(parInfoVO,"获取参数成功！");
     }
 
     @ApiOperation(value = "更新参数")
     @PostMapping(value = "/updatePar")
-    public CommonResult updatePar(@Validated({UpdateGroup.class}) @RequestBody UpdateParVO updateParVO, BindingResult result) {
+    public CommonResult updatePar(@Validated({UpdateGroup.class}) @RequestBody UpdateParVO updateParVO, BindingResult result)throws BusinessException {
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),updateParVO.toString());
         }
         if (!parameterService.updatePar(updateParVO)) {
-            return CommonResult.failed();
+            return CommonResult.failed("更新参数失败！");
         }else {
-            return CommonResult.success("update par successful");
+            return CommonResult.success("更新参数成功！");
         }
     }
 
@@ -95,19 +101,22 @@ public class ParameterController extends BaseController {
     @DeleteMapping(value = "/deletePar")
     public CommonResult deletePar(@RequestParam("parId") Integer parId) {
         if (!parameterService.deletePar(parId)) {
-            return CommonResult.failed();
+            return CommonResult.failed("删除参数失败！");
         }else {
-            return CommonResult.success("delete par successful");
+            return CommonResult.success("删除参数成功！");
         }
     }
 
     @ApiOperation(value = "批量删除参数")
     @PostMapping(value = "/batchDeletePar")
-    public CommonResult batchDeletePar(@RequestBody List<Integer> parIds) {
+    public CommonResult batchDeletePar(@Validated({DeleteGroup.class}) @RequestBody List<Integer> parIds, BindingResult result)throws BusinessException {
+        if (result.hasErrors()){
+            throw new BusinessException().newInstance(this.getErrorResponse(result),parIds.toString());
+        }
         if (!parameterService.batchDeletePar(parIds)) {
-            return CommonResult.failed();
+            return CommonResult.failed("批量删除参数失败！");
         }else {
-            return CommonResult.success("delete pars successful");
+            return CommonResult.success("批量删除参数成功！");
         }
     }
 

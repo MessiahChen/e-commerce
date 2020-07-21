@@ -72,7 +72,7 @@ public class ParameterServiceImpl implements ParameterService {
     public ParInfoVO getParWhenUpdate(Integer parId){
         ParParameter parameter = parParameterMapper.selectByPrimaryKey(parId);
         if (parameter == null) {
-            throw BusinessException.SELECT_FAIL;
+            return null;
         }
         ParInfoVO parInfoVO = new ParInfoVO();
         parInfoVO.setParId(parameter.getParId());

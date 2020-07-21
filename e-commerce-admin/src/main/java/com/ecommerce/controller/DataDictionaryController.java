@@ -5,6 +5,7 @@ import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.base.ResultCode;
 import com.ecommerce.common.exception.BusinessException;
+import com.ecommerce.common.validationGroup.DeleteGroup;
 import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.SelectGroup;
 import com.ecommerce.common.validationGroup.UpdateGroup;
@@ -38,9 +39,9 @@ public class DataDictionaryController extends BaseController {
             throw new BusinessException().newInstance(this.getErrorResponse(result),addCdmVO.toString());
         }
         if (!dataDictionaryService.add(addCdmVO)) {
-            return CommonResult.failed();
+            return CommonResult.failed("新增数据字典失败！");
         }else {
-            return CommonResult.success("add new cdm successful");
+            return CommonResult.success("新增数据字典成功！");
         }
     }
 
@@ -52,9 +53,9 @@ public class DataDictionaryController extends BaseController {
         }
         CommonPage<CdmInfoVO> commonPage = dataDictionaryService.getAllCdmInfo(pageVO);
         if (!commonPage.getList().isEmpty()) {
-            return CommonResult.success(commonPage, "get all cdms successful");
+            return CommonResult.success(commonPage, "获取所有数据字典成功！");
         } else {
-            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+            return CommonResult.failed("后台当前无数据字典！");
         }
     }
 
@@ -66,16 +67,20 @@ public class DataDictionaryController extends BaseController {
         }
         CommonPage<CdmInfoVO> commonPage = dataDictionaryService.searchCdm(searchCdmVO);
         if (!commonPage.getList().isEmpty()) {
-            return CommonResult.success(commonPage, "get similar cdms successful");
+            return CommonResult.success(commonPage, "模糊匹配数据字典成功！");
         } else {
-            return CommonResult.failed(ResultCode.THINGS_NOT_FOUND);
+            return CommonResult.failed("数据字典不存在！");
         }
     }
 
     @ApiOperation(value = "修改前获取原数据字典记录")
     @GetMapping(value = "/getCdmWhenUpdate")
     public CommonResult<CdmInfoVO> getCdmWhenUpdate(@RequestParam("cdmId") Integer cdmId) {
-        return CommonResult.success(dataDictionaryService.getCdmWhenUpdate(cdmId),"get cdm successful");
+        CdmInfoVO cdmInfoVO = dataDictionaryService.getCdmWhenUpdate(cdmId);
+        if (cdmInfoVO == null) {
+            return CommonResult.failed("数据字典不存在！");
+        }
+        return CommonResult.success(cdmInfoVO,"数据字典获取成功！");
     }
 
     @ApiOperation(value = "更新数据字典")
@@ -85,9 +90,9 @@ public class DataDictionaryController extends BaseController {
             throw new BusinessException().newInstance(this.getErrorResponse(result),updateCdmVO.toString());
         }
         if (!dataDictionaryService.updateCdm(updateCdmVO)) {
-            return CommonResult.failed();
+            return CommonResult.failed("更新数据字典失败！");
         }else {
-            return CommonResult.success("update cdm successful");
+            return CommonResult.success("更新数据字典成功！");
         }
     }
 
@@ -95,19 +100,22 @@ public class DataDictionaryController extends BaseController {
     @DeleteMapping(value = "/deleteCdm")
     public CommonResult deleteCdm(@RequestParam("cdmId") Integer cdmId) {
         if (!dataDictionaryService.deleteCdm(cdmId)) {
-            return CommonResult.failed();
+            return CommonResult.failed("删除数据字典失败！");
         }else {
-            return CommonResult.success("delete cdm successful");
+            return CommonResult.success("删除数据字典成功！");
         }
     }
 
     @ApiOperation(value = "批量删除数据字典")
     @PostMapping(value = "/batchDeleteCdm")
-    public CommonResult batchDeleteCdm(@RequestBody List<Integer> cdmIds) {
+    public CommonResult batchDeleteCdm(@Validated({DeleteGroup.class})@RequestBody List<Integer> cdmIds,BindingResult result) throws BusinessException{
+        if (result.hasErrors()){
+            throw new BusinessException().newInstance(this.getErrorResponse(result),cdmIds.toString());
+        }
         if (!dataDictionaryService.batchDeleteCdm(cdmIds)) {
-            return CommonResult.failed();
+            return CommonResult.failed("批量删除数据字典失败！");
         }else {
-            return CommonResult.success("delete cdms successful");
+            return CommonResult.success("批量删除数据字典成功！");
         }
     }
 }

@@ -74,7 +74,7 @@ public class DataDictionaryServiceImpl implements DataDictionaryService {
     public CdmInfoVO getCdmWhenUpdate(Integer parId){
         CdmCodeMaster cdmCodeMaster = cdmCodeMasterMapper.selectByPrimaryKey(parId);
         if (cdmCodeMaster == null) {
-            throw BusinessException.SELECT_FAIL;
+            return null;
         }
         CdmInfoVO cdmInfoVO = new CdmInfoVO();
         cdmInfoVO.setCdmId(cdmCodeMaster.getCdmId());
