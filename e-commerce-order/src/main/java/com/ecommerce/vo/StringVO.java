@@ -1,6 +1,9 @@
 package com.ecommerce.vo;
 
+import com.ecommerce.common.validationGroup.SelectGroup;
 import io.swagger.annotations.ApiModelProperty;
+
+import javax.validation.constraints.NotNull;
 
 /**
  * @ProjectName: e-commerce
@@ -12,7 +15,7 @@ import io.swagger.annotations.ApiModelProperty;
  */
 public class StringVO {
     @ApiModelProperty("指代前端往后端传入的String数据，如各种String型的id或者username等")
-
+    @NotNull(groups = {SelectGroup.class}, message = "收货地址编号之类的为空")
     String string;
 
     public String getString() {
