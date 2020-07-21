@@ -11,6 +11,8 @@ import com.ecommerce.vojo.company.GetCompanyVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class CompanyServiceImpl implements CompanyService {
 
@@ -28,9 +30,6 @@ public class CompanyServiceImpl implements CompanyService {
         companyEntryVO.setNameCn(manManufacturer.getNameCn());
         companyEntryVO.setNameEn(manManufacturer.getNameEn());
         companyEntryVO.setDescription(manManufacturer.getDescription());
-
-        System.out.println(manManufacturer.getNameCn());
-        System.out.println(manManufacturer.getDescription());
 
         return companyEntryVO;
     }
@@ -59,9 +58,9 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     public boolean updateCompanyInfo(CompanyInfoUpdateVO companyInfoUpdateVO) {
-        ManManufacturerExample manManufacturerExample = new ManManufacturerExample();
-        ManManufacturerExample.Criteria criteria = manManufacturerExample.createCriteria();
-        criteria.andManIdEqualTo(companyInfoUpdateVO.getManId());
+//        ManManufacturerExample manManufacturerExample = new ManManufacturerExample();
+//        ManManufacturerExample.Criteria criteria = manManufacturerExample.createCriteria();
+//        criteria.andManIdEqualTo(companyInfoUpdateVO.getManId());
 
         ManManufacturer manManufacturer = new ManManufacturer();
         manManufacturer.setGmcReportType(companyInfoUpdateVO.getGmcReportType());
@@ -74,11 +73,12 @@ public class CompanyServiceImpl implements CompanyService {
         manManufacturer.setCreationDate(companyInfoUpdateVO.getCreationDate());
         manManufacturer.setDescription(companyInfoUpdateVO.getDescription());
         manManufacturer.setLastUpdateBy(companyInfoUpdateVO.getLastUpdateBy());
-        manManufacturer.setLastUpdateDate(companyInfoUpdateVO.getLastUpdateDate());
+        manManufacturer.setLastUpdateDate(new Date());
         manManufacturer.setRemark(companyInfoUpdateVO.getRemark());
         manManufacturer.setStsCd(companyInfoUpdateVO.getStsCd());
 
-        manManufacturerMapper.updateByExampleSelective(manManufacturer, manManufacturerExample);
+        manManufacturerMapper.updateByPrimaryKeyWithBLOBs(manManufacturer);
+//        manManufacturerMapper.updateByExampleSelective(manManufacturer, manManufacturerExample);
         return true;
     }
 }
