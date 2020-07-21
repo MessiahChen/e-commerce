@@ -33,7 +33,7 @@ public class DataDictionaryController extends BaseController {
 
     @ApiOperation(value = "新增数据字典")
     @PutMapping(value = "/addCdmInfo")
-    public CommonResult addCdmInfo(@Validated({InsertGroup.class}) @RequestBody AddCdmVO addCdmVO, BindingResult result) {
+    public CommonResult addCdmInfo(@Validated({InsertGroup.class}) @RequestBody AddCdmVO addCdmVO, BindingResult result)throws BusinessException {
         if (result.hasErrors()){
             throw new BusinessException().newInstance(this.getErrorResponse(result),addCdmVO.toString());
         }

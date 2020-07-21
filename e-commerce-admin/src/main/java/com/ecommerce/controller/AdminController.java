@@ -4,11 +4,10 @@ import com.ecommerce.common.base.BaseController;
 import com.ecommerce.common.base.CommonPage;
 import com.ecommerce.common.base.CommonResult;
 import com.ecommerce.common.exception.BusinessException;
+import com.ecommerce.common.validationGroup.InsertGroup;
 import com.ecommerce.common.validationGroup.SelectGroup;
-import com.ecommerce.pojo.SysMenu;
-import com.ecommerce.pojo.SysResource;
-import com.ecommerce.pojo.SysRole;
-import com.ecommerce.pojo.SysUser;
+import com.ecommerce.common.validationGroup.UpdateGroup;
+import com.ecommerce.pojo.*;
 import com.ecommerce.security.component.DynamicSecurityMetadataSource;
 import com.ecommerce.security.component.DynamicSecurityService;
 import com.ecommerce.service.UserService;
@@ -49,7 +48,7 @@ public class AdminController extends BaseController {
         if (!commonPage.getList().isEmpty()) {
             return CommonResult.success(commonPage, "获取所有用户成功！");
         } else {
-            return CommonResult.failed();
+            return CommonResult.failed("用户表为空！");
         }
     }
 
@@ -63,7 +62,7 @@ public class AdminController extends BaseController {
         if (!commonPage.getList().isEmpty()) {
             return CommonResult.success(commonPage, "模糊匹配用户列表成功！");
         } else {
-            return CommonResult.failed();
+            return CommonResult.failed("用户不存在！");
         }
     }
 
@@ -71,7 +70,11 @@ public class AdminController extends BaseController {
     @GetMapping(value = "/infoById")
     @ResponseBody
     public CommonResult<SysUser> getItem(@RequestParam("id") Long id) {
-        return CommonResult.success(userService.getItem(id), "获取成功！");
+        SysUser user = userService.getItem(id);
+        if (user == null){
+            return CommonResult.failed("用户不存在！");
+        }
+        return CommonResult.success(user, "获取成功！");
     }
 
     @ApiOperation("给用户分配角色")
@@ -84,7 +87,7 @@ public class AdminController extends BaseController {
         if (count >= 0) {
             return CommonResult.success(count, "分配角色成功！");
         }
-        return CommonResult.failed();
+        return CommonResult.failed("分配角色失败！");
     }
 
     @ApiOperation("获取角色列表")
@@ -183,7 +186,10 @@ public class AdminController extends BaseController {
     @ApiOperation("添加新角色")
     @PutMapping(value = "/addNewRole")
     @ResponseBody
-    public CommonResult addNewRole(@RequestBody AddRoleVO addRoleVO) {
+    public CommonResult addNewRole(@Validated({InsertGroup.class})@RequestBody AddRoleVO addRoleVO, BindingResult result)throws BusinessException {
+        if (result.hasErrors()) {
+            throw new BusinessException().newInstance(this.getErrorResponse(result), addRoleVO.toString());
+        }
         if (userService.addNewRole(addRoleVO)) {
             return CommonResult.success("添加新角色成功！");
         } else {
@@ -191,14 +197,14 @@ public class AdminController extends BaseController {
         }
     }
 
-    @ApiOperation("添加新角色")
+    @ApiOperation("删除角色")
     @DeleteMapping(value = "/deleteRole")
     @ResponseBody
     public CommonResult deleteRole(@RequestParam("roleId") Long roleId) {
         if (userService.deleteRole(roleId)) {
-            return CommonResult.success("删除新角色成功！");
+            return CommonResult.success("删除角色成功！");
         } else {
-            return CommonResult.failed("删除新角色失败！");
+            return CommonResult.failed("删除角色失败！");
         }
     }
 
@@ -217,7 +223,10 @@ public class AdminController extends BaseController {
     @ApiOperation("更新角色")
     @PatchMapping(value = "/updateRole")
     @ResponseBody
-    public CommonResult updateRole(@RequestBody UpdateRoleVO updateRoleVO) {
+    public CommonResult updateRole(@Validated({UpdateGroup.class})@RequestBody UpdateRoleVO updateRoleVO,BindingResult result) throws BusinessException{
+        if (result.hasErrors()) {
+            throw new BusinessException().newInstance(this.getErrorResponse(result), updateRoleVO.toString());
+        }
         if (userService.updateRole(updateRoleVO)) {
             return CommonResult.success("更新新角色成功！");
         } else {

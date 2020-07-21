@@ -21,8 +21,4 @@ public class WalletOrderVO {
     @ApiModelProperty(value = "流水金额：提现/充值/支付/退款")
     @NotNull(message = "flow cannot be null")
     private BigDecimal flow;
-
-    @ApiModelProperty(value = " 订单编号数组")
-    @NotEmpty(message = "oderNums can not be empty")
-    private int[] orderNums;
 }
