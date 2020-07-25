@@ -27,3 +27,5 @@ Modern browsers and Internet Explorer 10+.
 | --------- | --------- | --------- | --------- |
 | IE10, IE11, Edge| last 2 versions| last 2 versions| last 2 versions
 
+## License
+[Apache](https://gitee.com/ma_hongsheng/e-commerce/blob/master/LICENSE) license.
