@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @Package: com.ecommerce
  * @ClassName: Mytest
  * @Description: java类作用描述
- * @Author: 邱晓淋
+ * @Author:
  * @CreateDate: 2020/7/15 21:46
  */
 

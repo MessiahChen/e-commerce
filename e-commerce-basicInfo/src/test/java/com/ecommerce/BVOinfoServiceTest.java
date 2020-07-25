@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
  * @Package: com.ecommerce
  * @ClassName: BVOinfoServiceTest
  * @Description: java类作用描述
- * @Author: 邱晓淋
+ * @Author:
  * @CreateDate: 2020/7/16 16:59
  */
 @RunWith(SpringRunner.class)
